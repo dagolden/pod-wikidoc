@@ -110,9 +110,6 @@ my %closing_of = (
 
 my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
-    BoldText            =>  \&_escape_pod, 
-    ItalicText          =>  \&_escape_pod, 
-    LinkLabel           =>  \&_escape_pod,
 );
 
 my %escape_code_for = (
