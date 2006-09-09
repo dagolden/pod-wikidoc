@@ -5,14 +5,16 @@ author:
   - David A Golden <dagolden@cpan.org>
 abstract: Generate Pod from inline wiki style text
 license: perl
+resources:
+  license: http://dev.perl.org/licenses/
 requires:
   File::Find: 1
   File::Spec: 3
-  File::Temp: 0.16
-  File::pushd: 0.2
+  File::Temp: 0.14
+  File::pushd: 0.3
   Getopt::Long: 2.17
   IO::String: 1.06
-  IPC::Run3: 0.020
+  IPC::Run3: 0.033
   Parse::RecDescent: 1.94
   Pod::Usage: 1
   Scalar::Util: 1.02
@@ -28,4 +30,4 @@ provides:
   Pod::WikiDoc::Parser:
     file: lib/Pod/WikiDoc/Parser.pm
     version: 0.13
-generated_by: Module::Build version 0.2702
+generated_by: Module::Build version 0.2703

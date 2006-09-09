@@ -67,12 +67,12 @@ $class->new(
     ],
     requires        => {
         File::Find          => 1,       #build_requires
-        File::pushd         => 0.20,    #build_requires
+        File::pushd         => 0.30,    #build_requires
         File::Spec          => 3,       #build_requires 
-        File::Temp          => 0.16,    #build_requires
+        File::Temp          => 0.14,    #build_requires
         Getopt::Long        => 2.17,
         IO::String          => 1.06,
-        IPC::Run3           => "0.020", #build_requires
+        IPC::Run3           => 0.033,   #build_requires
         Parse::RecDescent   => 1.94,
         Pod::Usage          => 1,
         Scalar::Util        => 1.02,
