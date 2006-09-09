@@ -46,6 +46,9 @@ $class->new(
     dist_abstract       => 'Generate Pod from inline wiki style text',
     license             => 'perl',
     create_readme       => 0,
+    PL_files            => {
+        'Pod_WikiDoc_Parser.pm.PL' => 'lib/Pod/WikiDoc/Parser.pm'
+    },
     requires        => {
         File::Find          => 1,       #build_requires
         File::pushd         => 0.20,    #build_requires

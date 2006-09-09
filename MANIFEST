@@ -108,3 +108,4 @@ t/wiki2pod/paragraphs/001_single_paragraph
 t/wiki2pod/paragraphs/002_multi_line_paragraph
 t/wiki2pod/paragraphs/003_blank_lines
 Todo
+Makefile.PL
