@@ -25,4 +25,7 @@ provides:
   Pod::WikiDoc::Cookbook:
     file: lib/Pod/WikiDoc/Cookbook.pm
     version: 0.13
+  Pod::WikiDoc::Parser:
+    file: lib/Pod/WikiDoc/Parser.pm
+    version: 0.13
 generated_by: Module::Build version 0.2702

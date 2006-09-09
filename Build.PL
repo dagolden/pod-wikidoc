@@ -38,6 +38,19 @@ my $class = Module::Build->subclass(
         $self->SUPER::ACTION_distdir;
     }
 
+    sub ACTION_distmeta {
+        my $self = shift;
+        $self->meta_merge( 
+            provides => {
+                'Pod::WikiDoc::Parser' => {
+                    file => 'lib/Pod/WikiDoc/Parser.pm',
+                    version => $self->dist_version,
+                },
+            },
+        );
+        $self->SUPER::ACTION_distmeta;
+    }
+
 SUBCLASS
             
 $class->new( 
@@ -47,8 +60,11 @@ $class->new(
     license             => 'perl',
     create_readme       => 0,
     PL_files            => {
-        'Pod_WikiDoc_Parser.pm.PL' => 'lib/Pod/WikiDoc/Parser.pm'
+        'Pod_WikiDoc_Parser.pm.PL' => 'lib/Pod/WikiDoc/Parser.pm',
     },
+    add_to_cleanup      => [
+        'lib/Pod/WikiDoc/Parser.pod',
+    ],
     requires        => {
         File::Find          => 1,       #build_requires
         File::pushd         => 0.20,    #build_requires
