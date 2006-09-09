@@ -123,7 +123,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ $item[1] . $item[2] . $item[3] ],
+                        content => $item[1] . $item[2] . $item[3],
                     }
                 }
 
@@ -171,7 +171,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ substr( substr( $item[1], 1), 0, -1 ) ],
+                        content => substr( substr( $item[1], 1), 0, -1 ),
                     }
                 }
 
@@ -179,7 +179,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ substr( substr( $item[1], 1), 0, -1 ) ],
+                        content => substr( substr( $item[1], 1), 0, -1 ),
                     }
                 }
 
@@ -187,7 +187,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ substr( substr( $item[1], 1), 0, -1 ) ],
+                        content => substr( substr( $item[1], 1), 0, -1 ),
                     }
                 }
 
@@ -195,7 +195,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ $item[1] ],
+                        content => $item[1],
                     }
                 }
 
@@ -203,7 +203,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ $item[1] ],
+                        content => $item[1],
                     }
                 }
 
@@ -211,7 +211,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => [ $item[1] ],
+                        content => $item[1],
                     }
                 }
 

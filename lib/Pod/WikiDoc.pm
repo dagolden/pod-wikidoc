@@ -104,7 +104,7 @@ my %closing_of = (
     SpecialChar         =>  q{},
 );
 
-my %handle_content_for = (
+my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
 );
 
@@ -115,9 +115,9 @@ my %escape_code_for = (
 
 sub _escape_pod {
     my $node = shift;
-    my $input_text  = @{ $node->{content} };
+    my $input_text  = $node->{content};
     # replace special symbols with corresponding escape code
-    $input_text =~ s{ ( [<>] ) }{ $escape_code_for{$1} }gxms;
+    $input_text =~ s{ ( [<>] ) }{$escape_code_for{$1}}gxms;
     return $input_text;
 }
 
@@ -125,20 +125,24 @@ sub _wiki2pod {
     my ($nodelist, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
-        if ( ref $node eq 'HASH' ) {
-            my $opening  = $opening_of{ $node->{type} };
-            my $closing = $closing_of{ $node->{type} };
+        next unless ref $node eq 'HASH'; # skip empty blocks marked w/ ""
+        my $opening = $opening_of{ $node->{type} };
+        my $closing = $closing_of{ $node->{type} };
 
-            $result .= ref $opening eq 'CODE' ? $opening->($node) : $opening;
+        $result .= ref $opening eq 'CODE' ? $opening->($node) : $opening;
+        if ( ref $node->{content} eq 'ARRAY' ) {
             $result .= _wiki2pod( 
                 $node->{content}, 
                 $node->{type} eq 'Preformat' ? 1 : 0 
             );
-            $result .= ref $closing eq 'CODE' ? $closing->($node) : $closing;
         }
-        elsif ( defined $node ) {
-            $result .= ($insert_space ? q{ } : q{} ) . $node;
+        else {
+            my $handler = $content_handler_for{ $node->{type} };
+            $result .= defined $handler 
+                     ? $handler->( $node ) : $node->{content}
+            ;
         }
+        $result .= ref $closing eq 'CODE' ? $closing->($node) : $closing;
     }
     return $result;
 }
