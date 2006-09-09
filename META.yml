@@ -1,0 +1,17 @@
+---
+name: Pod-WikiDoc
+version: 0.01
+author:
+  - David A Golden <dagolden@cpan.org>
+abstract: Put abstract here
+license: perl
+requires:
+  File::Find: 1
+  File::pushd: 0.2
+  Parse::RecDescent: 1.94
+  Test::More: 0.48
+provides:
+  Pod::WikiDoc:
+    file: lib/Pod/WikiDoc.pm
+    version: 0.01
+generated_by: Module::Build version 0.2702

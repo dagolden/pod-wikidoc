@@ -1,0 +1,20 @@
+=begin wikidoc
+
+hello world
+
+=end wikidoc
+
+=for wikidoc have a nice day
+
+=begin wikidoc
+
+don't forget to write
+
+=end wikidoc
+#--------------------------------------------------------------------------#
+hello world
+
+have a nice day
+
+don't forget to write
+

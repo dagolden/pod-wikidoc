@@ -1,4 +1,57 @@
 TODO list for Perl module Pod::WikiDoc
 
-- Nothing yet
+#--------------------------------------------------------------------------#
+# General
+#--------------------------------------------------------------------------#
+
+- Eat own cooking -- write wikidoc for Pod::Wikidoc
+
+#--------------------------------------------------------------------------#
+# Formatting
+#--------------------------------------------------------------------------#
+
+- Inline code markup
+
+- Add =pod and =cut around output
+
+- Auto escape things that need it
+
+- Allow link text with links (and inline markup)
+
+- Nesting inline markup
+
+- Markup for other pod markup?  Passthrough code to allow it through 
+  unescaped?
+
+- special eyword expansion for things like $VERSION (?!)
+
+    - e.g. %%VERSION%%
+
+#--------------------------------------------------------------------------#
+# Extraction
+#--------------------------------------------------------------------------#
+
+- Extract regular pod as well as wikidoc
+
+- Special comment mode: extract anything after "## " as wikidoc from 
+  regular code lines
+  
+#--------------------------------------------------------------------------#
+# Usage
+#--------------------------------------------------------------------------#
+
+- Figure out how best to use with Module::Build
+
+- Write "wikidoc" perlscript  (allow filename, recursion of a directory,
+  etc.)
+
+- Revise/expand API -- take string or filename or handle?
+
+#--------------------------------------------------------------------------#
+# Efficiency
+#--------------------------------------------------------------------------#
+
+- Profile on a long sample of wiki
+
+- Review and refactor grammer
 

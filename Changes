@@ -1,4 +1,6 @@
 Revision history for Perl module Pod::WikiDoc
 
 0.01 in progress
-    - original skeleton created with ExtUtils::ModuleMaker::TT
+    - basic wikidoc format section extraction works
+    - basic block formatting works
+    - basic inline formattting partially works

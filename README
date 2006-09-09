@@ -1,13 +1,53 @@
-If this is still here it means the programmer was too lazy to create the readme file.
+NAME
+    Pod::WikiDoc - Put abstract here
 
-You can create it now by using the command shown below from this directory:
+SYNOPSIS
+     use Pod::WikiDoc;
+     blah blah blah
 
-pod2text Pod::WikiDoc > README
+DESCRIPTION
+    Description...
 
-At the very least you should be able to use this set of instructions
-to install the module...
-perl Build.PL
-perl Build
-perl Build test
-perl Build install
-If you are on a windows box you should use 'nmake' rather than 'make'.
+USAGE
+    Usage...
+
+SEE ALSO
+    * HTML::WikiConverter
+
+    * Text::WikiFormat
+
+    * Template::Plugin::KwikiFormat
+
+    * PurpleWiki::Parser::WikiText
+
+    * Pod::TikiWiki
+
+    * Convert::Wiki
+
+    * Kwiki::Formatter
+
+    * CGI::Wiki::Formatter::*
+
+BUGS
+    Please report bugs using the CPAN Request Tracker at
+    http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-WikiDoc
+
+AUTHOR
+    David A Golden (DAGOLDEN)
+
+    dagolden@cpan.org
+
+    http://dagolden.com/
+
+COPYRIGHT
+    Copyright (c) 2005 by David A Golden
+
+    This program is free software; you can redistribute it and/or modify it
+    under the same terms as Perl itself.
+
+    The full text of the license can be found in the LICENSE file included
+    with this module.
+
+SEE ALSO
+    perl(1).
+

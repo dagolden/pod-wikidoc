@@ -8,6 +8,9 @@ Module::Build->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires        => {
-        Test::More => 0.48,
+        File::Find          => 1,
+        File::pushd         => 0.20,
+        Parse::RecDescent   => 1.94,
+        Test::More          => 0.48,
     },
 )->create_build_script;

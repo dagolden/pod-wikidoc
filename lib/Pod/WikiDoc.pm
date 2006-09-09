@@ -1,17 +1,13 @@
 package Pod::WikiDoc;
 use strict;
 use warnings;
-use Carp;
+use vars qw($VERSION );
+$VERSION     = "0.01";
 
-BEGIN {
-    use Exporter ();
-    use vars qw ($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
-    $VERSION     = "0.01";
-    @ISA         = qw (Exporter);
-    @EXPORT      = qw ();
-    @EXPORT_OK   = qw ();
-    %EXPORT_TAGS = ();
-}
+use base 'Pod::Simple';
+use Carp;
+use Parse::RecDescent;
+use Pod::WikiDoc::Parser;
 
 #--------------------------------------------------------------------------#
 # main pod documentation 
@@ -38,31 +34,143 @@ Usage...
 
 =cut
 
-#--------------------------------------------------------------------------#
-# new()
-#--------------------------------------------------------------------------#
-
-=head2 new
-
- $rv = Pod::WikiDoc->new();
-
-Description of new...
-
-=cut
-
-
 sub new {
-    my ($class, $parameters) = @_;
+    my $class = shift;
+    my $self = Pod::Simple->new(@_);
+
+    # setup for pod filtering
+    $self->accept_targets( 'wikidoc' );
+    $self->{in_wikidoc} = 0;
+
+    # load up a parser 
+    $self->{parser} = Pod::WikiDoc::Parser->new();
     
-    croak "new() can't be invoked on an object"
-        if ref($class);
-        
-    my $self = bless ({ }, $class);
-    return $self;
+    return bless $self, $class;
 }
 
-1; #this line is important and will help the module return a true value
-__END__
+sub _handle_element_start {
+    my($parser, $element_name, $attr_hash_ref) = @_;
+    if ( $element_name eq 'for' && $attr_hash_ref->{target} eq 'wikidoc' ) {
+        $parser->{in_wikidoc} = 1;
+    }
+
+#    print "START: $element_name\n"; # Attr hash: ", Dumper $attr_hash_ref;
+}
+
+sub _handle_text {
+    my($parser, $text) = @_;
+    if ( $parser->{in_wikidoc} ) {
+        print { $parser->{output_fh} } $text, "\n";
+    }
+#    print "TEXT: '$text'\n";
+}
+
+sub _handle_element_end {
+    my($parser, $element_name) = @_;
+    if ( $element_name eq 'for' ) {
+        $parser->{in_wikidoc} = 0;
+    }
+    elsif ( $element_name eq 'Data' ) {
+        print { $parser->{output_fh} } "\n";
+    }
+#    print "END: $element_name\n";
+}
+
+my $numbered_bullet;
+
+my $opening_of = {
+    Paragraph           => q{},
+    Unordered_List      => "=over\n\n",
+    Ordered_List        => sub { $numbered_bullet = 1; return "=over\n\n" },
+    Preformat           => q{},
+    Header              => sub { 
+                                my $node = shift; 
+                                my $level = $node->{level} > 4 ? 4 : $node->{level};
+                                return "=head$level "
+                           },
+    Bullet_Item         => "=item *\n\n",
+    Numbered_Item       => sub { return "=item " . $numbered_bullet++ . ".\n\n" },
+    Indented_Line       => q{ },
+    Plain_Line          => q{},
+    RegularText         => q{},
+    WhiteSpace          => q{},
+    BoldText            => 'B<',
+    ItalicText          => 'I<',
+    LinkText            => 'L<',
+    SpecialChar         => q{},
+};
+
+my $closing_of = {
+    Paragraph           => "\n",
+    Unordered_List      => "=back\n\n",
+    Ordered_List        => "=back\n\n",
+    Preformat           => "\n",
+    Header              => "\n\n",
+    Bullet_Item         => "\n\n",
+    Numbered_Item       => "\n\n",
+    Indented_Line       => "\n",
+    Plain_Line          => "\n",
+    RegularText         => q{},
+    WhiteSpace          => q{},
+    BoldText            => '>',
+    ItalicText          => '>',
+    LinkText            => '>',
+    SpecialChar         => q{},
+};
+
+
+sub wiki2pod {
+    my ($nodelist, $insert_space) = @_;
+    my $result = q{};
+    for my $node ( @$nodelist ) {
+        if ( ref $node eq 'HASH' ) {
+            my $opening  = $opening_of->{ $node->{type} };
+            my $closing = $closing_of->{ $node->{type} };
+
+            $result .= ref $opening eq 'CODE' ? $opening->($node) : $opening;
+            $result .= wiki2pod( 
+                $node->{content}, 
+                $node->{type} eq 'Preformat' ? 1 : 0 
+            );
+            $result .= ref $closing eq 'CODE' ? $closing->($node) : $closing;
+        }
+        elsif ( defined $node ) {
+            $result .= ($insert_space ? q{ } : q{} ) . $node;
+        }
+    }
+    return $result;
+}
+
+
+sub format {
+    my ($self, $wikitext) = @_;
+    
+    my $wiki_tree  = $self->{parser}->WikiDoc( $wikitext ) ;
+    for my $node ( @$wiki_tree ) {
+        undef $node if ! ref $node;
+    }
+
+    return wiki2pod( $wiki_tree );
+}
+
+
+=head1 SEE ALSO
+
+* HTML::WikiConverter
+
+* Text::WikiFormat
+
+* Template::Plugin::KwikiFormat
+
+* PurpleWiki::Parser::WikiText
+
+* Pod::TikiWiki
+
+* Convert::Wiki
+
+* Kwiki::Formatter
+
+* CGI::Wiki::Formatter::*
 
 =head1 BUGS
 
@@ -93,3 +201,4 @@ LICENSE file included with this module.
 perl(1).
 
 =cut
+1; #this line is important and will help the module return a true value
