@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.15";
+$VERSION     = "0.16";
 
 use 5.006;
 use Carp;
@@ -728,7 +728,7 @@ unchanged.
 = DEPENDENCIES
 
 Pod::WikiDoc and the 'wikidoc' script depend on the following modules:
-* [Getopt::Long]
+* [Getopt::Lucid]
 * [IO::String]
 * [Parse::RecDescent]
 * [Pod::Usage]

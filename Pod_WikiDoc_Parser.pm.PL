@@ -6,7 +6,7 @@ use File::pushd;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
-$VERSION = "0.15";
+$VERSION = "0.16";
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
