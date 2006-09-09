@@ -179,7 +179,9 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => substr( substr( $item[1], 1), 0, -1 ),
+                        content => $thisparser->Inline(
+                            substr( substr( $item[1], 1), 0, -1 )
+                        ),
                     }
                 }
 
@@ -187,7 +189,9 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => substr( substr( $item[1], 1), 0, -1 ),
+                        content => $thisparser->Inline(
+                            substr( substr( $item[1], 1), 0, -1 )
+                        ),
                     }
                 }
 
@@ -235,7 +239,7 @@ __DATA__
                 { 
                     $return = { 
                         type    => $item[0],
-                        content => $item[1],
+                        content => $thisparser->Inline( $item[1] ),
                     }
                 }
 
