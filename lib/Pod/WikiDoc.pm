@@ -331,13 +331,19 @@ my $specials = join q{}, keys %escape_code_for;
 #
 #--------------------------------------------------------------------------#
 
-sub _escape_pod { my $node = shift; my $input_text  = $node->{content};
+sub _escape_pod { 
+    
+    my $node = shift; 
+    
+    my $input_text  = $node->{content};
     
     # remove backslash escaping
-    $input_text =~ s{ \\(.) } # backslash followed by anything {$1}gxms;
+    $input_text =~ s{ \\(.) } 
+                    {$1}gxms;
     
     # replace special symbols with corresponding escape code
-    $input_text =~ s{ ( [$specials] ) } {$escape_code_for{$1}}gxms; 
+    $input_text =~ s{ ( [$specials] ) } 
+                    {$escape_code_for{$1}}gxms; 
 
     return $input_text; 
 }
