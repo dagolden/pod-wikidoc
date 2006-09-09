@@ -1,4 +1,4 @@
-package Pod::Wikidoc::Cookbook;
+package Pod::WikiDoc::Cookbook;
 # Not really a .pm file, but holds wikidoc which will be
 # turned into .pod by the Build.PL
 1;
