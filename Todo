@@ -41,7 +41,7 @@ TODO list for Perl module Pod::WikiDoc
 # Potential future enhancements
 #--------------------------------------------------------------------------#
 
-- Markup for other pod markup (?!)  
+- Markup for other pod markup (e.g. S<>, X<>, etc.) (?!)  
 
 - Passthrough for other formatting codes (e.g. S<>, X<>, etc.) (?!)
 

@@ -1,0 +1,42 @@
+#!/usr/bin/perl
+use strict;
+use warnings;
+
+use vars qw( $VERSION );
+$VERSION = "0.10";
+
+#use Pod::WikiDoc;
+use Getopt::Std;
+
+my %opts;
+getopts( "hV", \%opts );
+
+if ( $opts{h} ) {
+    print_usage() and exit;
+}
+
+if ( $opts{V} ) {
+    print_version() and exit;
+}
+
+sub print_version { print "Version: wikidoc $VERSION\n"; }
+
+sub print_usage {
+    print_version();
+    print << "USAGE";
+
+Usage: wikidoc [arguments] [input] [output]
+
+Available arguments:
+    -h  help: show this usage infomation
+    -V  Version: show the program's version
+
+Input should be a filename that WikiDoc will be extracted from.
+If no filename is given, data will be read from STDIN.
+
+Output should be a filename for the generated Pod.  If no filename is
+given, Pod will be written to STDOUT.
+USAGE
+
+}
+    

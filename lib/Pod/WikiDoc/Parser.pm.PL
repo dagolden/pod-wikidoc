@@ -35,9 +35,9 @@ my ($target_dir) = $ARGV[0] =~ m{ \A ( .+ )  / .+ \z }xms;
 
 # interpolate version and insert
 my $version_text = <<"END_VERSION";
-
+\n
 use vars qw( \$VERSION );
-\$VERSION = $VERSION;
+\$VERSION = "0.10";
 
 END_VERSION
 
@@ -47,7 +47,7 @@ my $docs_text = <<'END_DOCS';
 
 =head1 NAME
 
-Pod::WikiDoc::Parser -- precompiled recursive descent parser for WikiDoc
+Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
 =head1 SYNOPSIS
 
@@ -61,22 +61,33 @@ Pod::WikiDoc::Parser -- precompiled recursive descent parser for WikiDoc
 
 This is a precompiled L<Parse::RecDescent> parser for use with L<Pod::WikiDoc>.
 It is generated dynamically on installation of L<Pod::WikiDoc> from a grammer
-included in the distribution.  
+included with the distribution.  
 
-A copy of the L<Parse::RecDescent> grammer is appended to this source file for
-reference or reuse by others.
+A copy of the L<Parse::RecDescent> grammer used is appended to this source file
+for reference or reuse by others.
 
 =head1 USAGE
 
-This module is a support module and is not intended for general use.  Given
-a string containing WikiDoc markup text, the parser produces a data structure
-representing the parsed content.  The data structure is a
+This module is a support module for L<Pod::WikiDoc> and is not intended for
+general use.  Given a string containing WikiDoc markup text, the parser
+produces a data structure representing the parsed content.  The data structure
+returned is an array of references to hashes.  Keys in the hash are:
 
+=over
 
-=head1 BUGS
+=item *
 
-Please report bugs using the CPAN Request Tracker at 
-http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-WikiDoc
+type: the parser rule that generated the hash
+
+=item *
+
+content: either a reference to another AoH or a string of text
+
+=item *
+
+level: (only for "Header" type hashes) the level of the header
+
+=back
 
 =head1 AUTHOR
 
@@ -105,6 +116,7 @@ END_DOCS
 open my $fh, ">>", $ARGV[0] 
     or warn "Couldn't append grammer to Pod::WikiDoc::Parser";
 if ( $fh ) {
+    print $fh $version_text, $docs_text;
     print $fh "\n\n__END__\n\n", $grammer;
     close $fh;
 }
