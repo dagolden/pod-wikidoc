@@ -8,7 +8,7 @@ Pod::WikiDoc - Generate Pod from inline wiki style text
 
 =head1 VERSION
 
-This documentation refers to version 0.14.
+This documentation refers to version 0.15.
 
 =head1 SYNOPSIS
 

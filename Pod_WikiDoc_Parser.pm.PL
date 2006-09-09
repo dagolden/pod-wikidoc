@@ -6,7 +6,7 @@ use File::pushd;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
-$VERSION = "0.14";
+$VERSION = "0.15";
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
@@ -34,14 +34,10 @@ my ($target_dir) = dirname($ARGV[0]);
 
 # Text to append to precompiled parser
 
-# interpolate version and insert
-my $version_text = <<"END_VERSION";
-\n
-use vars qw( \$VERSION );
-\$VERSION
-    = "$VERSION";
+# interpolate version 
 
-END_VERSION
+my $version_text = "\n\nuse vars qw( \$VERSION );\n\$VERSION";
+$version_text .= " = $VERSION\n";
 
 # assemble intro pod
 

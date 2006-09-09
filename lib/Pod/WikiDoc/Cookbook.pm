@@ -3,7 +3,7 @@ package Pod::WikiDoc::Cookbook;
 # turned into .pod by the Build.PL
 use strict; # make CPANTS happy
 use vars '$VERSION';
-$VERSION = "0.14";
+$VERSION = "0.15";
 1;
 __END__
 
@@ -54,13 +54,15 @@ the MANIFEST
 * ACTION_distdir -- adds a dependency on the {wikidoc} action to regenerate
 .pod files before bundling up a distribution
 
+As an extra feature, ACTION_wikidoc also sets a VERSION keyword that can
+be used to insert the current version number into the generated Pod.
+
+    = VERSION
+    This documentation refers to version %%VERSION%%.
+
 By making wikidoc extraction part of the {distdir} action, users installing the
 distribution will receive it with .pod files already created, and will not need
-to have [Pod::WikiDoc] installed themselves.  Note: this subclassing can't be
-emulated in a "traditional" {Makefile.PL} as created by [Module::Build::Compat]
-using the {create_makefile} option in [Module::Build].  As the "passthrough"
-style is also problematic for some users, I recommend leaving off any
-{Makefile.PL} and using {Build.PL} only.
+to have [Pod::WikiDoc] installed themselves.  
 
     # Build.PL
     use Module::Build;
@@ -73,9 +75,10 @@ style is also problematic for some users, I recommend leaving off any
             my $self = shift;
             eval "use Pod::WikiDoc";
             if ( $@ eq '' ) {
-                my $parser = Pod::WikiDoc->new(
-                    { comment_blocks => 1}
-                );
+                my $parser = Pod::WikiDoc->new( {
+                    comment_blocks => 1}
+                    keywords => { VERSION => $self->dist_version },
+                });
                 for my $src ( keys %{ $self->find_pm_files() } ) {
                     (my $tgt = $src) =~ s{\.pm$}{.pod};
                     $parser->filter( {
@@ -120,7 +123,6 @@ in the META.yml file of the distribution.
 Example of a simple .pm documentation file:
 
     package Some::Module::About;
-    $VERSION = "0.14";
     use strict; # make CPANTS happy
     1;
     __END__
@@ -155,7 +157,7 @@ dagolden@cpan.org
 
 = COPYRIGHT
 
-Copyright (c) 2005 by David A Golden
+Copyright (c) 2005,2006 by David A Golden
 
 This program is free software; you can redistribute
 it and/or modify it under the same terms as Perl itself.

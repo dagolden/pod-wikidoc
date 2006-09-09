@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.14";
+$VERSION     = "0.15";
 
 use 5.006;
 use Carp;

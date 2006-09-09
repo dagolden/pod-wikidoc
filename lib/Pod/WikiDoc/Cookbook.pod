@@ -8,7 +8,7 @@ Pod::WikiDoc::Cookbook - Examples of Pod::WikiDoc usage
 
 =head1 VERSION
 
-This documentation refers to version 0.14.
+This documentation refers to version 0.15.
 
 =head1 DESCRIPTION
 
@@ -59,13 +59,15 @@ ACTION_distdir -- adds a dependency on the C<<< wikidoc >>> action to regenerate
 
 =back
 
+As an extra feature, ACTION_wikidoc also sets a VERSION keyword that can
+be used to insert the current version number into the generated Pod.
+
+     = VERSION
+     This documentation refers to version %%VERSION%%.
+
 By making wikidoc extraction part of the C<<< distdir >>> action, users installing the
 distribution will receive it with .pod files already created, and will not need
-to have L<Pod::WikiDoc> installed themselves.  Note: this subclassing can't be
-emulated in a "traditional" C<<< Makefile.PL >>> as created by L<Module::Build::Compat>
-using the C<<< create_makefile >>> option in L<Module::Build>.  As the "passthrough"
-style is also problematic for some users, I recommend leaving off any
-C<<< Makefile.PL >>> and using C<<< Build.PL >>> only.
+to have L<Pod::WikiDoc> installed themselves.  
 
      # Build.PL
      use Module::Build;
@@ -78,9 +80,10 @@ C<<< Makefile.PL >>> and using C<<< Build.PL >>> only.
              my $self = shift;
              eval "use Pod::WikiDoc";
              if ( $@ eq '' ) {
-                 my $parser = Pod::WikiDoc->new(
-                     { comment_blocks => 1}
-                 );
+                 my $parser = Pod::WikiDoc->new( {
+                     comment_blocks => 1}
+                     keywords => { VERSION => $self->dist_version },
+                 });
                  for my $src ( keys %{ $self->find_pm_files() } ) {
                      (my $tgt = $src) =~ s{\.pm$}{.pod};
                      $parser->filter( {
@@ -125,7 +128,6 @@ in the META.yml file of the distribution.
 Example of a simple .pm documentation file:
 
      package Some::Module::About;
-     $VERSION = "0.14";
      use strict; # make CPANTS happy
      1;
      __END__

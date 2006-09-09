@@ -1,5 +1,8 @@
 Revision history for Perl module Pod::WikiDoc
 
+0.15 Sun Jun 11 01:25:20 EDT 2006
+    - fixed up version numbering across generated modules
+    
 0.14 Sun Jun 11 00:41:31 EDT 2006
     - added keyword expansion (e.g. %%VERSION%% )
     - added keyword definition options to wikidoc program
