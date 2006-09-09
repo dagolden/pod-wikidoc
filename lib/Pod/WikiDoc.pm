@@ -202,7 +202,7 @@ sub filter {
             or croak "Error: Couldn't open input file '$args_ref->{input}': $!";
     }
     else {
-        croak "Error: Invalid variable type for input file argument to filter()";
+        croak "Error: 'input' parameter for filter() must be a filename or filehandle"
     }
     
     # setup output
@@ -222,7 +222,7 @@ sub filter {
             or croak "Error: Couldn't open output file '$args_ref->{output}': $!";
     }
     else {
-        croak "Error: Invalid variable type for output file argument to filter()";
+        croak "Error: 'output' parameter for filter() must be a filename or filehandle"
     }
     
     _filter_podfile( $self, $input_fh, $output_fh );
@@ -550,27 +550,119 @@ __END__
 
 = WIKIDOC MARKUP
 
-Wikidoc is composed of both block and inline markup.
+Pod::WikiDoc uses a wiki-style text markup, called wikidoc.  It is heavily
+influenced by [Kwiki].  Like other wiki markup, it has both block and 
+inline elements, which map directly to their Pod equivalents.
 
-Block markup:
+Block elements include:
+* Headers
+* Verbatim text
+* Bullet lists
+* Numbered lists
+* Ordinary paragraphs
+
+Inline elements include:
+* Bold markup
+* Italic markup
+* Code markup
+* Link markup
+* Escape code markup
+
+All text except that found in verbatim text or code markup is transformed to
+convert Pod special elements to Pod escape code markup: \E\<lt\>, \E\<gt\>,
+\E\<sol\>, \E\<verbar\>.  Inline markup can be escaped with a backslash.
+Including a literal backslash requires a double-backslash.
+
+== Headers
+
+Headers are indicated with one or more equals signs followed by whitespace in
+the first column.  The number of equals signs indicates the level of the
+header (the maximum is four).  Headers can not span multiple lines.  
 
     = header level 1
     
     == header level 2
 
-Inline markup:
+== Verbatim text
 
-    *bold*
+Verbatim text is indicated with leading whitespace in each line of text,
+just as with Pod.
 
-    ~italic~
+    #<--- first column 
 
-    [link]
+        sub verbatim {}
 
-    {monospace a.k.a. code}
+== Bullet lists
 
-    \*escapes
+Bullet lists are indicated with an asterisk in the first column followed by
+whitespace.  Bullet lists can span multiple lines.  Lines after the first
+should not have an asterisk or be indented.
 
-    E<euro> (regular Pod E<> markup for special symbols is passed through)
+    * First item in the list
+    * Second item in the list
+    on multiple lines
+    * Third item in the list
+
+== Numbered lists
+
+Numbered lists work just like numbered lists, but with a leading 0 followed
+by whitespace.
+
+    0 First item in the list
+    0 Second item in the list
+    on multiple lines
+    0 Third item in the list
+
+== Ordinary paragraphs
+
+Ordinary paragraphs consist of one or more lines of text that do not match
+the criteria of other blocks.  Paragraphs are terminated with a empty line.
+
+    This is an ordinary paragraph that
+    spans multiple lines.
+
+== Bold markup
+
+Bold text is indicated by bracketing with asterisks.  Bold markup must
+begin at a whitespace boundary, the start of a line, or the inside of
+other markup.
+
+    This shows *bold* text.
+
+== Italic markup
+
+Italic text is indicated by bracketing with tildes.  Italic markup must
+begin at a whitespace boundary, the start of a line, or the inside of
+other markup.
+
+    This shows ~italic~ text.
+
+== Code markup
+
+Code (monospaced) text is indicated by bracketing with matched braces.  Code
+markup must begin at a whitespace boundary, the start of a line, or the inside
+of other markup.  Brackets should nest properly with code.
+
+    This shows {code} text.  It can surround text
+    with brackets like this: { $data{ $id } }
+
+== Link markup
+
+Link text is indicated by bracketing with square brackets.  As with Pod, link
+text may include a vertical bar to separate display text from the link itself.
+Link markup must begin at a whitespace boundary, the start of a line, or the
+inside of other markup.
+
+    This is an ordinary [Pod::WikiDoc] link.
+    This is a [way to ~markup~ links|Pod::WikiDoc] with display text
+    Hypertext links look like this: [http://www.google.com/]
+
+== Escape code markup
+
+Pod-style escape text is passed through as normal to support international
+or other unusual characters.
+
+    This is the euro symbol: E<euro> 
 
 = DIAGNOSTICS
 
@@ -581,26 +673,24 @@ Inline markup:
 * {Error: Class method new() can't be called on an object}
 * {Error: Couldn't open input file 'FILENAME'}
 * {Error: Couldn't open output file 'FILENAME'}
-* {Error: Invalid variable type for input file argument to filter()}
-* {Error: Invalid variable type for output file argument to filter()}
+* {Error: 'input' parameter for filter() must be a filename or filehandle}
+* {Error: 'output' parameter for filter() must be a filename or filehandle}
     
-= CONFIGURATION AND ENVIRONMENT
-
-No configuration files or environment variables are used.
-
 = DEPENDENCIES
 
-Pod::WikiDoc depends on the following modules:
+Pod::WikiDoc and the 'wikidoc' script depend on the following modules:
 * [Getopt::Std]
 * [IO::String]
 * [Parse::RecDescent]
+* [Pod::Usage]
 * [Scalar::Util]
 
 = INCOMPATIBILITIES
 
-Use of the wikidoc comment-blocks conflicts with [Smart::Comments].
-Change the {comment_prefix_length} argument to {new} in Pod::WikiDoc or the level
-of 'smartness' in [Smart::Comments] to avoid the conflict.
+Default prefix length for wikidoc comment-blocks conflicts with
+[Smart::Comments].  Change the {comment_prefix_length} argument to {new} in
+Pod::WikiDoc or the level of 'smartness' in [Smart::Comments] to avoid the
+conflict.
 
 = BUGS
 

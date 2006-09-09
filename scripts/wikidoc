@@ -5,8 +5,9 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = "0.10";
 
-use Pod::WikiDoc;
 use Getopt::Std;
+use Pod::WikiDoc;
+use Pod::Usage;
 
 my %opts;
 getopts( "chV", \%opts );
@@ -19,26 +20,9 @@ if ( $opts{V} ) {
     print_version() and exit;
 }
 
-sub print_version { print "Version: wikidoc $VERSION\n"; }
+sub print_version { print "Version: wikidoc $VERSION\n" }
 
-sub print_usage {
-    print_version();
-    print << "USAGE";
-
-Usage: wikidoc [arguments] [input] [output]
-
-Available arguments:
-    -h  help: show this usage infomation
-    -V  Version: show the program's version
-
-Input should be a filename that WikiDoc will be extracted from.
-If no filename is given, data will be read from STDIN.
-
-Output should be a filename for the generated Pod.  If no filename is
-given, Pod will be written to STDOUT.
-USAGE
-
-}
+sub print_usage { pod2usage( -verbose => 2 ) }
     
 my ($input_file, $output_file) = @ARGV;
 
@@ -53,5 +37,107 @@ if ( $output_file ) {
 }
 
 $parser->filter( { input => $input_file, output => $output_file } );
+
+__END__
+
+=head1 NAME
+
+wikidoc - convert mixed Pod and wikidoc text to Pod
+
+=head1 SYNOPSIS
+
+    wikidoc MyModule.pm Mymodule.pod
+    
+=head1 USAGE
+
+    wikidoc [flags] [inputfile] [outputfile]
+    
+=head1 OPTIONS
+
+=over
+
+=item *
+
+flags:
+
+=over
+
+=item -c
+
+comments: Include wikidoc in comment-blocks
+
+=item -h
+
+help: Show usage information
+
+=item -V
+
+version: Show version number and copyright
+
+=back
+
+=item *
+
+inputfile: A filename that Pod and wikidoc will be extracted from.  If no
+filename is given, data will be read from STDIN.
+
+=item *
+
+outputfile: A filename for the generated Pod.  If no filename is given, Pod
+will be written to STDOUT.
+
+=back
+
+=head1 DESCRIPTION
+
+C<wikidoc> processes Pod and wikidoc, converting the wikidoc to Pod, and then
+writing the combined document back to a file or standard output. 
+
+See documentation for L<Pod::WikiDoc> for details.
+
+=head1 DIAGNOSTICS
+
+None yet -- probably should add some
+
+=head1 DEPENDENCIES
+
+=over
+
+=item *
+
+L<Getopt::Std>
+
+=item *
+
+L<Pod::Usage>
+
+=item *
+
+L<Pod::WikiDoc>
+
+=back
+
+=head1 BUGS
+
+Please report bugs using the CPAN Request Tracker at 
+L<http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-WikiDoc>
+
+=head1 AUTHOR
+
+David A Golden (DAGOLDEN)
+
+dagolden@cpan.org
+
+L<http://dagolden.com/>
+
+=head1 COPYRIGHT
+
+Copyright (c) 2005 by David A Golden
+
+This program is free software; you can redistribute
+it andE<sol>or modify it under the same terms as Perl itself.
+
+The full text of the license can be found in the
+LICENSE file included with this module.
 
 

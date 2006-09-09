@@ -56,6 +56,7 @@ $class->new(
         IO::String          => 1.06,
         IPC::Run3           => "0.020", #build_requires
         Parse::RecDescent   => 1.94,
+        Pod::Usage          => 1,
         Scalar::Util        => 1.02,
         Test::More          => 0.48,    #build_requires
     },
