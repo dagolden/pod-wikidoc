@@ -1,7 +1,9 @@
 Revision history for Perl module Pod::WikiDoc
 
-0.13 in progress
+0.13 Mon Feb  6 22:52:16 EST 2006
     - Created custom Makefile.PL
+    - Shifted parser compilation from build cycle back to distribution
+      creation (less burden on end-user)
 
 0.12 Sat Sep 24 09:17:56 EDT 2005
     - Removed Makefile.PL and using Build.PL only as the  Makefile can't

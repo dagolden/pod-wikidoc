@@ -1,9 +1,19 @@
 Pod::WikiDoc - Generate Pod from inline wiki style text
 
-Installation instructions:
+INSTALLATION 
 
-perl Build.PL
-perl Build
-perl Build test
-perl Build install
+If Module::Build is installed (preferred):
 
+    perl Build.PL
+    perl Build
+    perl Build test
+    perl Build install
+
+Otherwise, using a Makefile:
+
+    perl Makefile.PL
+    make
+    make test
+    make install
+
+If you are on a windows box you should use 'nmake' rather than 'make'.
