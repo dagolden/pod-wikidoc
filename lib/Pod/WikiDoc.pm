@@ -4,9 +4,8 @@ use warnings;
 use vars qw($VERSION );
 $VERSION     = "0.10";
 
-use base 'Pod::Simple';
 use Carp;
-use Parse::RecDescent;
+use IO::String;
 use Pod::WikiDoc::Parser;
 
 #--------------------------------------------------------------------------#
@@ -18,11 +17,7 @@ use Pod::WikiDoc::Parser;
 
 sub new {
     my $class = shift;
-    my $self = Pod::Simple->new(@_);
-
-    # setup for pod filtering
-    $self->accept_targets( 'wikidoc' );
-    $self->{in_wikidoc} = 0;
+    my $self = {};
 
     # load up a parser 
     $self->{parser} = Pod::WikiDoc::Parser->new();
@@ -30,7 +25,17 @@ sub new {
     return bless $self, $class;
 }
 
-sub process {
+sub convert {
+    my ($self, $input_string) = @_;
+
+    my $input_fh = IO::String->new( $input_string );
+    my $output_fh = IO::String->new();
+    _process( $self, $input_fh, $output_fh );
+    
+    return ${ $output_fh->string_ref() };
+}
+    
+sub _process {
     my ($self, $input_fh, $output_fh) = @_;
 
     # initialize flags and buffers
@@ -110,34 +115,6 @@ sub _translate_wikidoc {
     return $self->format( join q{}, @$wikidoc_ref );
 }
     
-sub _handle_element_start {
-    my($parser, $element_name, $attr_hash_ref) = @_;
-    if ( $element_name eq 'for' && $attr_hash_ref->{target} eq 'wikidoc' ) {
-        $parser->{in_wikidoc} = 1;
-    }
-
-#    print "START: $element_name\n"; # Attr hash: ", Dumper $attr_hash_ref;
-}
-
-sub _handle_text {
-    my($parser, $text) = @_;
-    if ( $parser->{in_wikidoc} ) {
-        print { $parser->{output_fh} } $text, "\n";
-    }
-#    print "TEXT: '$text'\n";
-}
-
-sub _handle_element_end {
-    my($parser, $element_name) = @_;
-    if ( $element_name eq 'for' ) {
-        $parser->{in_wikidoc} = 0;
-    }
-    elsif ( $element_name eq 'Data' ) {
-        print { $parser->{output_fh} } "\n";
-    }
-#    print "END: $element_name\n";
-}
-
 my $numbered_bullet;
 
 my %opening_of = (

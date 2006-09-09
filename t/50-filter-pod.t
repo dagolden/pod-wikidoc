@@ -23,7 +23,7 @@ $cases->run_tests(
         my $input_string = shift;
         my $input_fh = IO::String->new( $input_string );
         my $output_fh = IO::String->new();
-        $parser->process( $input_fh, $output_fh );
+        $parser->_process( $input_fh, $output_fh );
         return ${ $output_fh->string_ref() };
     }
 );
