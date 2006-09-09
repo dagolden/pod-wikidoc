@@ -4,6 +4,7 @@ use warnings;
 use vars qw($VERSION );
 $VERSION     = "0.10";
 
+use 5.006;
 use Carp;
 use IO::String;
 use Pod::WikiDoc::Parser;
@@ -34,7 +35,50 @@ sub convert {
 }
 
 sub filter {
-
+    my ( $self, $args_ref ) = @_;
+    
+    croak "Error: Argument to filter() must be a hash reference"
+        if defined $args_ref && ! ref($args_ref) eq 'HASH';
+    # setup input
+    my $input_fh;
+    if ( ! exists $args_ref->{input} ) {
+        $input_fh = \*STDIN;
+    }
+    elsif ( (ref $args_ref->{input} && $args_ref->{input}->isa('GLOB') ) 
+         || ref \$args_ref->{input} eq 'GLOB' ) {
+        # filehandle
+        $input_fh = $args_ref->{input};
+    } 
+    elsif ( ref \$args_ref->{input} eq 'SCALAR' ) {
+        # filename
+        open( $input_fh, "<", $args_ref->{input} )
+            or croak "Error: Couldn't open input file '$input_fh'";
+    }
+    else {
+        die "Error: invalid input file argument";
+    }
+    
+    # setup output
+    my $output_fh;
+    if ( ! exists $args_ref->{output} ) {
+        $output_fh = \*STDOUT;
+    }
+    elsif ( (ref $args_ref->{output} && $args_ref->{output}->isa('GLOB'))
+         || ref \$args_ref->{output} eq 'GLOB' ) {
+        # filehandle
+        $output_fh = $args_ref->{output};
+    } 
+    elsif ( ref \$args_ref->{output} eq 'SCALAR' ) {
+        # filename
+        open( $output_fh, ">", $args_ref->{output} )
+            or croak "Error: Couldn't open output file '$output_fh'";
+    }
+    else {
+        die "Error: invalid output file argument";
+    }
+    
+    _filter_podfile( $self, $input_fh, $output_fh );
+    return;
 }
 
 sub format {
@@ -68,6 +112,9 @@ sub _filter_podfile {
     my $in_wikidoc  = 0; # not in a wikidoc section
     my @wikidoc;
     
+    # open output with Pod marker
+    print $output_fh "=pod\n\n";
+    
     # process line-by-line
     my $line;
     LINE:
@@ -81,8 +128,16 @@ sub _filter_podfile {
                     next LINE;
                 }
 
+                # flag that we've found Pod
                 $in_pod = 1;
-                redo LINE;
+
+                # eat a =pod marker, otherwise, process it as Pod
+                if ( $command eq "pod" ) {
+                    next LINE;
+                }
+                else {
+                    redo LINE;
+                }
             }
         }
         elsif ( $in_wikidoc ) {
@@ -163,6 +218,7 @@ my %opening_of = (
                             },
     Indented_Line       =>  q{ },
     Plain_Line          =>  q{},
+    Empty_Line          =>  q{ },
     RegularText         =>  q{},
     EscapedChar         =>  q{},
     WhiteSpace          =>  q{},
@@ -184,6 +240,7 @@ my %closing_of = (
     Numbered_Item       =>  "\n\n",
     Indented_Line       =>  "\n",
     Plain_Line          =>  "\n",
+    Empty_Line          =>  "\n",
     RegularText         =>  q{},
     EscapedChar         =>  q{},
     WhiteSpace          =>  q{},
@@ -197,6 +254,7 @@ my %closing_of = (
 
 my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
+    Empty_Line          =>  sub { q{} },
 );
 
 my %escape_code_for = (
@@ -226,6 +284,7 @@ sub _wiki2pod {
     my ($nodelist, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
+        print "$node\n" if ref $node ne 'HASH';
         my $opening = $opening_of{ $node->{type} };
         my $closing = $closing_of{ $node->{type} };
 

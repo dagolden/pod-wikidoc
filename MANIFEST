@@ -24,6 +24,10 @@ t/12-nested_formatting.t
 t/20-convert_complex_wikitext.t
 t/50-private_filehandle_filter.t
 t/51-convert.t
+t/52-filter_filehandles.t
+t/53-filter_filenames.t
+t/54-filter_explicit_stdin_stdout
+t/55-filter_default_to_stdin_stdout
 t/Casefiles.pm
 t/filter_pod/001_filtering_empty_string
 t/filter_pod/002_filtering_only_pod
@@ -47,6 +51,7 @@ t/wiki2pod/code_markup/004_inline_code_in_header
 t/wiki2pod/code_markup/005_inline_code_in_bullet_list
 t/wiki2pod/code_markup/006_inline_code_in_numbered_list
 t/wiki2pod/codeblocks/001_simple_codeblock
+t/wiki2pod/codeblocks/002_codeblock_continuation
 t/wiki2pod/complex/001_mixed_blocks_without_inline
 t/wiki2pod/escape_markup/001_less_than_in_paragraph
 t/wiki2pod/escape_markup/002_greater_than_in_paragraph
@@ -82,4 +87,5 @@ t/wiki2pod/nested_formatting/006_nest_codes_in_link_text
 t/wiki2pod/numbered_lists/001_simple_numbered_list
 t/wiki2pod/paragraphs/001_single_paragraph
 t/wiki2pod/paragraphs/002_multi_line_paragraph
+t/wiki2pod/paragraphs/003_blank_lines
 Todo

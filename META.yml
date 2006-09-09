@@ -7,7 +7,9 @@ abstract: ~
 license: perl
 requires:
   File::Find: 1
+  File::Temp: 0.16
   File::pushd: 0.2
+  IO::File: 1.11
   IO::String: 1.06
   Parse::RecDescent: 1.94
   Test::More: 0.48

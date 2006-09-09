@@ -10,7 +10,7 @@ TODO list for Perl module Pod::WikiDoc
 # Formatting
 #--------------------------------------------------------------------------#
 
-- Add =pod and =cut around final doc output (need a new function?)
+- Nothing right now
 
 #--------------------------------------------------------------------------#
 # Extraction
@@ -22,8 +22,6 @@ TODO list for Perl module Pod::WikiDoc
 #--------------------------------------------------------------------------#
 # Usage
 #--------------------------------------------------------------------------#
-
-- Revise/expand API -- take string or filename or handle?
 
 - Write "wikidoc" perlscript  (allow filename, recursion of a directory,
   etc.)

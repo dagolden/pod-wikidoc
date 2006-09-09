@@ -9,9 +9,11 @@ WriteMakefile
           'VERSION_FROM' => 'lib/Pod/WikiDoc.pm',
           'PREREQ_PM' => {
                            'Test::More' => '0.48',
+                           'IO::File' => '1.11',
                            'IO::String' => '1.06',
                            'File::pushd' => '0.2',
                            'File::Find' => 1,
+                           'File::Temp' => '0.16',
                            'Parse::RecDescent' => '1.94'
                          }
         )

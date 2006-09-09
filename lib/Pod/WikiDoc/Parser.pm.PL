@@ -124,7 +124,7 @@ if ( $fh ) {
 __DATA__
     WikiDoc:        
             Block(s?)
-                { $return = [ grep { ref $_ } @{ $item[1] } ] }
+                { $return = [ grep { $_->{type} ne 'Empty_Line' } @{ $item[1] } ] }
 
     Block:          
             Header 
@@ -137,8 +137,8 @@ __DATA__
                 { $return = $item[1] }
         |   Paragraph
                 { $return = $item[1] }
-        |   Empty_Line(s)
-                { $return = "" }
+        |   Empty_Line
+                { $return = $item[1] }
 
     Header:         
             /^=+/ /[\t\ ]+/ /[^\n]*/ "\n" 
@@ -228,7 +228,12 @@ __DATA__
                     
     Empty_Line:     
             /^[\t\ ]*/ "\n"
-                { $return = $item[1] }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
     
     Plain_Line:     
             /^[^*0\n]|[*0][^\t\ ]/ /[^\n]+/ "\n"

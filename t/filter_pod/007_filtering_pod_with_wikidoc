@@ -12,6 +12,8 @@ Wikidoc paragraph
 
 =cut
 #--------------------------------------------------------------------------#
+=pod
+
 =head1 NAME
 
 This is a pod paragraph
