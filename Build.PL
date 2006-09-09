@@ -47,18 +47,18 @@ my $class = Module::Build->subclass(
         $self->SUPER::ACTION_distdir;
     }
 
-    sub ACTION_distmeta {
-        my $self = shift;
-        $self->meta_merge( 
-            provides => {
-                'Pod::WikiDoc::Parser' => {
-                    file => 'lib/Pod/WikiDoc/Parser.pm',
-                    version => $self->dist_version,
-                },
-            },
-        );
-        $self->SUPER::ACTION_distmeta;
-    }
+#    sub ACTION_distmeta {
+#        my $self = shift;
+#        $self->meta_merge( 
+#            provides => {
+#                'Pod::WikiDoc::Parser' => {
+#                    file => 'lib/Pod/WikiDoc/Parser.pm',
+#                    version => $self->dist_version,
+#                },
+#            },
+#        );
+#        $self->SUPER::ACTION_distmeta;
+#    }
 
 SUBCLASS
             
