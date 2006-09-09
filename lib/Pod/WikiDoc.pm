@@ -108,9 +108,9 @@ See the [Pod::WikiDoc::Cookbook] for more detailed usage examples.
 ### Constructor for a new Pod::WikiDoc object.  It takes a single, optional 
 ### argument: a hash reference with the following optional keys:
 ###
-### * ~comment_blocks~: if true, Pod::WikiDoc will scan for wikidoc in comment
+### * {comment_blocks}: if true, Pod::WikiDoc will scan for wikidoc in comment
 ### blocks.  Default is false.
-### * ~comment_prefix_length~: the number of leading sharp (#) symbols to 
+### * {comment_prefix_length}: the number of leading sharp (#) symbols to 
 ### denote a comment block.  Default is 3.
 
 my %default_args = (
@@ -176,8 +176,8 @@ sub convert {
 ### {filter} takes a single, optional argument: a hash reference with 
 ### the following optional keys:
 ###
-### * ~input~: a filename or filehandle to read from. Defaults to STDIN.  
-### * ~output~: a filename or filehandle to write to.  If given a filename
+### * {input}: a filename or filehandle to read from. Defaults to STDIN.  
+### * {output}: a filename or filehandle to write to.  If given a filename
 ### and the file already exists, it will be clobbered. Defaults to STDOUT.
 
 sub filter {

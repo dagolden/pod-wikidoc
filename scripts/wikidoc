@@ -10,24 +10,26 @@ use Pod::WikiDoc;
 use Pod::Usage;
 
 my %opts;
-getopts( "chV", \%opts );
+getopts( "chl:V", \%opts );
 
 if ( $opts{h} ) {
-    print_usage() and exit;
+    pod2usage( -verbose => 2 );
+    exit;
 }
 
 if ( $opts{V} ) {
-    print_version() and exit;
+    print "Version: wikidoc $VERSION\n"; 
+    exit;
 }
-
-sub print_version { print "Version: wikidoc $VERSION\n" }
-
-sub print_usage { pod2usage( -verbose => 2 ) }
     
 my ($input_file, $output_file) = @ARGV;
 
+die "wikidoc: Can't use the same file for input and output.\n"
+    if $input_file && $output_file && $input_file eq $output_file;
+
 my $args = {
     comment_blocks => $opts{c} ? 1 : 0,
+    comment_prefix_length => $opts{l} ? $opts{l} : 3,
 };
 
 my $parser = Pod::WikiDoc->new( $args );
@@ -36,7 +38,14 @@ if ( $output_file ) {
     print "Extracting Pod from $input_file\n";
 }
 
-$parser->filter( { input => $input_file, output => $output_file } );
+if ( -t *STDIN && -t *STDOUT ) {
+    my $buffer;
+    $buffer .= $_ while <STDIN>;
+    print $parser->convert( $buffer );
+}
+else {
+    $parser->filter( { input => $input_file, output => $output_file } );
+}
 
 __END__
 
@@ -69,6 +78,10 @@ comments: Include wikidoc in comment-blocks
 =item -h
 
 help: Show usage information
+
+=item -l
+
+length: Length of comment-block '#' prefix
 
 =item -V
 

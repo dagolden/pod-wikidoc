@@ -24,17 +24,11 @@ TODO list for Perl module Pod::WikiDoc
 # Usage
 #--------------------------------------------------------------------------#
 
-- wikidoc script: buffer stdin before generating pod if interactive
-
-- wikidoc script: add flag for length of comment block
-
 - wikidoc script: add recursion of a directory
-
-- wikidoc script: avoid reading/writing same file
 
 - Add configuration option for substituting an alternate parser
 
-- Add parameter checks to new()
+- Add parameter checks to new() 
 
 #--------------------------------------------------------------------------#
 # Potential future enhancements

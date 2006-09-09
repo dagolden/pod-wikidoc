@@ -54,14 +54,14 @@ like( $err, qr{\AError: Couldn't open output file 'cantopen.file'},
 eval { $parser->filter( { input => [], output => $fake_fh } ) };
 $err = $@;
 
-like( $err, qr{Error: Invalid variable type for input file argument to filter\(\)},
+like( $err, qr{Error: 'input' parameter for filter\(\) must be a filename or filehandle},
     "Catch filter() failure on bad variable type for input parameter"
 );
 
 eval { $parser->filter( { input => $fake_fh, output => [] } ) };
 $err = $@;
 
-like( $err, qr{Error: Invalid variable type for output file argument to filter\(\)},
+like( $err, qr{Error: 'output' parameter for filter\(\) must be a filename or filehandle},
     "Catch filter() failure on bad variable type for output parameter"
 );
 
