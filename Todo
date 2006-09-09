@@ -70,6 +70,8 @@ TODO list for Perl module Pod::WikiDoc
 
     - e.g. %%VERSION%%
 
+- inclusion of other files, either verbatim or as pod
+
 #--------------------------------------------------------------------------#
 # Efficiency
 #--------------------------------------------------------------------------#
