@@ -8,12 +8,10 @@ use Carp;
 use IO::String;
 use Pod::WikiDoc::Parser;
 
-#--------------------------------------------------------------------------#
-# main pod documentation 
-#--------------------------------------------------------------------------#
 
-# Below is the stub of documentation for your module. You better edit it!
-
+#--------------------------------------------------------------------------#
+# PUBLIC METHODS
+#--------------------------------------------------------------------------#
 
 sub new {
     my $class = shift;
@@ -30,12 +28,38 @@ sub convert {
 
     my $input_fh = IO::String->new( $input_string );
     my $output_fh = IO::String->new();
-    _process( $self, $input_fh, $output_fh );
+    _filter_podfile( $self, $input_fh, $output_fh );
     
     return ${ $output_fh->string_ref() };
 }
+
+sub filter {
+
+}
+
+sub format {
+    my ($self, $wikitext) = @_;
     
-sub _process {
+    my $wiki_tree  = $self->{parser}->WikiDoc( $wikitext ) ;
+    for my $node ( @$wiki_tree ) {
+        undef $node if ! ref $node;
+    }
+
+    return _wiki2pod( $wiki_tree );
+}
+
+#--------------------------------------------------------------------------#
+# PRIVATE METHODS
+#--------------------------------------------------------------------------#
+
+#--------------------------------------------------------------------------#
+# _filter_podfile() 
+#
+# extract Pod from input and pass through to output, converting any wikidoc
+# markup to Pod in the process
+#--------------------------------------------------------------------------#
+
+sub _filter_podfile {
     my ($self, $input_fh, $output_fh) = @_;
 
     # initialize flags and buffers
@@ -109,6 +133,10 @@ sub _process {
 
     return;
 }
+
+#--------------------------------------------------------------------------#
+# Translation functions and tables
+#--------------------------------------------------------------------------#
 
 sub _translate_wikidoc {
     my ( $self, $wikidoc_ref ) = @_;
@@ -217,17 +245,6 @@ sub _wiki2pod {
         $result .= ref $closing eq 'CODE' ? $closing->($node) : $closing;
     }
     return $result;
-}
-
-sub format {
-    my ($self, $wikitext) = @_;
-    
-    my $wiki_tree  = $self->{parser}->WikiDoc( $wikitext ) ;
-    for my $node ( @$wiki_tree ) {
-        undef $node if ! ref $node;
-    }
-
-    return _wiki2pod( $wiki_tree );
 }
 
 1; #this line is important and will help the module return a true value
