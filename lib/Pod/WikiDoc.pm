@@ -33,11 +33,9 @@ sub new {
 sub filter {
     my ($self, $string) = @_;
 
-    # break up input -- insure trailing blank line to ensure pod paragraphs end with blank line
+    # break up input -- insure trailing blank line to ensure pod 
+    # paragraphs end with blank line
     my @input_lines = split( /\n/, $string);
-    if ( ! @input_lines || $input_lines[-1] !~ m{ \s* }xms ) {
-        push @input_lines, q{};
-    }
 
     # initialize flags and buffers
     my $in_pod      = 0; # not in a Pod section at start
@@ -64,9 +62,10 @@ sub filter {
             # see if we're done -- =begin/=end or =for/blankline
             if (    (   $in_begin && $line =~ m{\A =end \s+ wikidoc}xms )
                  || ( ! $in_begin && $line =~ m{\A \s*  \z         }xms ) ) {
-                $in_wikidoc = $in_begin = 0;
+                
                 push @output, _translate_wikidoc( $self, \@wikidoc );
                 @wikidoc = ();
+                $in_wikidoc = $in_begin = 0;
                 next LINE;
             }
             # not done, so store up the wikidoc
@@ -92,8 +91,8 @@ sub filter {
                 if ( ! $in_begin && defined $para && length $para ) {
                     push @wikidoc, $para;
                 }
-                # if last line, process it now
-                if ( @input_lines == 0 ) {
+                # if last line, process a =for para now now
+                if ( ! $in_begin && @input_lines == 0 ) {
                     push @output, _translate_wikidoc( $self, $para );
                 }
                 next LINE;
@@ -102,13 +101,17 @@ sub filter {
         }
     }
 
-    return join "\n", @output, q{}; 
+    my $result = join "\n", @output; 
+    if ( $result ne "" && substr( $result, -1, 1 ) ne "\n" ) {
+        $result .= "\n";
+    }
+    return $result;
 }
 
 sub _translate_wikidoc {
     my ( $self, $wikidoc_ref ) = @_;
     my $converted = $self->format( join "\n", @$wikidoc_ref, q{} );
-    return split( "\n", $converted), q{} ;
+    return split( "\n", $converted );
 }
     
 sub _handle_element_start {
