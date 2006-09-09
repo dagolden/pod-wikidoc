@@ -82,3 +82,4 @@ sub run_tests {
 
 }
 
+1;
