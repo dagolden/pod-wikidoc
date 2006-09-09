@@ -16,8 +16,6 @@ TODO list for Perl module Pod::WikiDoc
 # Extraction
 #--------------------------------------------------------------------------#
 
-- Extract and pass through regular pod as well as wikidoc
-
 - Special comment mode: extract anything after "## " as wikidoc from 
   regular code lines
   
@@ -35,7 +33,8 @@ TODO list for Perl module Pod::WikiDoc
     - subclass ACTION_build -- part of build, but dependency, cleans up
       automatically
 
-    - subclass ACTION_distdir -- part of building dist, added to manifest
+    - subclass ACTION_distdir -- part of building dist, added to manifest 
+      also do ACTION_test to create .pod only if they don't already exist
 
 #--------------------------------------------------------------------------#
 # Potential future enhancements

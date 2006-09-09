@@ -10,6 +10,7 @@ Module::Build->new(
     requires        => {
         File::Find          => 1,
         File::pushd         => 0.20,
+        IO::String          => 1.06,
         Parse::RecDescent   => 1.94,
         Test::More          => 0.48,
     },

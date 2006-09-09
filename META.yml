@@ -8,15 +8,11 @@ license: perl
 requires:
   File::Find: 1
   File::pushd: 0.2
+  IO::String: 1.06
   Parse::RecDescent: 1.94
   Test::More: 0.48
 provides:
-  Parse::RecDescent::Pod::WikiDoc::Parser:
-    file: lib/Pod/WikiDoc/Parser.pm
   Pod::WikiDoc:
     file: lib/Pod/WikiDoc.pm
-    version: 0.10
-  Pod::WikiDoc::Parser:
-    file: lib/Pod/WikiDoc/Parser.pm
     version: 0.10
 generated_by: Module::Build version 0.2702
