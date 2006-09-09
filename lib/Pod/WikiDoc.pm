@@ -86,7 +86,6 @@ my %opening_of = (
     LinkContent         =>  'L<',
     LinkLabel           =>  q{},
     LinkTarget          =>  q{},
-    SpecialChar         =>  q{},
 );
 
 my %closing_of = (
@@ -107,7 +106,6 @@ my %closing_of = (
     LinkContent         =>  ">",
     LinkLabel           =>  "|",
     LinkTarget          =>  q{},
-    SpecialChar         =>  q{},
 );
 
 my %content_handler_for = (

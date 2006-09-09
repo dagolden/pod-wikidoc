@@ -165,8 +165,6 @@ __DATA__
                 { $return = $item[1] }
         |   RegularText
                 { $return = $item[1] }
-        |   SpecialChar
-                { $return = $item[1] }
 
     InlineCode:   { extract_bracketed( $text, '{' ) }
                 { 
@@ -215,15 +213,6 @@ __DATA__
                         content => $item[1],
                     }
                 }
-
-    SpecialChar: m{ ^ \* | \[ }x
-                { 
-                    $return = { 
-                        type    => $item[0],
-                        content => $item[1],
-                    }
-                }
-
 
     LinkContent:
             LinkLabel "\|" LinkTarget
