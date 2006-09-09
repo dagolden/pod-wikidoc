@@ -5,28 +5,36 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = "0.14";
 
-use Getopt::Long 2.17; # support for Configure()
+use Getopt::Lucid ':all';
 use Pod::WikiDoc;
 use Pod::Usage;
 
-Getopt::Long::Configure( "bundling" );
-my %opts;
-my $opts_ok = GetOptions( \%opts,
-    "comment|c",
-    "help|h",
-    "length|l:i",
-    "version|V"
+my @spec = (
+    Switch("comment|c"),
+    Param("length|l")->default(3),
+    Keypair("define|d"),
+    Switch("help|h"),
+    Switch("version|V"),
 );
+        
+my $opts;
 
-if ( ! $opts_ok ) {
-    pod2usage("Syntax Error.");
+eval { $opts = Getopt::Lucid->getopt( \@spec ) };
+
+if ($@) {
+    if ( ref $@ && $@->isa("Getopt::Lucid::Exception::ARGV") ) {
+        pod2usage("Syntax Error.");
+    }
+    else {
+        die $@;
+    }
 }
 
-if ( $opts{help} ) {
+if ( $opts->get_help ) {
     pod2usage( -verbose => 1 );
 }
 
-if ( $opts{version} ) {
+if ( $opts->get_version ) {
     print "Version: wikidoc $VERSION\n"; 
     exit;
 }
@@ -41,8 +49,9 @@ die "wikidoc: Can't use the same file for input and output.\n"
     if $input_file && $output_file && $input_file eq $output_file;
 
 my $args = {
-    comment_blocks => $opts{comment} ? 1 : 0,
-    comment_prefix_length => $opts{length} ? $opts{length} : 3,
+    comment_blocks => $opts->get_comment ? 1 : 0,
+    comment_prefix_length => $opts->get_length,
+    keywords => { $opts->get_define },
 };
 
 my $parser = Pod::WikiDoc->new( $args );
