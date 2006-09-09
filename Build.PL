@@ -87,6 +87,7 @@ $class->new(
         IPC::Run3           => 0.033,   #build_requires
         Parse::RecDescent   => 1.94,
         Pod::Usage          => 1,
+        Probe::Perl         => 0.01,    #build_requires
         Scalar::Util        => 1.02,
         Test::More          => 0.45,    #build_requires
         Text::Balanced      => 1.95,
