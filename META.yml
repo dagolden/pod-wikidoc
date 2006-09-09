@@ -19,4 +19,6 @@ provides:
   Pod::WikiDoc:
     file: lib/Pod/WikiDoc.pm
     version: 0.10
+  Pod::Wikidoc::Cookbook:
+    file: lib/Pod/WikiDoc/Cookbook.pm
 generated_by: Module::Build version 0.2702

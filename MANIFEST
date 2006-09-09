@@ -1,7 +1,11 @@
 Build.PL
 Changes
 lib/Pod/WikiDoc.pm
+lib/Pod/WikiDoc.pod
+lib/Pod/WikiDoc/Cookbook.pm
+lib/Pod/WikiDoc/Cookbook.pod
 lib/Pod/WikiDoc/Parser.pm.PL
+lib/Pod/WikiDoc/Parser.pod
 LICENSE
 Makefile.PL
 MANIFEST			This list of files
@@ -66,6 +70,7 @@ t/wiki2pod/code_markup/005_inline_code_in_bullet_list
 t/wiki2pod/code_markup/006_inline_code_in_numbered_list
 t/wiki2pod/codeblocks/001_simple_codeblock
 t/wiki2pod/codeblocks/002_codeblock_continuation
+t/wiki2pod/codeblocks/003_codeblock_after_paragraph
 t/wiki2pod/complex/001_mixed_blocks_without_inline
 t/wiki2pod/escape_markup/001_less_than_in_paragraph
 t/wiki2pod/escape_markup/002_greater_than_in_paragraph

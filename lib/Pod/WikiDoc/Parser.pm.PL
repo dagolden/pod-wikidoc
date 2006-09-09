@@ -45,59 +45,66 @@ END_VERSION
 
 my $docs_text = <<'END_DOCS';
 
-=head1 NAME
+=begin wikidoc
+
+= NAME
 
 Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
-=head1 SYNOPSIS
+= SYNOPSIS
 
- use Pod::WikiDoc::Parser;
+    use Pod::WikiDoc::Parser;
  
- my $parser = Pod::WikiDoc::Parser->new();
+    my $parser = Pod::WikiDoc::Parser->new();
 
- my $tree = $parser->WikiDoc( $text );
+    my $tree = $parser->WikiDoc( $text );
 
-=head1 DESCRIPTION
+= DESCRIPTION
 
-This is a precompiled L<Parse::RecDescent> parser for use with L<Pod::WikiDoc>.
-It is generated dynamically on installation of L<Pod::WikiDoc> from a grammer
+This is a precompiled [Parse::RecDescent] parser for use with [Pod::WikiDoc].
+It is generated dynamically on installation of [Pod::WikiDoc] from a grammer
 included with the distribution.  
 
-A copy of the L<Parse::RecDescent> grammer used is appended to this source file
-for reference or reuse by others.
+A copy of the [Parse::RecDescent] grammer used is appended to the
+Pod::WikiDoc::Parser source file for reference or reuse by others.
 
-=head1 USAGE
+= USAGE
 
-This module is a support module for L<Pod::WikiDoc> and is not intended for
+This module is a support module for [Pod::WikiDoc] and is not intended for
 general use.  Given a string containing WikiDoc markup text, the parser
 produces a data structure representing the parsed content.  The data structure
 returned is an array of references to hashes.  Keys in the hash are:
 
-=over
+* type: the parser rule that generated the hash
+* content: either a reference to another AoH or a string of text
+* level: (only for "Header" type hashes) the level of the header
 
-=item *
+See [Pod::WikiDoc] for details of the markup.
 
-type: the parser rule that generated the hash
+= SEE ALSO
 
-=item *
+There are numerous Perl wikitext parsers, formatters or translators, some of
+which were instructive in designing this parser.  All the ones I could find are
+included below for reference for those interested in the topic.
 
-content: either a reference to another AoH or a string of text
+* [CGI::Wiki::Formatter]
+* [Convert::Wiki]
+* [HTML::WikiConverter]
+* [Kwiki::Formatter]
+* [Pod::TikiWiki]
+* [PurpleWiki::Parser::WikiText]
+* [Template::Plugin::KwikiFormat]
+* [Text::WikiFormat]
 
-=item *
-
-level: (only for "Header" type hashes) the level of the header
-
-=back
-
-=head1 AUTHOR
+= AUTHOR
 
 David A Golden (DAGOLDEN)
 
 dagolden@cpan.org
 
-http://dagolden.com/
+[http://dagolden.com/]
 
-=head1 COPYRIGHT
+= COPYRIGHT
 
 Copyright (c) 2005 by David A Golden
 
@@ -106,6 +113,8 @@ it and/or modify it under the same terms as Perl itself.
 
 The full text of the license can be found in the
 LICENSE file included with this module.
+
+=end wikidoc
 
 =cut
 
@@ -236,7 +245,7 @@ __DATA__
                 }
     
     Plain_Line:     
-            /^[^*0\n]|[*0][^\t\ ]/ /[^\n]+/ "\n"
+            /^[^*0\n\t\ ]|[*0][^\t\ ]/ /[^\n]+/ "\n"
                 { $return =  $item[1] . $item[2] . $item[3] }
 
     Paragraph:      
