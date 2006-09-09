@@ -4,14 +4,16 @@ use warnings;
 
 use Test::Builder;
 use Probe::Perl;
+use Cwd qw( abs_path );
 use IPC::Run3;
+use File::Basename qw( basename );
 use File::Spec;
 #use POSIX qw( WEXITSTATUS );
 
 my $Test = Test::Builder->new;
 my $pp = Probe::Perl->new;
-my $perl = file($pp->find_perl_interpreter)->absolute;
-my $cwd = File::Spec->rel2abs();
+my $perl = abs_path($pp->find_perl_interpreter);
+my $cwd = abs_path( "." );
 my $coverdb = File::Spec->catdir($cwd,"cover_db");
 my $cover = index( ($ENV{HARNESS_PERL_SWITCHES} || ''), '-MDevel::Cover' ) < 0
           ? ''
@@ -40,7 +42,7 @@ sub run {
         $perl, 
         "-Mblib=$cwd", # must hard code this in case curdir changed
         ( $cover ? $cover : () ),
-        $self->program(),
+        $self->{program},
         @{ $self->default_args() },
         @args,
     );
@@ -63,12 +65,10 @@ sub run {
 sub program {
     my ($self, $filename) = @_;
     if (defined $filename) {
-        my $p = file($filename);
-        die "Can't find $p" if ! -e $p;
-        $self->{program} = $p->absolute;
-        $self->basename($p->basename);
+        die "Can't find $filename" if ! -e $filename;
+        $self->{program} = abs_path($filename);
     }
-    return $self->{program};
+    return basename( $self->{program} );
 }
         
 BEGIN {
@@ -78,7 +78,7 @@ BEGIN {
             return $_[0]->{PROP};
         }
 CODE
-    for ( qw( exit_code stdin stdout stderr basename default_args)) {
+    for ( qw( exit_code stdin stdout stderr default_args)) {
         no strict 'refs';
         (my $sub = $evaltext) =~ s/PROP/$_/g;
         *{__PACKAGE__ . "::$_"} = eval $sub;
@@ -91,7 +91,7 @@ CODE
 
 sub runs_ok {
     my ($self, @args) = @_;
-    my $label = "Ran " . $self->basename . " with "
+    my $label = "Ran " . $self->program() . " with "
               . (@args && $args[0] ne q{} ? "args '@args'" : "no args" )
               . " without error";
     my $runs = $self->run(@args);
@@ -107,7 +107,7 @@ sub runs_ok {
 
 sub dies_ok {
     my ($self, @args) = @_;
-    my $label = $self->basename . " with "
+    my $label = $self->program . " with "
               . (@args && $args[0] ne q{} ? "args '@args'" : "no args" )
               . " ended with an error";
     my $runs = $self->run(@args);
@@ -122,7 +122,7 @@ sub dies_ok {
 
 sub exits_with {
     my ($self, $expect, @args) = @_;
-    my $label = $self->basename . " with "
+    my $label = $self->program . " with "
               . (@args && $args[0] ne q{} ? "args '@args'" : "no args" )
               . " ended with exit code $expect";
     my $runs = $self->run(@args);
@@ -130,20 +130,16 @@ sub exits_with {
     return $Test->is_num( $self->exit_code, $expect, $label );
 }
 
-sub stdout_is {
-    my ($self, $expect, $label) = @_;
-    return $Test->is_eq( $self->stdout, $expect, 
-        $label 
-            ? "... $label" 
-            : "... " . $self->basename . " had correct output to STDOUT" );
-}
+sub stdout_is { my ($self, $expect, $label) = @_; return $Test->is_eq(
+        $self->stdout, $expect, $label ? "... $label" : "... " . $self->program
+        . " had correct output to STDOUT" ); }
 
 sub stdout_like {
     my ($self, $expect, $label) = @_;
     return $Test->like( $self->stdout, $expect, 
         $label 
             ? "... $label"
-            : "... " . $self->basename . " had correct output to STDOUT" );
+            : "... " . $self->program . " had correct output to STDOUT" );
 }
 
 sub stderr_is {
@@ -151,7 +147,7 @@ sub stderr_is {
     return $Test->is_eq( $self->stderr, $expect,
         $label 
             ? "... $label"
-            : "... " . $self->basename . " had correct output to STDERR" );
+            : "... " . $self->program . " had correct output to STDERR" );
 }
 
 sub stderr_like {
@@ -159,7 +155,7 @@ sub stderr_like {
     return $Test->like( $self->stderr, $expect,
         $label 
             ? "... $label"
-            : "... " . $self->basename . " had correct output to STDERR" );
+            : "... " . $self->program . " had correct output to STDERR" );
 }
 
 
