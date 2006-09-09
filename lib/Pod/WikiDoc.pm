@@ -83,7 +83,9 @@ my %opening_of = (
     InlineCode          =>  "C<<< ",
     BoldText            =>  'B<',
     ItalicText          =>  'I<',
-    LinkText            =>  'L<',
+    LinkContent         =>  'L<',
+    LinkLabel           =>  q{},
+    LinkTarget          =>  q{},
     SpecialChar         =>  q{},
 );
 
@@ -102,7 +104,9 @@ my %closing_of = (
     InlineCode          =>  " >>>",
     BoldText            =>  ">",
     ItalicText          =>  ">",
-    LinkText            =>  ">",
+    LinkContent         =>  ">",
+    LinkLabel           =>  "|",
+    LinkTarget          =>  q{},
     SpecialChar         =>  q{},
 );
 
@@ -110,6 +114,7 @@ my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
     BoldText            =>  \&_escape_pod, 
     ItalicText          =>  \&_escape_pod, 
+    LinkLabel           =>  \&_escape_pod,
 );
 
 my %escape_code_for = (

@@ -195,10 +195,9 @@ __DATA__
 
     LinkText:   { extract_bracketed( $text, '[' ) }
                 { 
-                    $return = { 
-                        type    => $item[0],
-                        content => substr( substr( $item[1], 1), 0, -1 ),
-                    }
+                    $return = $thisparser->LinkContent( 
+                        substr( substr( $item[1], 1), 0, -1 )
+                    ),
                 }
 
     RegularText:  m{ ^ \S+ }x
@@ -226,3 +225,37 @@ __DATA__
                 }
 
 
+    LinkContent:
+            LinkLabel "\|" LinkTarget
+                {   
+                    $return = { 
+                        type    => $item[0],
+                        content => [ $item[1], $item[3] ],
+                    }
+                }
+        |   LinkTarget
+                {
+                    $return = { 
+                        type    => $item[0],
+                        content => [ $item[1] ],
+                    }
+                }
+
+    LinkLabel:
+            /^[^|]*/
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+
+    LinkTarget:
+            /.+/
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+    
