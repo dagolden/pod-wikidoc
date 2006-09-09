@@ -21,7 +21,7 @@ L<Pod::WikiDoc>.  It is generated dynamically on installation of L<Pod::WikiDoc>
 from a grammar included with the distribution.  
 
 A copy of the L<Parse::RecDescent> grammar used is appended to the
-Pod::WikiDoc::Parser source and this Pod files for reference or reuse by
+Pod::WikiDoc::Parser source and this Pod file for reference or reuse by
 others.
 
 =head1 USAGE

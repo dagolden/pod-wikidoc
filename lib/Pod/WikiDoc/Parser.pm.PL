@@ -5,7 +5,7 @@ use File::pushd;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
-$VERSION = "0.11";
+$VERSION = "0.12";
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
@@ -37,7 +37,7 @@ my ($target_dir) = $ARGV[0] =~ m{ \A ( .+ )  / .+ \z }xms;
 my $version_text = <<"END_VERSION";
 \n
 use vars qw( \$VERSION );
-\$VERSION = "0.11";
+\$VERSION = "0.12";
 
 END_VERSION
 

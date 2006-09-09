@@ -2,7 +2,7 @@ package Pod::WikiDoc::Cookbook;
 # Not really a .pm file, but holds wikidoc which will be
 # turned into .pod by the Build.PL
 use vars '$VERSION';
-$VERSION = "0.11";
+$VERSION = "0.12";
 1;
 __END__
 
@@ -49,9 +49,13 @@ the MANIFEST
 * ACTION_distdir -- adds a dependency on the {wikidoc} action to regenerate
 .pod files before bundling up a distribution
 
-By making wikidoc extraction part of the {distdir} action, users installing
-the distribution will receive it with .pod files already created, and will 
-not need to have [Pod::WikiDoc] installed themselves.
+By making wikidoc extraction part of the {distdir} action, users installing the
+distribution will receive it with .pod files already created, and will not need
+to have [Pod::WikiDoc] installed themselves.  Note: this subclassing can't be
+emulated in a "traditional" {Makefile.PL} as created by [Module::Build::Compat]
+using the {create_makefile} option in [Module::Build].  As the "passthrough"
+style is also problematic for some users, I recommend leaving off any
+{Makefile.PL} and using {Build.PL} only.
 
     # Build.PL
     use Module::Build;

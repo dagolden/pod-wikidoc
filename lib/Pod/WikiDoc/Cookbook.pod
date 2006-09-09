@@ -55,9 +55,13 @@ ACTION_distdir -- adds a dependency on the C<<< wikidoc >>> action to regenerate
 
 =back
 
-By making wikidoc extraction part of the C<<< distdir >>> action, users installing
-the distribution will receive it with .pod files already created, and will 
-not need to have L<Pod::WikiDoc> installed themselves.
+By making wikidoc extraction part of the C<<< distdir >>> action, users installing the
+distribution will receive it with .pod files already created, and will not need
+to have L<Pod::WikiDoc> installed themselves.  Note: this subclassing can't be
+emulated in a "traditional" C<<< Makefile.PL >>> as created by L<Module::Build::Compat>
+using the C<<< create_makefile >>> option in L<Module::Build>.  As the "passthrough"
+style is also problematic for some users, I recommend leaving off any
+C<<< Makefile.PL >>> and using C<<< Build.PL >>> only.
 
      # Build.PL
      use Module::Build;
