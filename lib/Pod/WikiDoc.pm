@@ -30,29 +30,27 @@ sub new {
     return bless $self, $class;
 }
 
-sub filter {
-    my ($self, $string) = @_;
-
-    # break up input -- insure trailing blank line to ensure pod 
-    # paragraphs end with blank line
-    my @input_lines = split( /\n/, $string);
+sub process {
+    my ($self, $input_fh, $output_fh) = @_;
 
     # initialize flags and buffers
     my $in_pod      = 0; # not in a Pod section at start
     my $in_begin    = 0; # not in a begin section 
     my $in_wikidoc  = 0; # not in a wikidoc section
-    my (@output, @wikidoc);
+    my @wikidoc;
     
     # process line-by-line
     my $line;
     LINE:
-    while ( defined ($line = shift @input_lines) ) {
+    while ( defined( $line = <$input_fh> ) ) {
         if ( not $in_pod ) {
             if ( $line =~ m{ \A = ([a-zA-Z]\S*) }xms ) {
                 my $command = $1;
                 
                 # =cut can't start pod
-                next LINE if $command eq "cut";
+                if ( $command eq "cut" ) {
+                    next LINE;
+                }
 
                 $in_pod = 1;
                 redo LINE;
@@ -63,7 +61,7 @@ sub filter {
             if (    (   $in_begin && $line =~ m{\A =end \s+ wikidoc}xms )
                  || ( ! $in_begin && $line =~ m{\A \s*  \z         }xms ) ) {
                 
-                push @output, _translate_wikidoc( $self, \@wikidoc );
+                print $output_fh _translate_wikidoc( $self, \@wikidoc );
                 @wikidoc = ();
                 $in_wikidoc = $in_begin = 0;
                 next LINE;
@@ -71,10 +69,12 @@ sub filter {
             # not done, so store up the wikidoc
             push @wikidoc, $line;
             # if not more lines, process wikidoc now
-            if ( @input_lines == 0 ) {
-                push @output, _translate_wikidoc( $self, \@wikidoc );
+            $line = <$input_fh>;
+            if ( ! defined $line ) {
+                print $output_fh _translate_wikidoc( $self, \@wikidoc );
+                last LINE;
             }
-            next LINE;
+            redo LINE;
         }
         else {
             if ( $line =~ m{ \A =cut }xms ) {
@@ -91,27 +91,23 @@ sub filter {
                 if ( ! $in_begin && defined $para && length $para ) {
                     push @wikidoc, $para;
                 }
-                # if last line, process a =for para now now
-                if ( ! $in_begin && @input_lines == 0 ) {
-                    push @output, _translate_wikidoc( $self, $para );
+                # if last line, process a =for para now
+                $line = <$input_fh>;
+                if ( ! $in_begin && ! defined $line ) {
+                    print $output_fh _translate_wikidoc( $self, $para );
                 }
-                next LINE;
+                redo LINE;
             }
-            push @output, $line;
+            print $output_fh $line;
         }
     }
 
-    my $result = join "\n", @output; 
-    if ( $result ne "" && substr( $result, -1, 1 ) ne "\n" ) {
-        $result .= "\n";
-    }
-    return $result;
+    return;
 }
 
 sub _translate_wikidoc {
     my ( $self, $wikidoc_ref ) = @_;
-    my $converted = $self->format( join "\n", @$wikidoc_ref, q{} );
-    return split( "\n", $converted );
+    return $self->format( join q{}, @$wikidoc_ref );
 }
     
 sub _handle_element_start {

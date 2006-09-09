@@ -13,3 +13,4 @@ sub foo { 1; }
 =pod
 
 This is a pod paragraph
+
