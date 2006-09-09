@@ -30,6 +30,87 @@ sub new {
     return bless $self, $class;
 }
 
+sub filter {
+    my ($self, $string) = @_;
+
+    # break up input -- insure trailing blank line to ensure pod paragraphs end with blank line
+    my @input_lines = split( /\n/, $string);
+    if ( ! @input_lines || $input_lines[-1] !~ m{ \s* }xms ) {
+        push @input_lines, q{};
+    }
+
+    # initialize flags and buffers
+    my $in_pod      = 0; # not in a Pod section at start
+    my $in_begin    = 0; # not in a begin section 
+    my $in_wikidoc  = 0; # not in a wikidoc section
+    my (@output, @wikidoc);
+    
+    # process line-by-line
+    my $line;
+    LINE:
+    while ( defined ($line = shift @input_lines) ) {
+        if ( not $in_pod ) {
+            if ( $line =~ m{ \A = ([a-zA-Z]\S*) }xms ) {
+                my $command = $1;
+                
+                # =cut can't start pod
+                next LINE if $command eq "cut";
+
+                $in_pod = 1;
+                redo LINE;
+            }
+        }
+        elsif ( $in_wikidoc ) {
+            # see if we're done -- =begin/=end or =for/blankline
+            if (    (   $in_begin && $line =~ m{\A =end \s+ wikidoc}xms )
+                 || ( ! $in_begin && $line =~ m{\A \s*  \z         }xms ) ) {
+                $in_wikidoc = $in_begin = 0;
+                push @output, _translate_wikidoc( $self, \@wikidoc );
+                @wikidoc = ();
+                next LINE;
+            }
+            # not done, so store up the wikidoc
+            push @wikidoc, $line;
+            # if not more lines, process wikidoc now
+            if ( @input_lines == 0 ) {
+                push @output, _translate_wikidoc( $self, \@wikidoc );
+            }
+            next LINE;
+        }
+        else {
+            if ( $line =~ m{ \A =cut }xms ) {
+                $in_pod = 0;
+                next LINE;
+            }
+            if ( $line =~ m{ \A =(begin|for) \s+ wikidoc \s* (.*)}xms ) {
+                my ($command, $para) = ($1, $2);
+                
+                $in_wikidoc = 1;
+                $in_begin = $command eq 'begin' ? 1 : 0;
+                
+                # if =for wikidoc, then store $para
+                if ( ! $in_begin && defined $para && length $para ) {
+                    push @wikidoc, $para;
+                }
+                # if last line, process it now
+                if ( @input_lines == 0 ) {
+                    push @output, _translate_wikidoc( $self, $para );
+                }
+                next LINE;
+            }
+            push @output, $line;
+        }
+    }
+
+    return join "\n", @output, q{}; 
+}
+
+sub _translate_wikidoc {
+    my ( $self, $wikidoc_ref ) = @_;
+    my $converted = $self->format( join "\n", @$wikidoc_ref, q{} );
+    return split( "\n", $converted), q{} ;
+}
+    
 sub _handle_element_start {
     my($parser, $element_name, $attr_hash_ref) = @_;
     if ( $element_name eq 'for' && $attr_hash_ref->{target} eq 'wikidoc' ) {

@@ -1,9 +1,9 @@
 ---
 name: Pod-WikiDoc
-version: 0.01
+version: 0.10
 author:
   - David A Golden <dagolden@cpan.org>
-abstract: Put abstract here
+abstract: ~
 license: perl
 requires:
   File::Find: 1
@@ -11,7 +11,12 @@ requires:
   Parse::RecDescent: 1.94
   Test::More: 0.48
 provides:
+  Parse::RecDescent::Pod::WikiDoc::Parser:
+    file: lib/Pod/WikiDoc/Parser.pm
   Pod::WikiDoc:
     file: lib/Pod/WikiDoc.pm
-    version: 0.01
+    version: 0.10
+  Pod::WikiDoc::Parser:
+    file: lib/Pod/WikiDoc/Parser.pm
+    version: 0.10
 generated_by: Module::Build version 0.2702

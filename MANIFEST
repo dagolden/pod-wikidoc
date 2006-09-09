@@ -1,6 +1,7 @@
 Build.PL
 Changes
 lib/Pod/WikiDoc.pm
+lib/Pod/WikiDoc/Parser.pm
 lib/Pod/WikiDoc/Parser.pm.PL
 LICENSE
 Makefile.PL
@@ -22,6 +23,7 @@ t/10-convert_italic_markup.t
 t/11-escape_markup.t
 t/12-convert_inline_code.t
 t/13-nested_formatting.t
+t/50-filter-pod.t
 t/99-convert_complex_wikitext.t
 t/Casefiles.pm
 t/extraction/001_parsing_empty_string
@@ -31,6 +33,11 @@ t/extraction/004_parsing_multi_line_begin_end
 t/extraction/005_parsing_multi_para_begin_end
 t/extraction/006_parsing_multi_section_begin_end
 t/extraction/007_parsing_multi_section_with_extraneous
+t/filter_pod/001_filtering_empty_string
+t/filter_pod/002_filtering_only_pod
+t/filter_pod/003_filtering_bad_pod
+t/filter_pod/004_filtering_only_begin_end_wikidoc
+t/filter_pod/005_filtering_only_for_wikidoc
 t/wiki2pod/bold_markup/001_simple_bold_tag_in_paragraph
 t/wiki2pod/bold_markup/002_multi_line_bold_tag_in_paragraph
 t/wiki2pod/bold_markup/003_asterisk_in_words
