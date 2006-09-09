@@ -2,6 +2,9 @@
 
 This text shouldn't appear
 
+=for comment
+Nor should this
+
 =begin wikidoc
 
 hello world
