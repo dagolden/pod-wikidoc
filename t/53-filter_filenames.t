@@ -23,11 +23,17 @@ $cases->run_tests(
     sub { 
         my $input_string = shift;
 
-        # setup output file
+        # setup temporary files
         my $output_file = File::Temp->new();
-
-        # setup input file
         my $input_file = File::Temp->new();
+
+        # File::Temp defaults to binmode so change that on Windows
+        if ( $^O eq 'MSWin32' ) {
+            binmode $output_file, ":crlf";
+            binmode $input_file, ":crlf";
+        }
+        
+        # init the input file
         print $input_file $input_string;
         seek $input_file, 0, 0;
 
