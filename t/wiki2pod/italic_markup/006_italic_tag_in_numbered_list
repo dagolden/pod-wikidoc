@@ -1,6 +1,6 @@
-0 this text should be /italic/ here
-0 this text should be /italic and span
-multiple lines/
+0 this text should be ~italic~ here
+0 this text should be ~italic and span
+multiple lines~
 #--------------------------------------------------------------------------#
 =over
 

@@ -1,6 +1,7 @@
 Revision history for Perl module Pod::WikiDoc
 
 0.01 in progress
-    - basic wikidoc format section extraction works
-    - basic block formatting works
-    - basic inline formattting partially works
+    - basic wikidoc format section extraction
+    - basic block formatting
+    - basic inline formattting
+    - special symbols escaped in generated pod

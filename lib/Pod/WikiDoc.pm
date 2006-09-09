@@ -111,13 +111,17 @@ my %content_handler_for = (
 my %escape_code_for = (
     ">" =>  "E<gt>",
     "<" =>  "E<lt>",
+    "|" =>  "E<verbar>",
+    "/" =>  "E<sol>",
 );
+my $specials = "@{[ keys %escape_code_for ]}";
 
 sub _escape_pod {
     my $node = shift;
     my $input_text  = $node->{content};
     # replace special symbols with corresponding escape code
-    $input_text =~ s{ ( [<>] ) }{$escape_code_for{$1}}gxms;
+    $input_text =~ s{ ( [$specials] ) }
+                    {$escape_code_for{$1}}gxms;
     return $input_text;
 }
 

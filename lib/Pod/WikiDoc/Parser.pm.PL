@@ -2,7 +2,6 @@
 use strict;
 use warnings;
 use File::pushd;
-
 use Parse::RecDescent;
 
 # Load Text::Balanced into Parse::RecDescent
@@ -175,7 +174,7 @@ __DATA__
                     }
                 }
 
-    ItalicText: { extract_delimited( $text, '/' ) }
+    ItalicText: { extract_delimited( $text, '~' ) }
                 { 
                     $return = { 
                         type    => $item[0],
