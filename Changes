@@ -1,6 +1,6 @@
 Revision history for Perl module Pod::WikiDoc
 
-0.14 in progress
+0.14 Sun Jun 11 00:41:31 EDT 2006
     - added keyword expansion (e.g. %%VERSION%% )
     - added keyword definition options to wikidoc program
     - added no_index recipe to Cookbook for extra documentation files
