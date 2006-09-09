@@ -120,7 +120,7 @@ in the META.yml file of the distribution.
 Example of a simple .pm documentation file:
 
     package Some::Module::About;
-    $VERSION = "1.00";
+    $VERSION = "0.14";
     use strict; # make CPANTS happy
     1;
     __END__

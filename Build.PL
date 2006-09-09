@@ -91,4 +91,11 @@ $class->new(
         Test::More          => 0.45,    #build_requires
         Text::Balanced      => 1.95,
     },
+    meta_add            => {
+        no_index => {
+            file => [ qw{
+                lib/Pod/WikiDoc/Cookbook.pm
+            } ]
+        }
+    },
 )->create_build_script;
