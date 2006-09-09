@@ -59,7 +59,9 @@ not need to have [Pod::WikiDoc] installed themselves.
             my $self = shift;
             eval "use Pod::WikiDoc";
             if ( $@ eq '' ) {
-                my $parser = Pod::WikiDoc->new({comment_doc => 1});
+                my $parser = Pod::WikiDoc->new(
+                    { comment_blocks => 1}
+                );
                 for my $src ( keys %{ $self->find_pm_files() } ) {
                     (my $tgt = $src) =~ s{\.pm$}{.pod};
                     $parser->filter( {

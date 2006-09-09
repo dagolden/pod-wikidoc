@@ -8,7 +8,9 @@ my $class = Module::Build->subclass(
         my $self = shift;
         eval "use Pod::WikiDoc";
         if ( $@ eq '' ) {
-            my $parser = Pod::WikiDoc->new( { comment_doc => 1 } );
+            my $parser = Pod::WikiDoc->new( 
+                { comment_blocks => 1 } 
+            );
             for my $src ( keys %{ $self->find_pm_files() } ) {
                 (my $tgt = $src) =~ s{\.pm$}{.pod};
                 $parser->filter( {
@@ -46,10 +48,11 @@ $class->new(
     create_readme       => 1,
     create_makefile_pl  => 'traditional',
     requires        => {
-        File::Find          => 1,    
+        File::Find          => 1,       #build_requires
         File::pushd         => 0.20,    #build_requires
-        File::Spec          => 3,       
+        File::Spec          => 3,       #build_requires 
         File::Temp          => 0.16,    #build_requires
+        Getopt::Std         => 1,
         IO::String          => 1.06,
         IPC::Run3           => "0.020", #build_requires
         Parse::RecDescent   => 1.94,

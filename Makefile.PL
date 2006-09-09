@@ -10,13 +10,14 @@ WriteMakefile
           'PREREQ_PM' => {
                            'Scalar::Util' => '1.02',
                            'IO::String' => '1.06',
+                           'Getopt::Std' => 1,
                            'File::pushd' => '0.2',
                            'File::Spec' => 3,
                            'Parse::RecDescent' => '1.94',
                            'Test::More' => '0.48',
                            'File::Find' => 1,
                            'File::Temp' => '0.16',
-                           'IPC::Run3' => '0.030'
+                           'IPC::Run3' => '0.020'
                          }
         )
 ;

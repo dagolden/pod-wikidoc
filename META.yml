@@ -10,8 +10,9 @@ requires:
   File::Spec: 3
   File::Temp: 0.16
   File::pushd: 0.2
+  Getopt::Std: 1
   IO::String: 1.06
-  IPC::Run3: 0.030
+  IPC::Run3: 0.020
   Parse::RecDescent: 1.94
   Scalar::Util: 1.02
   Test::More: 0.48

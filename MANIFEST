@@ -43,6 +43,7 @@ t/filter_comments/001_filtering_only_doc_comments
 t/filter_comments/002_filtering_code_and_doc_comments
 t/filter_comments/003_filtering_pod_with_doc_comments
 t/filter_comments/004_filtering_different_length_comments
+t/filter_comments/005_multi_paragraph_comments
 t/filter_comments_alt/001_filtering_3_sharps
 t/filter_comments_alt/002_filtering_2_sharps
 t/filter_comments_alt/003_filtering_4_sharps

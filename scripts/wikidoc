@@ -43,7 +43,7 @@ USAGE
 my ($input_file, $output_file) = @ARGV;
 
 my $args = {
-    comment_doc => $opts{c} ? 1 : 0,
+    comment_blocks => $opts{c} ? 1 : 0,
 };
 
 my $parser = Pod::WikiDoc->new( $args );
