@@ -44,16 +44,36 @@ Usage...
 #--------------------------------------------------------------------------#
 # new()
 #
-# Constructor.  At the moment, takes no arguments.
+# Constructor.  
+# Argument: a hash reference; valid keys include
+#
+# * comment_doc
+# * comment_doc_length
+#
 #--------------------------------------------------------------------------#
 
+my @valid_args = qw( comment_doc comment_doc_length );
+
 sub new {
-    my $class = shift;
+    my ( $class, $args ) = @_;
 
     croak "Error: Class method new() can't be called on an object"
         if ref $class;
 
-    my $self = {};
+    croak "Error: Argument to new() must be a hash reference"
+        if $args && ref $args ne 'HASH';
+        
+    my $self = {
+        comment_doc         => 0,
+        comment_doc_length  => 3,
+    };
+
+    # pick up any specified arguments;
+    for my $key ( @valid_args ) {
+        if ( exists $args->{$key} ) {
+            $self->{$key} = $args->{$key};
+        }
+    }
 
     # load up a parser 
     $self->{parser} = Pod::WikiDoc::Parser->new();
@@ -98,7 +118,7 @@ sub filter {
         if defined $args_ref && ref($args_ref) ne 'HASH';
     # setup input
     my $input_fh;
-    if ( ! exists $args_ref->{input} ) {
+    if ( ! $args_ref->{input} ) {
         $input_fh = \*STDIN;
     }
     elsif ( ( blessed $args_ref->{input} && $args_ref->{input}->isa('GLOB') )
@@ -118,7 +138,7 @@ sub filter {
     
     # setup output
     my $output_fh;
-    if ( ! exists $args_ref->{output} ) {
+    if ( ! $args_ref->{output} ) {
         $output_fh = \*STDOUT;
     }
     elsif ( ( blessed $args_ref->{output} && $args_ref->{output}->isa('GLOB') )
@@ -159,13 +179,23 @@ sub format {
 #--------------------------------------------------------------------------#
 
 #--------------------------------------------------------------------------#
+# _comment_doc_regex
+#
+# construct a regex dynamically for the right comment prefix
+#--------------------------------------------------------------------------#
+
+sub _comment_doc_regex {
+    my ( $self ) = @_;
+    my $length = $self->{comment_doc_length};
+    return "\\A#{$length} (.*)?\\z";
+}
+
+#--------------------------------------------------------------------------#
 # _filter_podfile() 
 #
 # extract Pod from input and pass through to output, converting any wikidoc
 # markup to Pod in the process
 #--------------------------------------------------------------------------#
-
-my $MATCHES_SHARPDOC = qr{\A### (.*)?\z}ms;
 
 sub _filter_podfile {
     my ($self, $input_fh, $output_fh) = @_;
@@ -174,8 +204,12 @@ sub _filter_podfile {
     my $in_pod      = 0; # not in a Pod section at start
     my $in_begin    = 0; # not in a begin section 
     my $in_wikidoc  = 0; # not in a wikidoc section
-    my $in_sharpdoc = 0; # not in a wikidoc comment section
+    my $in_comment_doc = 0; # not in a wikidoc comment section
     my @wikidoc;
+    
+    # init regex
+    my $comment_regex = _comment_doc_regex($self);
+    my $MATCHES_COMMENT_DOC = qr{$comment_regex}ms;
     
     # open output with Pod marker
     print $output_fh "=pod\n\n";
@@ -219,17 +253,17 @@ sub _filter_podfile {
             push @wikidoc, $line;
             next LINE;
         }
-        elsif ( ( ! $in_pod ) && $in_sharpdoc ) {
-            # capture a sharpdoc line
-            if ( $line =~ $MATCHES_SHARPDOC ) {
-                my $sharptext = defined $1 ? $1 : q{};
-                push @wikidoc, $sharptext; 
+        elsif ( ( ! $in_pod ) && $in_comment_doc ) {
+            # capture a comment_doc line
+            if ( $line =~ $MATCHES_COMMENT_DOC ) {
+                my $comment_doc_text = defined $1 ? $1 : q{};
+                push @wikidoc, $comment_doc_text; 
                 next LINE;
             }
             else { 
                 print $output_fh _translate_wikidoc( $self, \@wikidoc );
                 @wikidoc = ();
-                $in_sharpdoc = 0;
+                $in_comment_doc = 0;
                 redo LINE;
             }
         }
@@ -254,9 +288,9 @@ sub _filter_podfile {
                     redo LINE;
                 }
             }
-            # if it's a doc comment, flag and restart
-            elsif ( $line =~ $MATCHES_SHARPDOC ) {
-                $in_sharpdoc = 1;
+            # if it's a doc comment and we're using them, flag and restart
+            elsif ( $self->{comment_doc} && $line =~ $MATCHES_COMMENT_DOC ) {
+                $in_comment_doc = 1;
                 redo LINE;
             }
             # otherwise, move on

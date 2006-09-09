@@ -10,7 +10,7 @@ use Pod::WikiDoc;
 # parser setup
 #--------------------------------------------------------------------------#
 
-my $parser = Pod::WikiDoc->new ();
+my $parser = Pod::WikiDoc->new( { comment_doc => 1 } );
 
 #--------------------------------------------------------------------------#
 # case file runner

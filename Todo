@@ -7,6 +7,8 @@ TODO list for Perl module Pod::WikiDoc
 - Eat own cooking -- write wikidoc for Pod::Wikidoc -- use magic comment
   mode in comment blocks for methods
 
+- Document wikidoc script
+
 #--------------------------------------------------------------------------#
 # Formatting
 #--------------------------------------------------------------------------#
@@ -17,14 +19,13 @@ TODO list for Perl module Pod::WikiDoc
 # Extraction
 #--------------------------------------------------------------------------#
 
-- Test interspersed "=begin wikidoc", "=cut", "=pod", "=end wikidoc"
+- Nothing right now
 
 #--------------------------------------------------------------------------#
 # Usage
 #--------------------------------------------------------------------------#
 
-- Write "wikidoc" perlscript  (allow filename, recursion of a directory,
-  etc.)
+- wikidoc script: add recursion of a directory
 
 - Figure out how best to use with Module::Build
 

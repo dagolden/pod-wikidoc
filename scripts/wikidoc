@@ -5,11 +5,11 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = "0.10";
 
-#use Pod::WikiDoc;
+use Pod::WikiDoc;
 use Getopt::Std;
 
 my %opts;
-getopts( "hV", \%opts );
+getopts( "chV", \%opts );
 
 if ( $opts{h} ) {
     print_usage() and exit;
@@ -40,3 +40,18 @@ USAGE
 
 }
     
+my ($input_file, $output_file) = @ARGV;
+
+my $args = {
+    comment_doc => $opts{c} ? 1 : 0,
+};
+
+my $parser = Pod::WikiDoc->new( $args );
+
+if ( $output_file ) {
+    print "Extracting Pod from $input_file\n";
+}
+
+$parser->filter( { input => $input_file, output => $output_file } );
+
+

@@ -1,7 +1,6 @@
 # Pod::WikiDoc - check module loading and create testing directory
 
 use Test::More;
-use IO::File;
 use File::Temp;
 use t::Casefiles;
 
