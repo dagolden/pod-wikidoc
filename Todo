@@ -12,13 +12,6 @@ TODO list for Perl module Pod::WikiDoc
 
 - Add =pod and =cut around final doc output (need a new function?)
 
-- Markup for other pod markup?  Passthrough code to allow it through 
-  unescaped?  E.g. E< > or << >>
-
-- special keyword expansion for things like $VERSION (?!)
-
-    - e.g. %%VERSION%%
-
 #--------------------------------------------------------------------------#
 # Extraction
 #--------------------------------------------------------------------------#
@@ -32,12 +25,29 @@ TODO list for Perl module Pod::WikiDoc
 # Usage
 #--------------------------------------------------------------------------#
 
-- Figure out how best to use with Module::Build
+- Revise/expand API -- take string or filename or handle?
 
 - Write "wikidoc" perlscript  (allow filename, recursion of a directory,
   etc.)
 
-- Revise/expand API -- take string or filename or handle?
+- Figure out how best to use with Module::Build
+
+    - subclass ACTION_build -- part of build, but dependency, cleans up
+      automatically
+
+    - subclass ACTION_distdir -- part of building dist, added to manifest
+
+#--------------------------------------------------------------------------#
+# Potential future enhancements
+#--------------------------------------------------------------------------#
+
+- Markup for other pod markup (?!)  
+
+- Passthrough for other formatting codes (e.g. S<>, X<>, etc.) (?!)
+
+- special keyword expansion for things like $VERSION (?!)
+
+    - e.g. %%VERSION%%
 
 #--------------------------------------------------------------------------#
 # Efficiency

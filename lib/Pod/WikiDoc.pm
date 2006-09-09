@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.01";
+$VERSION     = "0.10";
 
 use base 'Pod::Simple';
 use Carp;
@@ -136,7 +136,6 @@ sub _wiki2pod {
     my ($nodelist, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
-        next unless ref $node eq 'HASH'; # skip empty blocks marked w/ ""
         my $opening = $opening_of{ $node->{type} };
         my $closing = $closing_of{ $node->{type} };
 
