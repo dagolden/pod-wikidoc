@@ -17,6 +17,18 @@ or to integrate [Pod::WikiDoc] with other tools.
 
 = BASIC RECIPES
 
+== Editor settings for working with Pod::WikiDoc
+
+~Seeking equivalent settings for other editors.~
+
+=== Vim
+
+Using vim, use the {comments} and {formatoptions} settings in {.vimrc} to
+have vim automatically insert the wikidoc comment leader when pressing
+return from a wikidoc comment line:
+ 
+(Need to write down the details)
+
 == Subclassing Module::Build to automatically generate Pod from wikidoc
 
 With a little extra work in the Build.PL file, Pod::WikiDoc
@@ -59,7 +71,7 @@ not need to have [Pod::WikiDoc] installed themselves.
                 }
             }
             else {
-                warn "Pod::WikiDoc not available. Skipping wikidoc.";
+                warn "Pod::WikiDoc not available. Skipping wikidoc.\n";
             }
         }
 

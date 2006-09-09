@@ -18,34 +18,80 @@ use Pod::WikiDoc::Parser;
 
 = NAME
 
-Pod::WikiDoc - Generate Pod from inline wiki text
+Pod::WikiDoc - Generate Pod from inline wiki style text 
 
 = SYNOPSIS
 
-In a source file, Pod formatting style:
+In a source file, Pod format-block style:
+    =begin wikidoc
 
+    = POD FORMAT-BLOCK STYLE
+    
+    Write documentation with *bold*, ~italic~ or {code}
+    markup.  Create a link to [Pod::WikiDoc].
+
+        Indent for verbatim paragraphs
+
+    * bullet
+    * point
+    * list
+
+    0 sequentially
+    0 numbered
+    0 list
+
+    = end wikidoc
+    
 In a source file, wikidoc-comment style:
+    ### = WIKIDOC-COMMENT STYLE
+    ###
+    ### Optionally, [Pod::WikiDoc] can extract from
+    ### specially-marked comment blocks
 
-To generate Pod from wikidoc, programmatically:
+Generate Pod from wikidoc, programmatically:
     use Pod::WikiDoc;
     my $parser = Pod::WikiDoc->new( { comment_doc => 1 } );
     $parser->filter( 
-        { 
-            input => "my_module.pm", 
-            output => "my_module.pod",
-        }
+        { input => "my_module.pm", output => "my_module.pod" }
     );
 
-To generate Pod from wikidoc, via command line:
+Generate Pod from wikidoc, via command line:
     $ wikidoc -c my_module.pm my_module.pod
     
 = DESCRIPTION
 
-Description...
+Pod works well, but writing it can be time consuming or tedious.  For example,
+commonly used structures like lists require numerous lines of text to make just
+a couple of simple points.  An alternative approach is to write documentation
+in a wiki-text shorthand (referred to here as ~wikidoc~) and use Pod::WikiDoc
+to extract it and convert it into its corresponding Pod as a separate {.pod}
+file.
 
-= USAGE
+Documentation written in wikidoc may be embedded in Pod format-blocks, or,
+optionally, in specially marked comment blocks.  Wikidoc uses simple text-based
+markup like wiki websites to indicate formatting and links.  (See 
+[/WIKIDOC MARKUP], below.)
 
-Usage...
+Pod::WikiDoc processes text files (or text strings) by extracting both
+existing Pod and wikidoc, converting the wikidoc to Pod, and then writing
+the combined document back to a file or standard output. 
+
+Summary of major features of Pod::WikiDoc:
+
+* Extracts and converts wikidoc from Pod format blocks or special 
+wikidoc comment blocks
+* Extracts and preserves existing Pod
+* Provides bold, italic, code, and link markup
+* Automatically converts special symbols in wikidoc to their
+Pod escape equivalents, e.g. {E<lt>}, {E<gt>}
+* Preserves other Pod escape sequences, e.g. {E<euro>}
+
+In addition, Pod::WikiDoc provides a command-line utility, [wikidoc],
+to provide easy automation of wikidoc translation.
+
+See the [Pod::WikiDoc::Cookbook] for more detailed usage examples.
+
+= INTERFACE
 
 =end wikidoc
 
@@ -55,16 +101,17 @@ Usage...
 # PUBLIC METHODS
 #--------------------------------------------------------------------------#
 
-#--------------------------------------------------------------------------#
-# new()
-#
-# Constructor.  
-# Argument: a hash reference; valid keys include
-#
-# * comment_doc
-# * comment_doc_length
-#
-#--------------------------------------------------------------------------#
+### == {new}
+### 
+###     $parser = Pod::WikiDoc->new( \%args );
+### 
+### Constructor for a new Pod::WikiDoc object.  It takes a single, optional 
+### argument, a hash reference with the following optional keys:
+###
+### * ~comment_doc~: if true, Pod::WikiDoc will scan for wikidoc in comment
+### blocks.  Default is false.
+### * ~comment_doc_length~: the number of leading sharp symbols to denote a
+### comment block.  Default is 3.
 
 my @valid_args = qw( comment_doc comment_doc_length );
 
@@ -95,12 +142,13 @@ sub new {
     return bless $self, $class;
 }
 
-#--------------------------------------------------------------------------#
-# convert()
-#
-# Given a string with Pod and/or WikiDoc, filter/translate it to Pod. 
-# Really just a wrapper around filter()
-#--------------------------------------------------------------------------#
+### == {convert}
+### 
+###     my $pod_text = $parser->convert( $input_text );
+### 
+### Given a string with valid Pod and/or wikidoc markup, filter/translate it to
+### Pod.  This is really just a wrapper around {filter} for working with
+### strings rather than files.
 
 sub convert {
     my ($self, $input_string) = @_;
@@ -115,15 +163,19 @@ sub convert {
     return ${ $output_fh->string_ref() };
 }
 
-#--------------------------------------------------------------------------#
-# filter()
-#
-# Given an optional hashref with keys "input" and/or "output", filters
-# the input for Pod/WikiDoc, translating it to Pod on the output. 
-# "input" and "output" default to STDIN and STDOUT. Input and output can
-# be specified as either filehandles (or a reference to one) or as 
-# filenames.  Given an output filename, the file will be clobbered.
-#--------------------------------------------------------------------------#
+### == {filter}
+### 
+###     $parser->filter( \%args );
+### 
+### {filter} takes a single, optional argument, a hash reference with 
+### the following optional keys:
+###
+### * ~input~: a filename or filehandle to read from. Defaults to STDIN.  
+### * ~output~: a filename or filehandle to write to.  If given a filename,
+### an existing file will be clobbered. Defaults to STDOUT.
+###
+### Filters from the input file for Pod and wikidoc, translating it to Pod 
+### and writing it to the output file.
 
 sub filter {
     my ( $self, $args_ref ) = @_;
@@ -144,7 +196,7 @@ sub filter {
     elsif ( ref \$args_ref->{input} eq 'SCALAR' ) {
         # filename
         open( $input_fh, "<", $args_ref->{input} )
-            or croak "Error: Couldn't open input file '$args_ref->{input}'";
+            or croak "Error: Couldn't open input file '$args_ref->{input}': $!";
     }
     else {
         croak "Error: Invalid variable type for input file argument to filter()";
@@ -164,7 +216,7 @@ sub filter {
     elsif ( ref \$args_ref->{output} eq 'SCALAR' ) {
         # filename
         open( $output_fh, ">", $args_ref->{output} )
-            or croak "Error: Couldn't open output file '$args_ref->{output}'";
+            or croak "Error: Couldn't open output file '$args_ref->{output}': $!";
     }
     else {
         croak "Error: Invalid variable type for output file argument to filter()";
@@ -486,7 +538,7 @@ __END__
 
 =begin wikidoc
 
-= WIKIDOC GRAMMAR
+= WIKIDOC MARKUP
 
 Wikidoc is composed of both block and inline markup.
 
@@ -509,7 +561,36 @@ Inline markup:
     \*escapes
 
     E<euro> (regular Pod E<> markup for special symbols is passed through)
+
+= DIAGNOSTICS
+
+* ~Error: Argument to convert() must be a scalar~
+* ~Error: Argument to filter() must be a hash reference~
+* ~Error: Argument to format() must be a scalar~
+* ~Error: Argument to new() must be a hash reference~
+* ~Error: Class method new() can't be called on an object~
+* ~Error: Couldn't open input file 'FILENAME'~
+* ~Error: Couldn't open output file 'FILENAME'~
+* ~Error: Invalid variable type for input file argument to filter()~
+* ~Error: Invalid variable type for output file argument to filter()~
     
+= CONFIGURATION AND ENVIRONMENT
+
+No configuration files or environment variables are used.
+
+= DEPENDENCIES
+
+Pod::WikiDoc depends on the following modules:
+* [Getopt::Std]
+* [IO::String]
+* [Parse::RecDescent]
+* [Scalar::Util]
+
+= INCOMPATIBILITIES
+
+Use of the wikidoc comment-blocks conflicts with [Smart::Comments].
+Change the {comment_prefix} argument to {new} in Pod::WikiDoc or the level
+of 'smartness' in [Smart::Comments] to avoid the conflict.
 
 = BUGS
 

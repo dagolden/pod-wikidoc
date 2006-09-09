@@ -20,7 +20,7 @@ my $class = Module::Build->subclass(
             }
         }
         else {
-            warn "Pod::WikiDoc not available. Skipping wikidoc.";
+            warn "Pod::WikiDoc not available. Skipping wikidoc.\n";
         }
     }
 
