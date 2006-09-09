@@ -9,9 +9,41 @@ use Carp;
 use IO::String;
 use Pod::WikiDoc::Parser;
 
+#--------------------------------------------------------------------------#
+# PREAMBLE DOCUMENTATION
+#--------------------------------------------------------------------------#
+
+=begin wikidoc
+
+= NAME
+
+Pod::WikiDoc - Put abstract here 
+
+= SYNOPSIS
+
+    use Pod::WikiDoc;
+    blah blah blah
+
+= DESCRIPTION
+
+Description...
+
+= USAGE
+
+Usage...
+
+=end wikidoc
+
+=cut
 
 #--------------------------------------------------------------------------#
 # PUBLIC METHODS
+#--------------------------------------------------------------------------#
+
+#--------------------------------------------------------------------------#
+# new()
+#
+# Constructor.  At the moment, takes no arguments.
 #--------------------------------------------------------------------------#
 
 sub new {
@@ -24,6 +56,13 @@ sub new {
     return bless $self, $class;
 }
 
+#--------------------------------------------------------------------------#
+# convert()
+#
+# Given a string with Pod and/or WikiDoc, filter/translate it to Pod. 
+# Really just a wrapper around filter()
+#--------------------------------------------------------------------------#
+
 sub convert {
     my ($self, $input_string) = @_;
 
@@ -33,6 +72,16 @@ sub convert {
     
     return ${ $output_fh->string_ref() };
 }
+
+#--------------------------------------------------------------------------#
+# filter()
+#
+# Given an optional hashref with keys "input" and/or "output", filters
+# the input for Pod/WikiDoc, translating it to Pod on the output. 
+# "input" and "output" default to STDIN and STDOUT. Input and output can
+# be specified as either filehandles (or a reference to one) or as 
+# filenames.  Given an output filename, the file will be clobbered.
+#--------------------------------------------------------------------------#
 
 sub filter {
     my ( $self, $args_ref ) = @_;
@@ -55,7 +104,7 @@ sub filter {
             or croak "Error: Couldn't open input file '$input_fh'";
     }
     else {
-        die "Error: invalid input file argument";
+        croak "Error: invalid input file argument to filter()";
     }
     
     # setup output
@@ -74,7 +123,7 @@ sub filter {
             or croak "Error: Couldn't open output file '$output_fh'";
     }
     else {
-        die "Error: invalid output file argument";
+        croak "Error: invalid output file argument to filter()";
     }
     
     _filter_podfile( $self, $input_fh, $output_fh );
@@ -193,13 +242,15 @@ sub _filter_podfile {
 # Translation functions and tables
 #--------------------------------------------------------------------------#
 
-sub _translate_wikidoc {
-    my ( $self, $wikidoc_ref ) = @_;
-    return $self->format( join q{}, @$wikidoc_ref );
-}
-    
+#--------------------------------------------------------------------------#
+# Tables for formatting
+#--------------------------------------------------------------------------#
+
+# Used in closure for counting numbered lists
 my $numbered_bullet;
 
+# Text to print at start of entity from parse tree, or a subroutine
+# to generate the text programmatically
 my %opening_of = (
     Paragraph           =>  q{},
     Unordered_List      =>  "=over\n\n",
@@ -230,6 +281,8 @@ my %opening_of = (
     LinkTarget          =>  q{},
 );
 
+# Text to print at end of entity from parse tree, or a subroutine
+# to generate the text programmatically
 my %closing_of = (
     Paragraph           =>  "\n",
     Unordered_List      =>  "=back\n\n",
@@ -252,11 +305,14 @@ my %closing_of = (
     LinkTarget          =>  q{},
 );
 
+# Subroutine to handle actual raw content from different node types
+# from the parse tree
 my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
     Empty_Line          =>  sub { q{} },
 );
 
+# Table of character to E<> code conversion
 my %escape_code_for = (
     ">" =>  "E<gt>",
     "<" =>  "E<lt>",
@@ -264,27 +320,52 @@ my %escape_code_for = (
     "/" =>  "E<sol>",
 );
 
+# List of characters that need conversion
 my $specials = join q{}, keys %escape_code_for;
 
-sub _escape_pod {
-    my $node = shift;
-    my $input_text  = $node->{content};
+#--------------------------------------------------------------------------#
+# _escape_pod()
+#
+# After removing backslash escapes from a text string, translates characters
+# that must be escaped in Pod <, >, |, and / to their Pod E<> code equivalents
+#
+#--------------------------------------------------------------------------#
+
+sub _escape_pod { my $node = shift; my $input_text  = $node->{content};
     
     # remove backslash escaping
-    $input_text =~ s{ \\(.) } # backslash followed by anything
-                    {$1}gxms;
+    $input_text =~ s{ \\(.) } # backslash followed by anything {$1}gxms;
     
     # replace special symbols with corresponding escape code
-    $input_text =~ s{ ( [$specials] ) }
-                    {$escape_code_for{$1}}gxms;
-    return $input_text;
+    $input_text =~ s{ ( [$specials] ) } {$escape_code_for{$1}}gxms; 
+
+    return $input_text; 
 }
+
+#--------------------------------------------------------------------------#
+# _translate_wikidoc()
+#
+# given an array of wikidoc lines, joins them and runs them through
+# the formatter
+#--------------------------------------------------------------------------#
+
+sub _translate_wikidoc {
+    my ( $self, $wikidoc_ref ) = @_;
+    return $self->format( join q{}, @$wikidoc_ref );
+}
+
+#--------------------------------------------------------------------------#
+# _wiki2pod()
+#
+# recursive function that walks a Pod::WikiDoc::Parser tree and generates
+# a string with the corresponding Pod
+#--------------------------------------------------------------------------#
 
 sub _wiki2pod {
     my ($nodelist, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
-        print "$node\n" if ref $node ne 'HASH';
+        # XXX print "$node\n" if ref $node ne 'HASH';
         my $opening = $opening_of{ $node->{type} };
         my $closing = $closing_of{ $node->{type} };
 
@@ -310,23 +391,6 @@ sub _wiki2pod {
 __END__
 
 =begin wikidoc
-
-= NAME
-
-Pod::WikiDoc - Put abstract here 
-
-= SYNOPSIS
-
-    use Pod::WikiDoc;
-    blah blah blah
-
-= DESCRIPTION
-
-Description...
-
-= USAGE
-
-Usage...
 
 = WIKIDOC GRAMMAR
 

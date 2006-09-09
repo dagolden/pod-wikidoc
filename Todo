@@ -4,7 +4,8 @@ TODO list for Perl module Pod::WikiDoc
 # General
 #--------------------------------------------------------------------------#
 
-- Eat own cooking -- write wikidoc for Pod::Wikidoc
+- Eat own cooking -- write wikidoc for Pod::Wikidoc -- use magic comment
+  mode in comment blocks for methods
 
 #--------------------------------------------------------------------------#
 # Formatting
@@ -15,6 +16,8 @@ TODO list for Perl module Pod::WikiDoc
 #--------------------------------------------------------------------------#
 # Extraction
 #--------------------------------------------------------------------------#
+
+- Test interspersed "=begin wikidoc", "=cut", "=pod", "=end wikidoc"
 
 - Special comment mode: extract anything after "## " as wikidoc from 
   regular code lines
@@ -33,6 +36,8 @@ TODO list for Perl module Pod::WikiDoc
 
     - subclass ACTION_distdir -- part of building dist, added to manifest 
       also do ACTION_test to create .pod only if they don't already exist
+
+- Add configuration option for substituting an alternate parser
 
 #--------------------------------------------------------------------------#
 # Potential future enhancements
