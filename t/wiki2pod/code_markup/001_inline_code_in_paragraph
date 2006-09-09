@@ -1,4 +1,4 @@
 This {sub {}} should render as {code}
 #--------------------------------------------------------------------------#
-This C<< sub {} >> should render as C<< code >>
+This C<<< sub {} >>> should render as C<<< code >>>
 

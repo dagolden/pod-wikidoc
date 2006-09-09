@@ -155,6 +155,8 @@ __DATA__
     Chunk:
             WhiteSpace
                 { $return = $item[1] }
+        |   InlineCode
+                { $return = $item[1] }
         |   BoldText
                 { $return = $item[1] }
         |   ItalicText
@@ -165,6 +167,15 @@ __DATA__
                 { $return = $item[1] }
         |   SpecialChar
                 { $return = $item[1] }
+
+    InlineCode:   { extract_bracketed( $text, '{' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 1), 0, -1 ),
+                    }
+                }
+
 
     BoldText:   { extract_delimited( $text, '*' ) }
                 { 
