@@ -105,7 +105,7 @@ seek $input_file, 0, 0;
 
 run3 \@cmd, undef, \$script_output;
 
-like( $script_output, qr/Extracting Pod from $input_file/,
+like( $script_output, qr/Extracting Pod from \Q$input_file\E/,
     "'wikidoc file file' status message"
 );
 
