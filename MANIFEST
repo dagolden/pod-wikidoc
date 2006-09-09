@@ -28,7 +28,11 @@ t/52-filter_filehandles.t
 t/53-filter_filenames.t
 t/54-filter_explicit_stdin_stdout
 t/55-filter_default_to_stdin_stdout
+t/60-convert_wikidoc_comments.t
 t/Casefiles.pm
+t/filter_comments/001_filtering_only_doc_comments
+t/filter_comments/002_filtering_code_and_doc_comments
+t/filter_comments/003_filtering_pod_with_doc_comments
 t/filter_pod/001_filtering_empty_string
 t/filter_pod/002_filtering_only_pod
 t/filter_pod/003_filtering_bad_pod

@@ -152,6 +152,8 @@ sub format {
 # markup to Pod in the process
 #--------------------------------------------------------------------------#
 
+my $MATCHES_SHARPDOC = qr{\A### (.*)?\z}ms;
+
 sub _filter_podfile {
     my ($self, $input_fh, $output_fh) = @_;
 
@@ -159,6 +161,7 @@ sub _filter_podfile {
     my $in_pod      = 0; # not in a Pod section at start
     my $in_begin    = 0; # not in a begin section 
     my $in_wikidoc  = 0; # not in a wikidoc section
+    my $in_sharpdoc = 0; # not in a wikidoc comment section
     my @wikidoc;
     
     # open output with Pod marker
@@ -168,7 +171,57 @@ sub _filter_podfile {
     my $line;
     LINE:
     while ( defined( $line = <$input_fh> ) ) {
-        if ( not $in_pod ) {
+        if ( $in_pod && ( ! $in_wikidoc) ) {
+            if ( $line =~ m{ \A =cut }xms ) {
+                $in_pod = 0;
+                next LINE;
+            }
+            elsif ( $line =~ m{ \A =(begin|for) \s+ wikidoc \s* (.*)}xms ) {
+                my ($command, $para) = ($1, $2);
+                
+                $in_wikidoc = 1;
+                $in_begin = $command eq 'begin' ? 1 : 0;
+                
+                # if =for wikidoc, then store $para
+                if ( ! $in_begin && defined $para && length $para ) {
+                    push @wikidoc, $para;
+                }
+                next LINE;
+            }
+            else {
+                print $output_fh $line;
+            }
+        }
+        elsif ( $in_pod && $in_wikidoc ) {
+            # see if we're done -- =begin/=end or =for/blankline
+            if (    (   $in_begin && $line =~ m{\A =end \s+ wikidoc}xms )
+                 || ( ! $in_begin && $line =~ m{\A \s*  \z         }xms ) ) {
+                
+                print $output_fh _translate_wikidoc( $self, \@wikidoc );
+                @wikidoc = ();
+                $in_wikidoc = $in_begin = 0;
+                next LINE;
+            }
+            # not done, so store up the wikidoc
+            push @wikidoc, $line;
+            next LINE;
+        }
+        elsif ( ( ! $in_pod ) && $in_sharpdoc ) {
+            # capture a sharpdoc line
+            if ( $line =~ $MATCHES_SHARPDOC ) {
+                my $sharptext = defined $1 ? $1 : q{};
+                push @wikidoc, $sharptext; 
+                next LINE;
+            }
+            else { 
+                print $output_fh _translate_wikidoc( $self, \@wikidoc );
+                @wikidoc = ();
+                $in_sharpdoc = 0;
+                redo LINE;
+            }
+        }
+        else {
+            # if it's a Pod command, flag and handle it
             if ( $line =~ m{ \A = ([a-zA-Z]\S*) }xms ) {
                 my $command = $1;
                 
@@ -188,51 +241,21 @@ sub _filter_podfile {
                     redo LINE;
                 }
             }
-        }
-        elsif ( $in_wikidoc ) {
-            # see if we're done -- =begin/=end or =for/blankline
-            if (    (   $in_begin && $line =~ m{\A =end \s+ wikidoc}xms )
-                 || ( ! $in_begin && $line =~ m{\A \s*  \z         }xms ) ) {
-                
-                print $output_fh _translate_wikidoc( $self, \@wikidoc );
-                @wikidoc = ();
-                $in_wikidoc = $in_begin = 0;
-                next LINE;
-            }
-            # not done, so store up the wikidoc
-            push @wikidoc, $line;
-            # if not more lines, process wikidoc now
-            $line = <$input_fh>;
-            if ( ! defined $line ) {
-                print $output_fh _translate_wikidoc( $self, \@wikidoc );
-                last LINE;
-            }
-            redo LINE;
-        }
-        else {
-            if ( $line =~ m{ \A =cut }xms ) {
-                $in_pod = 0;
-                next LINE;
-            }
-            if ( $line =~ m{ \A =(begin|for) \s+ wikidoc \s* (.*)}xms ) {
-                my ($command, $para) = ($1, $2);
-                
-                $in_wikidoc = 1;
-                $in_begin = $command eq 'begin' ? 1 : 0;
-                
-                # if =for wikidoc, then store $para
-                if ( ! $in_begin && defined $para && length $para ) {
-                    push @wikidoc, $para;
-                }
-                # if last line, process a =for para now
-                $line = <$input_fh>;
-                if ( ! $in_begin && ! defined $line ) {
-                    print $output_fh _translate_wikidoc( $self, $para );
-                }
+            # if it's a doc comment, flag and restart
+            elsif ( $line =~ $MATCHES_SHARPDOC ) {
+                $in_sharpdoc = 1;
                 redo LINE;
             }
-            print $output_fh $line;
+            # otherwise, move on
+            else {
+                next LINE;
+            }
         }
+    } # while
+    
+    # print any unfinished wikidoc capture
+    if ( @wikidoc ) {
+        print $output_fh _translate_wikidoc( $self, \@wikidoc );
     }
 
     return;

@@ -7,3 +7,4 @@ Revision history for Perl module Pod::WikiDoc
     - link formatting with or without link text
     - special symbols "<>|/" automatically escaped in generated Pod
     - format nesting
+    - sharpdoc ("### " indicates wikidoc)

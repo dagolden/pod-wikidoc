@@ -21,9 +21,6 @@ TODO list for Perl module Pod::WikiDoc
 
 - Test interspersed "=begin wikidoc", "=cut", "=pod", "=end wikidoc"
 
-- Special comment mode: extract anything after "## " as wikidoc from 
-  regular code lines
-  
 #--------------------------------------------------------------------------#
 # Usage
 #--------------------------------------------------------------------------#
@@ -45,6 +42,23 @@ TODO list for Perl module Pod::WikiDoc
 # Potential future enhancements
 #--------------------------------------------------------------------------#
 
+- Add multi-level lists (with what syntax?)
+
+- Add markup for some sort of definitional list; (":item: definition"?)
+    - would make it easier to write javadoc style details, e.g.
+    ## == {some_function}
+    ## :usage:
+    ##   code block example
+    ## :arguments:
+    ## * {foo}: blah blah 
+    ## * {bar}: blah blah
+    ## :returns:
+    ## blah blah blah
+    ##
+    ## blah blah blah description
+
+- Add markup for blockquote list; ("> blockquote blah blah blah"?)
+    
 - Markup for other pod markup (e.g. S<>, X<>, etc.) (?!)  
 
 - Passthrough for other formatting codes (e.g. S<>, X<>, etc.) (?!)
