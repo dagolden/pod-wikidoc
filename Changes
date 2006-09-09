@@ -1,5 +1,9 @@
 Revision history for Perl module Pod::WikiDoc
 
+0.12 in progress
+    - Fixed dependency list in documentation
+    - Various documentation tweaks and clarifications
+
 0.11 Fri Sep 23 17:16:13 EDT 2005
     - Added Text::Balanced to Build.PL requires
     - Fixed typo in package name in Cookbook.pm

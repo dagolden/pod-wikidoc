@@ -19,7 +19,7 @@ I<(Seeking equivalent settings for other editors or alternatives for vim.)>
 
 =head3 Vim
 
-Using vim, use the C<<< comments >>> and C<<< formatoptions >>> settings in C<<< .vimrc >>> to
+In vim, use the C<<< comments >>> and C<<< formatoptions >>> settings in C<<< .vimrc >>> to
 have vim automatically insert the wikidoc comment leader when pressing
 return from a wikidoc comment line.  For example, the following lines in a 
 C<<< .vimrc >>> file will activate this option whenever a perl-ish file is loaded.
@@ -59,11 +59,12 @@ By making wikidoc extraction part of the C<<< distdir >>> action, users installi
 the distribution will receive it with .pod files already created, and will 
 not need to have L<Pod::WikiDoc> installed themselves.
 
+     # Build.PL
      use Module::Build;
  
      my $class = Module::Build->subclass(
          class => "Module::Build::WikiDoc",
-         code => <<'SUBCLASS',
+         code => <<'SUBCLASS' );
  
          sub ACTION_wikidoc {
              my $self = shift;
@@ -100,7 +101,6 @@ not need to have L<Pod::WikiDoc> installed themselves.
          }
  
      SUBCLASS
-     );
  
      $class->new( 
          # regular Module::Build options

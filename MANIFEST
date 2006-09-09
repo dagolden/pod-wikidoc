@@ -7,7 +7,6 @@ lib/Pod/WikiDoc/Cookbook.pod
 lib/Pod/WikiDoc/Parser.pm.PL
 lib/Pod/WikiDoc/Parser.pod
 LICENSE
-Makefile.PL
 MANIFEST			This list of files
 MANIFEST.SKIP
 META.yml

@@ -2,7 +2,7 @@ use Module::Build;
 
 my $class = Module::Build->subclass(
     class => "Module::Build::WikiDoc",
-    code => <<'SUBCLASS',
+    code => <<'SUBCLASS', );
 
     sub ACTION_wikidoc {
         my $self = shift;
@@ -39,7 +39,6 @@ my $class = Module::Build->subclass(
     }
 
 SUBCLASS
-);
             
 $class->new( 
     module_name         => 'Pod::WikiDoc',
@@ -47,7 +46,6 @@ $class->new(
     dist_abstract       => 'Generate Pod from inline wiki style text',
     license             => 'perl',
     create_readme       => 0,
-    create_makefile_pl  => 'traditional',
     requires        => {
         File::Find          => 1,       #build_requires
         File::pushd         => 0.20,    #build_requires

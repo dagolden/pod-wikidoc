@@ -66,7 +66,7 @@ Pod::WikiDoc::Parser is a precompiled [Parse::RecDescent] parser for use with
 from a grammar included with the distribution.  
 
 A copy of the [Parse::RecDescent] grammar used is appended to the
-Pod::WikiDoc::Parser source and this Pod files for reference or reuse by
+Pod::WikiDoc::Parser source and this Pod file for reference or reuse by
 others.
 
 = USAGE
