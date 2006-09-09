@@ -15,24 +15,6 @@ use Pod::WikiDoc::Parser;
 
 # Below is the stub of documentation for your module. You better edit it!
 
-=head1 NAME
-
-Pod::WikiDoc - Put abstract here 
-
-=head1 SYNOPSIS
-
- use Pod::WikiDoc;
- blah blah blah
-
-=head1 DESCRIPTION
-
-Description...
-
-=head1 USAGE
-
-Usage...
-
-=cut
 
 sub new {
     my $class = shift;
@@ -78,57 +60,77 @@ sub _handle_element_end {
 
 my $numbered_bullet;
 
-my $opening_of = {
-    Paragraph           => q{},
-    Unordered_List      => "=over\n\n",
-    Ordered_List        => sub { $numbered_bullet = 1; return "=over\n\n" },
-    Preformat           => q{},
-    Header              => sub { 
+my %opening_of = (
+    Paragraph           =>  q{},
+    Unordered_List      =>  "=over\n\n",
+    Ordered_List        =>  sub { $numbered_bullet = 1; return "=over\n\n" },
+    Preformat           =>  q{},
+    Header              =>  sub { 
                                 my $node = shift; 
-                                my $level = $node->{level} > 4 ? 4 : $node->{level};
+                                my $level = $node->{level} > 4 
+                                    ? 4 : $node->{level};
                                 return "=head$level "
-                           },
-    Bullet_Item         => "=item *\n\n",
-    Numbered_Item       => sub { return "=item " . $numbered_bullet++ . ".\n\n" },
-    Indented_Line       => q{ },
-    Plain_Line          => q{},
-    RegularText         => q{},
-    WhiteSpace          => q{},
-    BoldText            => 'B<',
-    ItalicText          => 'I<',
-    LinkText            => 'L<',
-    SpecialChar         => q{},
-};
+                            },
+    Bullet_Item         =>  "=item *\n\n",
+    Numbered_Item       =>  sub { 
+                                return  "=item " . $numbered_bullet++ 
+                                        . ".\n\n" 
+                            },
+    Indented_Line       =>  q{ },
+    Plain_Line          =>  q{},
+    RegularText         =>  q{},
+    WhiteSpace          =>  q{},
+    BoldText            =>  'B<',
+    ItalicText          =>  'I<',
+    LinkText            =>  'L<',
+    SpecialChar         =>  q{},
+);
 
-my $closing_of = {
-    Paragraph           => "\n",
-    Unordered_List      => "=back\n\n",
-    Ordered_List        => "=back\n\n",
-    Preformat           => "\n",
-    Header              => "\n\n",
-    Bullet_Item         => "\n\n",
-    Numbered_Item       => "\n\n",
-    Indented_Line       => "\n",
-    Plain_Line          => "\n",
-    RegularText         => q{},
-    WhiteSpace          => q{},
-    BoldText            => '>',
-    ItalicText          => '>',
-    LinkText            => '>',
-    SpecialChar         => q{},
-};
+my %closing_of = (
+    Paragraph           =>  "\n",
+    Unordered_List      =>  "=back\n\n",
+    Ordered_List        =>  "=back\n\n",
+    Preformat           =>  "\n",
+    Header              =>  "\n\n",
+    Bullet_Item         =>  "\n\n",
+    Numbered_Item       =>  "\n\n",
+    Indented_Line       =>  "\n",
+    Plain_Line          =>  "\n",
+    RegularText         =>  q{},
+    WhiteSpace          =>  q{},
+    BoldText            =>  ">",
+    ItalicText          =>  ">",
+    LinkText            =>  ">",
+    SpecialChar         =>  q{},
+);
 
+my %handle_content_for = (
+    RegularText         =>  \&_escape_pod, 
+);
 
-sub wiki2pod {
+my %escape_code_for = (
+    ">" =>  "E<gt>",
+    "<" =>  "E<lt>",
+);
+
+sub _escape_pod {
+    my $node = shift;
+    my $input_text  = @{ $node->{content} };
+    # replace special symbols with corresponding escape code
+    $input_text =~ s{ ( [<>] ) }{ $escape_code_for{$1} }gxms;
+    return $input_text;
+}
+
+sub _wiki2pod {
     my ($nodelist, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
         if ( ref $node eq 'HASH' ) {
-            my $opening  = $opening_of->{ $node->{type} };
-            my $closing = $closing_of->{ $node->{type} };
+            my $opening  = $opening_of{ $node->{type} };
+            my $closing = $closing_of{ $node->{type} };
 
             $result .= ref $opening eq 'CODE' ? $opening->($node) : $opening;
-            $result .= wiki2pod( 
+            $result .= _wiki2pod( 
                 $node->{content}, 
                 $node->{type} eq 'Preformat' ? 1 : 0 
             );
@@ -141,7 +143,6 @@ sub wiki2pod {
     return $result;
 }
 
-
 sub format {
     my ($self, $wikitext) = @_;
     
@@ -150,34 +151,48 @@ sub format {
         undef $node if ! ref $node;
     }
 
-    return wiki2pod( $wiki_tree );
+    return _wiki2pod( $wiki_tree );
 }
 
+1; #this line is important and will help the module return a true value
+__END__
 
-=head1 SEE ALSO
+=begin wikidoc
+
+= NAME
+
+Pod::WikiDoc - Put abstract here 
+
+= SYNOPSIS
+
+    use Pod::WikiDoc;
+    blah blah blah
+
+= DESCRIPTION
+
+Description...
+
+= USAGE
+
+Usage...
+
+= SEE ALSO
 
 * HTML::WikiConverter
-
 * Text::WikiFormat
-
 * Template::Plugin::KwikiFormat
-
 * PurpleWiki::Parser::WikiText
-
 * Pod::TikiWiki
-
 * Convert::Wiki
-
 * Kwiki::Formatter
-
 * CGI::Wiki::Formatter::*
 
-=head1 BUGS
+= BUGS
 
 Please report bugs using the CPAN Request Tracker at 
 http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-WikiDoc
 
-=head1 AUTHOR
+= AUTHOR
 
 David A Golden (DAGOLDEN)
 
@@ -185,7 +200,7 @@ dagolden@cpan.org
 
 http://dagolden.com/
 
-=head1 COPYRIGHT
+= COPYRIGHT
 
 Copyright (c) 2005 by David A Golden
 
@@ -195,10 +210,5 @@ it and/or modify it under the same terms as Perl itself.
 The full text of the license can be found in the
 LICENSE file included with this module.
 
+=end wikidoc
 
-=head1 SEE ALSO
-
-perl(1).
-
-=cut
-1; #this line is important and will help the module return a true value
