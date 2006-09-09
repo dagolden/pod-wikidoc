@@ -19,15 +19,17 @@ or to integrate [Pod::WikiDoc] with other tools.
 
 == Editor settings for working with Pod::WikiDoc
 
-~Seeking equivalent settings for other editors.~
+~(Seeking equivalent settings for other editors or alternatives for vim.)~
 
 === Vim
 
 Using vim, use the {comments} and {formatoptions} settings in {.vimrc} to
 have vim automatically insert the wikidoc comment leader when pressing
-return from a wikidoc comment line:
+return from a wikidoc comment line.  For example, the following lines in a 
+{.vimrc} file will activate this option whenever a perl-ish file is loaded.
  
-(Need to write down the details)
+    autocmd BufNewFile,BufRead *.p? set comments=b:###
+    autocmd BufNewFile,BufRead *.p? set formatoptions+=r
 
 == Subclassing Module::Build to automatically generate Pod from wikidoc
 

@@ -5,31 +5,44 @@ use warnings;
 use vars qw( $VERSION );
 $VERSION = "0.10";
 
-use Getopt::Std;
+use Getopt::Long 2.17; # support for Configure()
 use Pod::WikiDoc;
 use Pod::Usage;
 
+Getopt::Long::Configure( "bundling" );
 my %opts;
-getopts( "chl:V", \%opts );
+my $opts_ok = GetOptions( \%opts,
+    "comment|c",
+    "help|h",
+    "length|l:i",
+    "version|V"
+);
 
-if ( $opts{h} ) {
-    pod2usage( -verbose => 2 );
-    exit;
+if ( ! $opts_ok ) {
+    pod2usage("Syntax Error.");
 }
 
-if ( $opts{V} ) {
+if ( $opts{help} ) {
+    pod2usage( -verbose => 1 );
+}
+
+if ( $opts{version} ) {
     print "Version: wikidoc $VERSION\n"; 
     exit;
 }
     
 my ($input_file, $output_file) = @ARGV;
 
+if ( ! $input_file and -t *STDIN ) {
+    pod2usage("wikidoc: Syntax error.")
+}
+
 die "wikidoc: Can't use the same file for input and output.\n"
     if $input_file && $output_file && $input_file eq $output_file;
 
 my $args = {
-    comment_blocks => $opts{c} ? 1 : 0,
-    comment_prefix_length => $opts{l} ? $opts{l} : 3,
+    comment_blocks => $opts{comment} ? 1 : 0,
+    comment_prefix_length => $opts{length} ? $opts{length} : 3,
 };
 
 my $parser = Pod::WikiDoc->new( $args );
@@ -38,7 +51,8 @@ if ( $output_file ) {
     print "Extracting Pod from $input_file\n";
 }
 
-if ( -t *STDIN && -t *STDOUT ) {
+if ( defined $input_file and $input_file eq '-' ) {
+    print "wikidoc: Reading from terminal:\n";
     my $buffer;
     $buffer .= $_ while <STDIN>;
     print $parser->convert( $buffer );
@@ -55,51 +69,30 @@ wikidoc - convert mixed Pod and wikidoc text to Pod
 
 =head1 SYNOPSIS
 
-    wikidoc MyModule.pm Mymodule.pod
+ wikidoc [options] [inputfile] [outputfile]
+ 
+ options: 
+    --comments or -c
+        include wikidoc comment-blocks
     
-=head1 USAGE
-
-    wikidoc [flags] [inputfile] [outputfile]
+    --help or -h       
+        give usage information
     
-=head1 OPTIONS
-
-=over
-
-=item *
-
-flags:
-
-=over
-
-=item -c
-
-comments: Include wikidoc in comment-blocks
-
-=item -h
-
-help: Show usage information
-
-=item -l
-
-length: Length of comment-block '#' prefix
-
-=item -V
-
-version: Show version number and copyright
-
-=back
-
-=item *
-
-inputfile: A filename that Pod and wikidoc will be extracted from.  If no
-filename is given, data will be read from STDIN.
-
-=item *
-
-outputfile: A filename for the generated Pod.  If no filename is given, Pod
-will be written to STDOUT.
-
-=back
+    --length <INTEGER> or -l <INTEGER>
+        set the length of the comment block prefix, e.g. 3 means "###"
+    
+    --version or -V
+        print the version number of this program
+ 
+ inputfile: 
+    A filename from which Pod and wikidoc will be extracted.  To read
+    from STDIN, use the special name '-'.  If no filename is given, data 
+    will be read from STDIN if wikidoc is receiving data from a pipe, 
+    otherwise a syntax error will occur.
+ 
+ outputfile: 
+    A filename for the generated Pod.  If no filename is given, Pod
+    will be written to STDOUT.
 
 =head1 DESCRIPTION
 
@@ -110,7 +103,10 @@ See documentation for L<Pod::WikiDoc> for details.
 
 =head1 DIAGNOSTICS
 
-None yet -- probably should add some
+C<wikidoc: Can't use the same file for input and output.>
+
+Because an output file is clobbered, using the same input and output
+file would destroy the input and produce no output.
 
 =head1 DEPENDENCIES
 
@@ -118,7 +114,7 @@ None yet -- probably should add some
 
 =item *
 
-L<Getopt::Std>
+L<Getopt::Long>
 
 =item *
 

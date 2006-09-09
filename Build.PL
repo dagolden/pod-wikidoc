@@ -52,7 +52,7 @@ $class->new(
         File::pushd         => 0.20,    #build_requires
         File::Spec          => 3,       #build_requires 
         File::Temp          => 0.16,    #build_requires
-        Getopt::Std         => 1,
+        Getopt::Long        => 2.17,
         IO::String          => 1.06,
         IPC::Run3           => "0.020", #build_requires
         Parse::RecDescent   => 1.94,
