@@ -163,6 +163,8 @@ __DATA__
                 { $return = $item[1] }
         |   LinkText
                 { $return = $item[1] }
+        |   EscapedChar
+                { $return = $item[1] }
         |   RegularText
                 { $return = $item[1] }
 
@@ -200,6 +202,15 @@ __DATA__
                     $return = $thisparser->LinkContent( 
                         substr( substr( $item[1], 1), 0, -1 )
                     ),
+                }
+
+    EscapedChar:
+            "E" { extract_bracketed( $text, '<' ) }
+                {
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1] . $item[2]
+                    }
                 }
 
     RegularText:  m{ ^ \S+ }x
