@@ -12,18 +12,18 @@ TODO list for Perl module Pod::WikiDoc
 
 - Inline code markup
 
-- Add =pod and =cut around output
+- Add =pod and =cut around final doc output (need a new function?)
 
-- Auto escape things that need it
+- Test auto escape for all relevant contexts
 
-- Allow link text with links (and inline markup)
+- Allow link text with links (and inline markup within it)
 
-- Nesting inline markup
+- Nesting inline markup (?)
 
 - Markup for other pod markup?  Passthrough code to allow it through 
-  unescaped?
+  unescaped?  E.g. E< > or << >>
 
-- special eyword expansion for things like $VERSION (?!)
+- special keyword expansion for things like $VERSION (?!)
 
     - e.g. %%VERSION%%
 

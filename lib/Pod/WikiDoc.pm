@@ -184,6 +184,26 @@ Description...
 
 Usage...
 
+= WIKIDOC GRAMMAR
+
+Wikidoc is composed of both block and inline markup.
+
+Block markup:
+
+    = header level 1
+    
+    == header level 2
+
+Inline markup:
+
+    *bold*
+
+    ~italic~
+
+    [link]
+
+    {monospace aka code}
+    
 = SEE ALSO
 
 * HTML::WikiConverter
