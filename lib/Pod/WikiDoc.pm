@@ -108,6 +108,8 @@ my %closing_of = (
 
 my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
+    BoldText            =>  \&_escape_pod, 
+    ItalicText          =>  \&_escape_pod, 
 );
 
 my %escape_code_for = (
@@ -116,7 +118,8 @@ my %escape_code_for = (
     "|" =>  "E<verbar>",
     "/" =>  "E<sol>",
 );
-my $specials = "@{[ keys %escape_code_for ]}";
+
+my $specials = join q{}, keys %escape_code_for;
 
 sub _escape_pod {
     my $node = shift;

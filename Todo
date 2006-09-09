@@ -30,7 +30,7 @@ TODO list for Perl module Pod::WikiDoc
 # Extraction
 #--------------------------------------------------------------------------#
 
-- Extract regular pod as well as wikidoc
+- Extract and pass through REGUlar pod as well as wikidoc
 
 - Special comment mode: extract anything after "## " as wikidoc from 
   regular code lines
