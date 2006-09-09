@@ -6,6 +6,9 @@ TODO list for Perl module Pod::WikiDoc
 
 - Add more tests for wikidoc utility script
 
+- Revise Parser generation approach to pre-generate before distribution 
+  during the distdir action of Build.PL
+
 #--------------------------------------------------------------------------#
 # Formatting
 #--------------------------------------------------------------------------#

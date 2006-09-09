@@ -1,9 +1,9 @@
 ---
 name: Pod-WikiDoc
-version: 0.10
+version: 0.11
 author:
   - David A Golden <dagolden@cpan.org>
-abstract: ~
+abstract: Generate Pod from inline wiki style text
 license: perl
 requires:
   File::Find: 1
@@ -17,10 +17,12 @@ requires:
   Pod::Usage: 1
   Scalar::Util: 1.02
   Test::More: 0.48
+  Text::Balanced: 1.95
 provides:
   Pod::WikiDoc:
     file: lib/Pod/WikiDoc.pm
-    version: 0.10
-  Pod::Wikidoc::Cookbook:
+    version: 0.11
+  Pod::WikiDoc::Cookbook:
     file: lib/Pod/WikiDoc/Cookbook.pm
+    version: 0.11
 generated_by: Module::Build version 0.2702

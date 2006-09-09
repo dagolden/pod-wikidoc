@@ -16,12 +16,13 @@ Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
 =head1 DESCRIPTION
 
-This is a precompiled L<Parse::RecDescent> parser for use with L<Pod::WikiDoc>.
-It is generated dynamically on installation of L<Pod::WikiDoc> from a grammer
-included with the distribution.  
+Pod::WikiDoc::Parser is a precompiled L<Parse::RecDescent> parser for use with
+L<Pod::WikiDoc>.  It is generated dynamically on installation of L<Pod::WikiDoc>
+from a grammar included with the distribution.  
 
-A copy of the L<Parse::RecDescent> grammer used is appended to the
-Pod::WikiDoc::Parser source file for reference or reuse by others.
+A copy of the L<Parse::RecDescent> grammar used is appended to the
+Pod::WikiDoc::Parser source and this Pod files for reference or reuse by
+others.
 
 =head1 USAGE
 
@@ -108,4 +109,259 @@ it andE<sol>or modify it under the same terms as Perl itself.
 The full text of the license can be found in the
 LICENSE file included with this module.
 
+
+=begin grammar
+
+    WikiDoc:        
+            Block(s?)
+                { $return = [ grep { $_->{type} ne 'Empty_Line' } @{ $item[1] } ] }
+
+    Block:          
+            Header 
+                { $return = $item[1] }
+        |   Unordered_List 
+                { $return = $item[1] }
+        |   Ordered_List 
+                { $return = $item[1] }
+        |   Preformat
+                { $return = $item[1] }
+        |   Paragraph
+                { $return = $item[1] }
+        |   Empty_Line
+                { $return = $item[1] }
+
+    Header:         
+            /^=+/ /[\t\ ]+/ /[^\n]*/ "\n" 
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        level   => length($item[1]),
+                        content => $thisparser->Inline( $item[3] ),
+                    }
+                }
+
+    Unordered_List: 
+            Bullet_Item(s) Empty_Line(?)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+    
+    Bullet_Item:    
+            Bullet_Line List_Continuation(s?)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline( join( "\n", $item[1],  @{$item[2]} ) ),
+                    }
+                }
+    
+    Bullet_Line:    
+            /^\*[\t\ ]*\n/
+                { $return = q{} }
+        |   /^\*[\t\ ]+/ /[^\n]*/ "\n"
+                { $return = $item[2] }
+
+    Ordered_List:   
+            Numbered_Item(s) Empty_Line(?)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+    
+    Numbered_Item:  
+            Numbered_Line List_Continuation(s?)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline( 
+                            join( "\n", $item[1],  @{$item[2]} ) 
+                        ),
+                    }
+                }
+    
+    Numbered_Line:  
+            /^0[\t\ ]*\n/ 
+                { $return =  q{} }
+        |   /^0[\t\ ]+/ /[^\n]*/ "\n"
+                { $return = $item[2] }
+
+    List_Continuation: 
+            /^[^*0\s]/ /[^\n]*/ "\n"
+                { $return = $item[1] . $item[2] }
+    
+    Preformat:      
+            Indented_Line(s) Indent_Continuation(s?) Empty_Line(?)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => [ @{$item[1]}, map { @{$_} } @{$item[2]} ],
+                    }
+                }
+    
+    Indented_Line:  
+            /^[\t\ ]+/ /[^\t\n\ ]+/ /[^\n]*/ "\n"
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1] . $item[2] . $item[3],
+                    }
+                }
+
+    Indent_Continuation:
+            Empty_Line(s) Indented_Line(s)
+                { $return = [ @{$item[1]}, @{$item[2]} ] }
+                    
+    Empty_Line:     
+            /^[\t\ ]*/ "\n"
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+    
+    Plain_Line:     
+            /^[^*0\n\t\ ]|[*0][^\t\ ]/ /[^\n]+/ "\n"
+                { $return =  $item[1] . $item[2] . $item[3] }
+
+    Paragraph:      
+            Plain_Line(s)
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline( 
+                            join( q{}, @{$item[1]} )
+                        ),
+                    }
+                }
+
+    Inline: 
+            Chunk(s?)
+                { $return = $item[1] }
+
+    Chunk:
+            WhiteSpace
+                { $return = $item[1] }
+        |   InlineCode
+                { $return = $item[1] }
+        |   BoldText
+                { $return = $item[1] }
+        |   ItalicText
+                { $return = $item[1] }
+        |   LinkText
+                { $return = $item[1] }
+        |   EscapedChar
+                { $return = $item[1] }
+        |   RegularText
+                { $return = $item[1] }
+
+    InlineCode:   
+            { extract_bracketed( $text, '{' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 1), 0, -1 ),
+                    }
+                }
+
+
+    BoldText:   
+            { extract_delimited( $text, '*' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline(
+                            substr( substr( $item[1], 1), 0, -1 )
+                        ),
+                    }
+                }
+
+    ItalicText: 
+            { extract_delimited( $text, '~' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline(
+                            substr( substr( $item[1], 1), 0, -1 )
+                        ),
+                    }
+                }
+
+    LinkText:   
+            { extract_bracketed( $text, '[' ) }
+                { 
+                    $return = $thisparser->LinkContent( 
+                        substr( substr( $item[1], 1), 0, -1 )
+                    ),
+                }
+
+    EscapedChar:
+            "E" { extract_bracketed( $text, '<' ) }
+                {
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1] . $item[2]
+                    }
+                }
+
+    RegularText:  
+            m{ ^ \S+ }x
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+
+    WhiteSpace:  
+            m{ ^ \s+ }x
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+
+    LinkContent:
+            LinkLabel "\|" LinkTarget
+                {   
+                    $return = { 
+                        type    => $item[0],
+                        content => [ $item[1], $item[3] ],
+                    }
+                }
+        |   LinkTarget
+                {
+                    $return = { 
+                        type    => $item[0],
+                        content => [ $item[1] ],
+                    }
+                }
+
+    LinkLabel:
+            /^[^|]*/
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $thisparser->Inline( $item[1] ),
+                    }
+                }
+
+    LinkTarget:
+            /.+/
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => $item[1],
+                    }
+                }
+    
+
+
+=end grammar
 

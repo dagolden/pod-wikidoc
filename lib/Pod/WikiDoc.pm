@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.10";
+$VERSION     = "0.11";
 
 use 5.006;
 use Carp;
@@ -685,10 +685,15 @@ Pod::WikiDoc and the 'wikidoc' script depend on the following modules:
 
 = INCOMPATIBILITIES
 
-Default prefix length for wikidoc comment-blocks conflicts with
+* Default prefix length for wikidoc comment-blocks conflicts with
 [Smart::Comments].  Change the {comment_prefix_length} argument to {new} in
 Pod::WikiDoc or the level of 'smartness' in [Smart::Comments] to avoid the
 conflict.
+
+* Module::Build (as of 0.27_02) does not look in external {.pod} files 
+to generate a {README} with the {create_readme} option or to find a module 
+abstract.  Set the abstract manually in the {Build.PL} file with the
+{dist_abstract} option.
 
 = BUGS
 

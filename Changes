@@ -1,5 +1,12 @@
 Revision history for Perl module Pod::WikiDoc
 
+0.11 Fri Sep 23 17:16:13 EDT 2005
+    - Added Text::Balanced to Build.PL requires
+    - Fixed typo in package name in Cookbook.pm
+    - Tweaked doc phrasing for Pod::WikiDoc::Parser
+    - Appended grammar to Pod::WikiDoc::Parser Pod file
+    - Stubbed README (wasn't being generated properly)
+
 0.10 Fri Sep 23 09:46:42 EDT 2005
     - basic wikidoc format section extraction
     - basic block formatting (header, paragraph, verbatim, lists)

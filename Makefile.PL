@@ -17,6 +17,7 @@ WriteMakefile
                            'Parse::RecDescent' => '1.94',
                            'Test::More' => '0.48',
                            'File::Find' => 1,
+                           'Text::Balanced' => '1.95',
                            'File::Temp' => '0.16',
                            'IPC::Run3' => '0.020'
                          }

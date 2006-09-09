@@ -1,0 +1,9 @@
+Pod::WikiDoc - Generate Pod from inline wiki style text
+
+Installation instructions:
+
+perl Build.PL
+perl Build
+perl Build test
+perl Build install
+

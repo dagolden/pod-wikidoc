@@ -8,7 +8,7 @@ Pod::WikiDoc::Cookbook - Examples of Pod::WikiDoc usage
 
 =head1 DESCRIPTION
 
-This file contains some lengthier examples of ways to use L<Pod::WikiDoc>
+This file contains some examples of ways to use L<Pod::WikiDoc>
 or to integrate L<Pod::WikiDoc> with other tools.
 
 =head1 BASIC RECIPES

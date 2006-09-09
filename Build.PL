@@ -44,8 +44,9 @@ SUBCLASS
 $class->new( 
     module_name         => 'Pod::WikiDoc',
     dist_author         => 'David A Golden <dagolden@cpan.org>',
+    dist_abstract       => 'Generate Pod from inline wiki style text',
     license             => 'perl',
-    create_readme       => 1,
+    create_readme       => 0,
     create_makefile_pl  => 'traditional',
     requires        => {
         File::Find          => 1,       #build_requires
@@ -59,5 +60,6 @@ $class->new(
         Pod::Usage          => 1,
         Scalar::Util        => 1.02,
         Test::More          => 0.48,    #build_requires
+        Text::Balanced      => 1.95,
     },
 )->create_build_script;

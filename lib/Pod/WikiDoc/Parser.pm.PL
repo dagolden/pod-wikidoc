@@ -5,16 +5,16 @@ use File::pushd;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
-$VERSION = "0.10";
+$VERSION = "0.11";
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
 use Text::Balanced qw( extract_bracketed extract_delimited );
 package main;
 
-# Load grammer from __DATA__
+# Load grammar from __DATA__
 
-my $grammer = do { local $/; <DATA> };
+my $grammar = do { local $/; <DATA> };
 
 # Find target directory
 
@@ -28,7 +28,7 @@ my ($target_dir) = $ARGV[0] =~ m{ \A ( .+ )  / .+ \z }xms;
     # Generate Parser file
 
     $Parse::RecDescent::skip = q{};
-    Parse::RecDescent->Precompile( $grammer, "Pod::WikiDoc::Parser" );
+    Parse::RecDescent->Precompile( $grammar, "Pod::WikiDoc::Parser" );
 }
 
 # Text to append to precompiled parser
@@ -37,7 +37,7 @@ my ($target_dir) = $ARGV[0] =~ m{ \A ( .+ )  / .+ \z }xms;
 my $version_text = <<"END_VERSION";
 \n
 use vars qw( \$VERSION );
-\$VERSION = "0.10";
+\$VERSION = "0.11";
 
 END_VERSION
 
@@ -61,12 +61,13 @@ Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
 = DESCRIPTION
 
-This is a precompiled [Parse::RecDescent] parser for use with [Pod::WikiDoc].
-It is generated dynamically on installation of [Pod::WikiDoc] from a grammer
-included with the distribution.  
+Pod::WikiDoc::Parser is a precompiled [Parse::RecDescent] parser for use with
+[Pod::WikiDoc].  It is generated dynamically on installation of [Pod::WikiDoc]
+from a grammar included with the distribution.  
 
-A copy of the [Parse::RecDescent] grammer used is appended to the
-Pod::WikiDoc::Parser source file for reference or reuse by others.
+A copy of the [Parse::RecDescent] grammar used is appended to the
+Pod::WikiDoc::Parser source and this Pod files for reference or reuse by
+others.
 
 = USAGE
 
@@ -120,13 +121,13 @@ LICENSE file included with this module.
 
 END_DOCS
 
-# Append version and grammer for reference
+# Append version and grammar for reference
 
 open my $fh, ">>", $ARGV[0] 
-    or warn "Couldn't append grammer to Pod::WikiDoc::Parser";
+    or warn "Couldn't append grammar to Pod::WikiDoc::Parser";
 if ( $fh ) {
-    print $fh $version_text, $docs_text;
-    print $fh "\n\n__END__\n\n", $grammer;
+    print $fh $version_text, "\n\n__END__\n\n", $docs_text;
+    print $fh "\n\n=begin grammar\n\n", $grammar, "\n\n=end grammar\n\n";
     close $fh;
 }
 

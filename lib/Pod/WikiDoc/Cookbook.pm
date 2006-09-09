@@ -1,6 +1,8 @@
 package Pod::WikiDoc::Cookbook;
 # Not really a .pm file, but holds wikidoc which will be
 # turned into .pod by the Build.PL
+use vars '$VERSION';
+$VERSION = "0.11";
 1;
 __END__
 
@@ -12,7 +14,7 @@ Pod::WikiDoc::Cookbook - Examples of Pod::WikiDoc usage
 
 = DESCRIPTION
 
-This file contains some lengthier examples of ways to use [Pod::WikiDoc]
+This file contains some examples of ways to use [Pod::WikiDoc]
 or to integrate [Pod::WikiDoc] with other tools.
 
 = BASIC RECIPES
