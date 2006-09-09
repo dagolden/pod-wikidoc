@@ -8,6 +8,7 @@ package Parse::RecDescent::Pod::WikiDoc::Parser;
 use strict;
 use vars qw($skip $AUTOLOAD  );
 $skip = '';
+ use Text::Balanced qw( extract_tagged ) ;
 
 
 {
@@ -539,12 +540,91 @@ sub Parse::RecDescent::Pod::WikiDoc::Parser::Chunk
 	while (!$_matched && !$commit)
 	{
 		
-		Parse::RecDescent::_trace(q{Trying production: [RegularText]},
+		Parse::RecDescent::_trace(q{Trying production: [KeyWord]},
 					  Parse::RecDescent::_tracefirst($_[1]),
 					  q{Chunk},
 					  $tracelevel)
 						if defined $::RD_TRACE;
 		my $thisprod = $thisrule->{"prods"}[6];
+		$text = $_[1];
+		my $_savetext;
+		@item = (q{Chunk});
+		%item = (__RULE__ => q{Chunk});
+		my $repcount = 0;
+
+
+		Parse::RecDescent::_trace(q{Trying subrule: [KeyWord]},
+				  Parse::RecDescent::_tracefirst($text),
+				  q{Chunk},
+				  $tracelevel)
+					if defined $::RD_TRACE;
+		if (1) { no strict qw{refs};
+		$expectation->is(q{})->at($text);
+		unless (defined ($_tok = Parse::RecDescent::Pod::WikiDoc::Parser::KeyWord($thisparser,$text,$repeating,$_noactions,sub { \@arg })))
+		{
+			
+			Parse::RecDescent::_trace(q{<<Didn't match subrule: [KeyWord]>>},
+						  Parse::RecDescent::_tracefirst($text),
+						  q{Chunk},
+						  $tracelevel)
+							if defined $::RD_TRACE;
+			$expectation->failed();
+			last;
+		}
+		Parse::RecDescent::_trace(q{>>Matched subrule: [KeyWord]<< (return value: [}
+					. $_tok . q{]},
+					  
+					  Parse::RecDescent::_tracefirst($text),
+					  q{Chunk},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		$item{q{KeyWord}} = $_tok;
+		push @item, $_tok;
+		
+		}
+
+		Parse::RecDescent::_trace(q{Trying action},
+					  Parse::RecDescent::_tracefirst($text),
+					  q{Chunk},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		
+
+		$_tok = ($_noactions) ? 0 : do { $return = $item[1] };
+		unless (defined $_tok)
+		{
+			Parse::RecDescent::_trace(q{<<Didn't match action>> (return value: [undef])})
+					if defined $::RD_TRACE;
+			last;
+		}
+		Parse::RecDescent::_trace(q{>>Matched action<< (return value: [}
+					  . $_tok . q{])},
+					  Parse::RecDescent::_tracefirst($text))
+						if defined $::RD_TRACE;
+		push @item, $_tok;
+		$item{__ACTION1__}=$_tok;
+		
+
+
+		Parse::RecDescent::_trace(q{>>Matched production: [KeyWord]<<},
+					  Parse::RecDescent::_tracefirst($text),
+					  q{Chunk},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		$_matched = 1;
+		last;
+	}
+
+
+	while (!$_matched && !$commit)
+	{
+		
+		Parse::RecDescent::_trace(q{Trying production: [RegularText]},
+					  Parse::RecDescent::_tracefirst($_[1]),
+					  q{Chunk},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		my $thisprod = $thisrule->{"prods"}[7];
 		$text = $_[1];
 		my $_savetext;
 		@item = (q{Chunk});
@@ -5065,6 +5145,160 @@ sub Parse::RecDescent::Pod::WikiDoc::Parser::EscapedChar
 }
 
 # ARGS ARE: ($parser, $text; $repeating, $_noactions, \@args)
+sub Parse::RecDescent::Pod::WikiDoc::Parser::KeyWord
+{
+	my $thisparser = $_[0];
+	use vars q{$tracelevel};
+	local $tracelevel = ($tracelevel||0)+1;
+	$ERRORS = 0;
+	my $thisrule = $thisparser->{"rules"}{"KeyWord"};
+	
+	Parse::RecDescent::_trace(q{Trying rule: [KeyWord]},
+				  Parse::RecDescent::_tracefirst($_[1]),
+				  q{KeyWord},
+				  $tracelevel)
+					if defined $::RD_TRACE;
+
+	
+	my $err_at = @{$thisparser->{errors}};
+
+	my $score;
+	my $score_return;
+	my $_tok;
+	my $return = undef;
+	my $_matched=0;
+	my $commit=0;
+	my @item = ();
+	my %item = ();
+	my $repeating =  defined($_[2]) && $_[2];
+	my $_noactions = defined($_[3]) && $_[3];
+ 	my @arg =        defined $_[4] ? @{ &{$_[4]} } : ();
+	my %arg =        ($#arg & 01) ? @arg : (@arg, undef);
+	my $text;
+	my $lastsep="";
+	my $expectation = new Parse::RecDescent::Expectation($thisrule->expected());
+	$expectation->at($_[1]);
+	
+	my $thisline;
+	tie $thisline, q{Parse::RecDescent::LineCounter}, \$text, $thisparser;
+
+	
+
+	while (!$_matched && !$commit)
+	{
+		
+		Parse::RecDescent::_trace(q{Trying production: []},
+					  Parse::RecDescent::_tracefirst($_[1]),
+					  q{KeyWord},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		my $thisprod = $thisrule->{"prods"}[0];
+		$text = $_[1];
+		my $_savetext;
+		@item = (q{KeyWord});
+		%item = (__RULE__ => q{KeyWord});
+		my $repcount = 0;
+
+
+		Parse::RecDescent::_trace(q{Trying action},
+					  Parse::RecDescent::_tracefirst($text),
+					  q{KeyWord},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		
+
+		$_tok = ($_noactions) ? 0 : do { extract_tagged( $text, '%%', '%%' ) };
+		unless (defined $_tok)
+		{
+			Parse::RecDescent::_trace(q{<<Didn't match action>> (return value: [undef])})
+					if defined $::RD_TRACE;
+			last;
+		}
+		Parse::RecDescent::_trace(q{>>Matched action<< (return value: [}
+					  . $_tok . q{])},
+					  Parse::RecDescent::_tracefirst($text))
+						if defined $::RD_TRACE;
+		push @item, $_tok;
+		$item{__ACTION1__}=$_tok;
+		
+
+		Parse::RecDescent::_trace(q{Trying action},
+					  Parse::RecDescent::_tracefirst($text),
+					  q{KeyWord},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		
+
+		$_tok = ($_noactions) ? 0 : do { 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 2), 0, -2 ),
+                    }
+                };
+		unless (defined $_tok)
+		{
+			Parse::RecDescent::_trace(q{<<Didn't match action>> (return value: [undef])})
+					if defined $::RD_TRACE;
+			last;
+		}
+		Parse::RecDescent::_trace(q{>>Matched action<< (return value: [}
+					  . $_tok . q{])},
+					  Parse::RecDescent::_tracefirst($text))
+						if defined $::RD_TRACE;
+		push @item, $_tok;
+		$item{__ACTION2__}=$_tok;
+		
+
+
+		Parse::RecDescent::_trace(q{>>Matched production: []<<},
+					  Parse::RecDescent::_tracefirst($text),
+					  q{KeyWord},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		$_matched = 1;
+		last;
+	}
+
+
+        unless ( $_matched || defined($return) || defined($score) )
+	{
+		
+
+		$_[1] = $text;	# NOT SURE THIS IS NEEDED
+		Parse::RecDescent::_trace(q{<<Didn't match rule>>},
+					 Parse::RecDescent::_tracefirst($_[1]),
+					 q{KeyWord},
+					 $tracelevel)
+					if defined $::RD_TRACE;
+		return undef;
+	}
+	if (!defined($return) && defined($score))
+	{
+		Parse::RecDescent::_trace(q{>>Accepted scored production<<}, "",
+					  q{KeyWord},
+					  $tracelevel)
+						if defined $::RD_TRACE;
+		$return = $score_return;
+	}
+	splice @{$thisparser->{errors}}, $err_at;
+	$return = $item[$#item] unless defined $return;
+	if (defined $::RD_TRACE)
+	{
+		Parse::RecDescent::_trace(q{>>Matched rule<< (return value: [} .
+					  $return . q{])}, "",
+					  q{KeyWord},
+					  $tracelevel);
+		Parse::RecDescent::_trace(q{(consumed: [} .
+					  Parse::RecDescent::_tracemax(substr($_[1],0,-length($text))) . q{])}, 
+					  Parse::RecDescent::_tracefirst($text),
+					  , q{KeyWord},
+					  $tracelevel)
+	}
+	$_[1] = $text;
+	return $return;
+}
+
+# ARGS ARE: ($parser, $text; $repeating, $_noactions, \@args)
 sub Parse::RecDescent::Pod::WikiDoc::Parser::Unordered_List
 {
 	my $thisparser = $_[0];
@@ -6215,6 +6449,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                'ItalicText',
                                                                'LinkText',
                                                                'EscapedChar',
+                                                               'KeyWord',
                                                                'RegularText'
                                                              ],
                                                   'changed' => 0,
@@ -6235,12 +6470,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 134
+                                                                                              'line' => 136
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 135,
+                                                                                              'line' => 137,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
@@ -6261,16 +6496,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 136
+                                                                                              'line' => 138
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 137,
+                                                                                              'line' => 139,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 136
+                                                                        'line' => 138
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '2',
@@ -6287,16 +6522,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 138
+                                                                                              'line' => 140
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 139,
+                                                                                              'line' => 141,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 138
+                                                                        'line' => 140
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '3',
@@ -6313,16 +6548,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 140
+                                                                                              'line' => 142
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 141,
+                                                                                              'line' => 143,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 140
+                                                                        'line' => 142
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '4',
@@ -6339,16 +6574,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 142
+                                                                                              'line' => 144
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 143,
+                                                                                              'line' => 145,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 142
+                                                                        'line' => 144
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '5',
@@ -6365,19 +6600,45 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 144
+                                                                                              'line' => 146
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 145,
+                                                                                              'line' => 147,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 144
+                                                                        'line' => 146
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '6',
+                                                                        'strcount' => 0,
+                                                                        'dircount' => 0,
+                                                                        'uncommit' => undef,
+                                                                        'error' => undef,
+                                                                        'patcount' => 0,
+                                                                        'actcount' => 1,
+                                                                        'items' => [
+                                                                                     bless( {
+                                                                                              'subrule' => 'KeyWord',
+                                                                                              'matchrule' => 0,
+                                                                                              'implicit' => undef,
+                                                                                              'argcode' => undef,
+                                                                                              'lookahead' => 0,
+                                                                                              'line' => 148
+                                                                                            }, 'Parse::RecDescent::Subrule' ),
+                                                                                     bless( {
+                                                                                              'hashname' => '__ACTION1__',
+                                                                                              'lookahead' => 0,
+                                                                                              'line' => 149,
+                                                                                              'code' => '{ $return = $item[1] }'
+                                                                                            }, 'Parse::RecDescent::Action' )
+                                                                                   ],
+                                                                        'line' => 148
+                                                                      }, 'Parse::RecDescent::Production' ),
+                                                               bless( {
+                                                                        'number' => '7',
                                                                         'strcount' => 0,
                                                                         'dircount' => 0,
                                                                         'uncommit' => undef,
@@ -6391,21 +6652,21 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 146
+                                                                                              'line' => 150
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 147,
+                                                                                              'line' => 151,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 146
+                                                                        'line' => 150
                                                                       }, 'Parse::RecDescent::Production' )
                                                              ],
                                                   'name' => 'Chunk',
                                                   'vars' => '',
-                                                  'line' => 133
+                                                  'line' => 135
                                                 }, 'Parse::RecDescent::Rule' ),
                               'Paragraph' => bless( {
                                                       'impcount' => 0,
@@ -6433,12 +6694,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                   'matchrule' => 0,
                                                                                                   'repspec' => 's',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 119
+                                                                                                  'line' => 121
                                                                                                 }, 'Parse::RecDescent::Repetition' ),
                                                                                          bless( {
                                                                                                   'hashname' => '__ACTION1__',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 120,
+                                                                                                  'line' => 122,
                                                                                                   'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -6454,7 +6715,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                  ],
                                                       'name' => 'Paragraph',
                                                       'vars' => '',
-                                                      'line' => 118
+                                                      'line' => 120
                                                     }, 'Parse::RecDescent::Rule' ),
                               'ItalicText' => bless( {
                                                        'impcount' => 0,
@@ -6474,13 +6735,13 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 171,
+                                                                                                   'line' => 175,
                                                                                                    'code' => '{ extract_delimited( $text, \'~\' ) }'
                                                                                                  }, 'Parse::RecDescent::Action' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION2__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 172,
+                                                                                                   'line' => 176,
                                                                                                    'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -6496,7 +6757,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'ItalicText',
                                                        'vars' => '',
-                                                       'line' => 170
+                                                       'line' => 174
                                                      }, 'Parse::RecDescent::Rule' ),
                               'Block' => bless( {
                                                   'impcount' => 0,
@@ -6526,12 +6787,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 6
+                                                                                              'line' => 8
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 7,
+                                                                                              'line' => 9,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
@@ -6552,16 +6813,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 8
+                                                                                              'line' => 10
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 9,
+                                                                                              'line' => 11,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 8
+                                                                        'line' => 10
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '2',
@@ -6578,16 +6839,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 10
+                                                                                              'line' => 12
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 11,
+                                                                                              'line' => 13,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 10
+                                                                        'line' => 12
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '3',
@@ -6604,16 +6865,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 12
+                                                                                              'line' => 14
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 13,
+                                                                                              'line' => 15,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 12
+                                                                        'line' => 14
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '4',
@@ -6630,16 +6891,16 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 14
+                                                                                              'line' => 16
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 15,
+                                                                                              'line' => 17,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 14
+                                                                        'line' => 16
                                                                       }, 'Parse::RecDescent::Production' ),
                                                                bless( {
                                                                         'number' => '5',
@@ -6656,21 +6917,21 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                               'implicit' => undef,
                                                                                               'argcode' => undef,
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 16
+                                                                                              'line' => 18
                                                                                             }, 'Parse::RecDescent::Subrule' ),
                                                                                      bless( {
                                                                                               'hashname' => '__ACTION1__',
                                                                                               'lookahead' => 0,
-                                                                                              'line' => 17,
+                                                                                              'line' => 19,
                                                                                               'code' => '{ $return = $item[1] }'
                                                                                             }, 'Parse::RecDescent::Action' )
                                                                                    ],
-                                                                        'line' => 16
+                                                                        'line' => 18
                                                                       }, 'Parse::RecDescent::Production' )
                                                              ],
                                                   'name' => 'Block',
                                                   'vars' => '',
-                                                  'line' => 5
+                                                  'line' => 7
                                                 }, 'Parse::RecDescent::Rule' ),
                               'Numbered_Line' => bless( {
                                                           'impcount' => 0,
@@ -6693,14 +6954,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/^0[\\\\t\\\\ ]*\\\\n/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 74,
+                                                                                                      'line' => 76,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
                                                                                              bless( {
                                                                                                       'hashname' => '__ACTION1__',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 75,
+                                                                                                      'line' => 77,
                                                                                                       'code' => '{ $return =  q{} }'
                                                                                                     }, 'Parse::RecDescent::Action' )
                                                                                            ],
@@ -6721,7 +6982,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/^0[\\\\t\\\\ ]+/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 76,
+                                                                                                      'line' => 78,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
@@ -6731,7 +6992,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/[^\\\\n]*/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 76,
+                                                                                                      'line' => 78,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
@@ -6740,21 +7001,21 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'hashname' => '__STRING1__',
                                                                                                       'description' => '\'\\\\n\'',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 76
+                                                                                                      'line' => 78
                                                                                                     }, 'Parse::RecDescent::InterpLit' ),
                                                                                              bless( {
                                                                                                       'hashname' => '__ACTION1__',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 77,
+                                                                                                      'line' => 79,
                                                                                                       'code' => '{ $return = $item[2] }'
                                                                                                     }, 'Parse::RecDescent::Action' )
                                                                                            ],
-                                                                                'line' => 76
+                                                                                'line' => 78
                                                                               }, 'Parse::RecDescent::Production' )
                                                                      ],
                                                           'name' => 'Numbered_Line',
                                                           'vars' => '',
-                                                          'line' => 73
+                                                          'line' => 75
                                                         }, 'Parse::RecDescent::Rule' ),
                               'Bullet_Item' => bless( {
                                                         'impcount' => 0,
@@ -6780,7 +7041,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'implicit' => undef,
                                                                                                     'argcode' => undef,
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 39
+                                                                                                    'line' => 41
                                                                                                   }, 'Parse::RecDescent::Subrule' ),
                                                                                            bless( {
                                                                                                     'subrule' => 'List_Continuation',
@@ -6791,12 +7052,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'matchrule' => 0,
                                                                                                     'repspec' => 's?',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 39
+                                                                                                    'line' => 41
                                                                                                   }, 'Parse::RecDescent::Repetition' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 40,
+                                                                                                    'line' => 42,
                                                                                                     'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -6810,7 +7071,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                    ],
                                                         'name' => 'Bullet_Item',
                                                         'vars' => '',
-                                                        'line' => 38
+                                                        'line' => 40
                                                       }, 'Parse::RecDescent::Rule' ),
                               'LinkTarget' => bless( {
                                                        'impcount' => 0,
@@ -6833,14 +7094,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'description' => '/.+/',
                                                                                                    'lookahead' => 0,
                                                                                                    'rdelim' => '/',
-                                                                                                   'line' => 242,
+                                                                                                   'line' => 255,
                                                                                                    'mod' => '',
                                                                                                    'ldelim' => '/'
                                                                                                  }, 'Parse::RecDescent::Token' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 243,
+                                                                                                   'line' => 256,
                                                                                                    'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -6854,7 +7115,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'LinkTarget',
                                                        'vars' => '',
-                                                       'line' => 241
+                                                       'line' => 254
                                                      }, 'Parse::RecDescent::Rule' ),
                               'Plain_Line' => bless( {
                                                        'impcount' => 0,
@@ -6877,7 +7138,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'description' => '/^[^*0\\\\n\\\\t\\\\ ]|[*0][^\\\\t\\\\ ]/',
                                                                                                    'lookahead' => 0,
                                                                                                    'rdelim' => '/',
-                                                                                                   'line' => 115,
+                                                                                                   'line' => 117,
                                                                                                    'mod' => '',
                                                                                                    'ldelim' => '/'
                                                                                                  }, 'Parse::RecDescent::Token' ),
@@ -6887,7 +7148,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'description' => '/[^\\\\n]+/',
                                                                                                    'lookahead' => 0,
                                                                                                    'rdelim' => '/',
-                                                                                                   'line' => 115,
+                                                                                                   'line' => 117,
                                                                                                    'mod' => '',
                                                                                                    'ldelim' => '/'
                                                                                                  }, 'Parse::RecDescent::Token' ),
@@ -6896,12 +7157,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'hashname' => '__STRING1__',
                                                                                                    'description' => '\'\\\\n\'',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 115
+                                                                                                   'line' => 117
                                                                                                  }, 'Parse::RecDescent::InterpLit' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 116,
+                                                                                                   'line' => 118,
                                                                                                    'code' => '{ $return =  $item[1] . $item[2] . $item[3] }'
                                                                                                  }, 'Parse::RecDescent::Action' )
                                                                                         ],
@@ -6910,7 +7171,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'Plain_Line',
                                                        'vars' => '',
-                                                       'line' => 114
+                                                       'line' => 116
                                                      }, 'Parse::RecDescent::Rule' ),
                               'WhiteSpace' => bless( {
                                                        'impcount' => 0,
@@ -6933,14 +7194,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'description' => 'm\\{ ^ \\\\s+ \\}x',
                                                                                                    'lookahead' => 0,
                                                                                                    'rdelim' => '}',
-                                                                                                   'line' => 208,
+                                                                                                   'line' => 221,
                                                                                                    'mod' => 'x',
                                                                                                    'ldelim' => '{'
                                                                                                  }, 'Parse::RecDescent::Token' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 209,
+                                                                                                   'line' => 222,
                                                                                                    'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -6954,7 +7215,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'WhiteSpace',
                                                        'vars' => '',
-                                                       'line' => 207
+                                                       'line' => 220
                                                      }, 'Parse::RecDescent::Rule' ),
                               'Indent_Continuation' => bless( {
                                                                 'impcount' => 0,
@@ -6983,7 +7244,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                             'matchrule' => 0,
                                                                                                             'repspec' => 's',
                                                                                                             'lookahead' => 0,
-                                                                                                            'line' => 102
+                                                                                                            'line' => 104
                                                                                                           }, 'Parse::RecDescent::Repetition' ),
                                                                                                    bless( {
                                                                                                             'subrule' => 'Indented_Line',
@@ -6994,12 +7255,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                             'matchrule' => 0,
                                                                                                             'repspec' => 's',
                                                                                                             'lookahead' => 0,
-                                                                                                            'line' => 102
+                                                                                                            'line' => 104
                                                                                                           }, 'Parse::RecDescent::Repetition' ),
                                                                                                    bless( {
                                                                                                             'hashname' => '__ACTION1__',
                                                                                                             'lookahead' => 0,
-                                                                                                            'line' => 103,
+                                                                                                            'line' => 105,
                                                                                                             'code' => '{ $return = [ @{$item[1]}, @{$item[2]} ] }'
                                                                                                           }, 'Parse::RecDescent::Action' )
                                                                                                  ],
@@ -7008,7 +7269,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                            ],
                                                                 'name' => 'Indent_Continuation',
                                                                 'vars' => '',
-                                                                'line' => 101
+                                                                'line' => 103
                                                               }, 'Parse::RecDescent::Rule' ),
                               'Numbered_Item' => bless( {
                                                           'impcount' => 0,
@@ -7034,7 +7295,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'implicit' => undef,
                                                                                                       'argcode' => undef,
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 63
+                                                                                                      'line' => 65
                                                                                                     }, 'Parse::RecDescent::Subrule' ),
                                                                                              bless( {
                                                                                                       'subrule' => 'List_Continuation',
@@ -7045,12 +7306,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'matchrule' => 0,
                                                                                                       'repspec' => 's?',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 63
+                                                                                                      'line' => 65
                                                                                                     }, 'Parse::RecDescent::Repetition' ),
                                                                                              bless( {
                                                                                                       'hashname' => '__ACTION1__',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 64,
+                                                                                                      'line' => 66,
                                                                                                       'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7066,7 +7327,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                      ],
                                                           'name' => 'Numbered_Item',
                                                           'vars' => '',
-                                                          'line' => 62
+                                                          'line' => 64
                                                         }, 'Parse::RecDescent::Rule' ),
                               'Preformat' => bless( {
                                                       'impcount' => 0,
@@ -7096,7 +7357,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                   'matchrule' => 0,
                                                                                                   'repspec' => 's',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 84
+                                                                                                  'line' => 86
                                                                                                 }, 'Parse::RecDescent::Repetition' ),
                                                                                          bless( {
                                                                                                   'subrule' => 'Indent_Continuation',
@@ -7107,7 +7368,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                   'matchrule' => 0,
                                                                                                   'repspec' => 's?',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 84
+                                                                                                  'line' => 86
                                                                                                 }, 'Parse::RecDescent::Repetition' ),
                                                                                          bless( {
                                                                                                   'subrule' => 'Empty_Line',
@@ -7118,12 +7379,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                   'matchrule' => 0,
                                                                                                   'repspec' => '?',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 84
+                                                                                                  'line' => 86
                                                                                                 }, 'Parse::RecDescent::Repetition' ),
                                                                                          bless( {
                                                                                                   'hashname' => '__ACTION1__',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 85,
+                                                                                                  'line' => 87,
                                                                                                   'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7137,7 +7398,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                  ],
                                                       'name' => 'Preformat',
                                                       'vars' => '',
-                                                      'line' => 83
+                                                      'line' => 85
                                                     }, 'Parse::RecDescent::Rule' ),
                               'Empty_Line' => bless( {
                                                        'impcount' => 0,
@@ -7160,7 +7421,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'description' => '/^[\\\\t\\\\ ]*/',
                                                                                                    'lookahead' => 0,
                                                                                                    'rdelim' => '/',
-                                                                                                   'line' => 106,
+                                                                                                   'line' => 108,
                                                                                                    'mod' => '',
                                                                                                    'ldelim' => '/'
                                                                                                  }, 'Parse::RecDescent::Token' ),
@@ -7169,12 +7430,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                    'hashname' => '__STRING1__',
                                                                                                    'description' => '\'\\\\n\'',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 106
+                                                                                                   'line' => 108
                                                                                                  }, 'Parse::RecDescent::InterpLit' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 107,
+                                                                                                   'line' => 109,
                                                                                                    'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7188,7 +7449,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'Empty_Line',
                                                        'vars' => '',
-                                                       'line' => 105
+                                                       'line' => 107
                                                      }, 'Parse::RecDescent::Rule' ),
                               'Bullet_Line' => bless( {
                                                         'impcount' => 0,
@@ -7211,14 +7472,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'description' => '/^\\\\*[\\\\t\\\\ ]*\\\\n/',
                                                                                                     'lookahead' => 0,
                                                                                                     'rdelim' => '/',
-                                                                                                    'line' => 48,
+                                                                                                    'line' => 50,
                                                                                                     'mod' => '',
                                                                                                     'ldelim' => '/'
                                                                                                   }, 'Parse::RecDescent::Token' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 49,
+                                                                                                    'line' => 51,
                                                                                                     'code' => '{ $return = q{} }'
                                                                                                   }, 'Parse::RecDescent::Action' )
                                                                                          ],
@@ -7239,7 +7500,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'description' => '/^\\\\*[\\\\t\\\\ ]+/',
                                                                                                     'lookahead' => 0,
                                                                                                     'rdelim' => '/',
-                                                                                                    'line' => 50,
+                                                                                                    'line' => 52,
                                                                                                     'mod' => '',
                                                                                                     'ldelim' => '/'
                                                                                                   }, 'Parse::RecDescent::Token' ),
@@ -7249,7 +7510,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'description' => '/[^\\\\n]*/',
                                                                                                     'lookahead' => 0,
                                                                                                     'rdelim' => '/',
-                                                                                                    'line' => 50,
+                                                                                                    'line' => 52,
                                                                                                     'mod' => '',
                                                                                                     'ldelim' => '/'
                                                                                                   }, 'Parse::RecDescent::Token' ),
@@ -7258,21 +7519,21 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'hashname' => '__STRING1__',
                                                                                                     'description' => '\'\\\\n\'',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 50
+                                                                                                    'line' => 52
                                                                                                   }, 'Parse::RecDescent::InterpLit' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 51,
+                                                                                                    'line' => 53,
                                                                                                     'code' => '{ $return = $item[2] }'
                                                                                                   }, 'Parse::RecDescent::Action' )
                                                                                          ],
-                                                                              'line' => 50
+                                                                              'line' => 52
                                                                             }, 'Parse::RecDescent::Production' )
                                                                    ],
                                                         'name' => 'Bullet_Line',
                                                         'vars' => '',
-                                                        'line' => 47
+                                                        'line' => 49
                                                       }, 'Parse::RecDescent::Rule' ),
                               'InlineCode' => bless( {
                                                        'impcount' => 0,
@@ -7292,13 +7553,13 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION1__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 150,
+                                                                                                   'line' => 154,
                                                                                                    'code' => '{ extract_bracketed( $text, \'{\' ) }'
                                                                                                  }, 'Parse::RecDescent::Action' ),
                                                                                           bless( {
                                                                                                    'hashname' => '__ACTION2__',
                                                                                                    'lookahead' => 0,
-                                                                                                   'line' => 151,
+                                                                                                   'line' => 155,
                                                                                                    'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7312,7 +7573,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                   ],
                                                        'name' => 'InlineCode',
                                                        'vars' => '',
-                                                       'line' => 149
+                                                       'line' => 153
                                                      }, 'Parse::RecDescent::Rule' ),
                               'LinkText' => bless( {
                                                      'impcount' => 0,
@@ -7332,13 +7593,13 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                         bless( {
                                                                                                  'hashname' => '__ACTION1__',
                                                                                                  'lookahead' => 0,
-                                                                                                 'line' => 182,
+                                                                                                 'line' => 195,
                                                                                                  'code' => '{ extract_bracketed( $text, \'[\' ) }'
                                                                                                }, 'Parse::RecDescent::Action' ),
                                                                                         bless( {
                                                                                                  'hashname' => '__ACTION2__',
                                                                                                  'lookahead' => 0,
-                                                                                                 'line' => 183,
+                                                                                                 'line' => 196,
                                                                                                  'code' => '{ 
                     $return = $thisparser->LinkContent( 
                         substr( substr( $item[1], 1), 0, -1 )
@@ -7351,7 +7612,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                 ],
                                                      'name' => 'LinkText',
                                                      'vars' => '',
-                                                     'line' => 181
+                                                     'line' => 194
                                                    }, 'Parse::RecDescent::Rule' ),
                               'Ordered_List' => bless( {
                                                          'impcount' => 0,
@@ -7380,7 +7641,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                      'matchrule' => 0,
                                                                                                      'repspec' => 's',
                                                                                                      'lookahead' => 0,
-                                                                                                     'line' => 54
+                                                                                                     'line' => 56
                                                                                                    }, 'Parse::RecDescent::Repetition' ),
                                                                                             bless( {
                                                                                                      'subrule' => 'Empty_Line',
@@ -7391,12 +7652,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                      'matchrule' => 0,
                                                                                                      'repspec' => '?',
                                                                                                      'lookahead' => 0,
-                                                                                                     'line' => 54
+                                                                                                     'line' => 56
                                                                                                    }, 'Parse::RecDescent::Repetition' ),
                                                                                             bless( {
                                                                                                      'hashname' => '__ACTION1__',
                                                                                                      'lookahead' => 0,
-                                                                                                     'line' => 55,
+                                                                                                     'line' => 57,
                                                                                                      'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7410,7 +7671,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                     ],
                                                          'name' => 'Ordered_List',
                                                          'vars' => '',
-                                                         'line' => 53
+                                                         'line' => 55
                                                        }, 'Parse::RecDescent::Rule' ),
                               'LinkLabel' => bless( {
                                                       'impcount' => 0,
@@ -7433,14 +7694,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                   'description' => '/^[^|]*/',
                                                                                                   'lookahead' => 0,
                                                                                                   'rdelim' => '/',
-                                                                                                  'line' => 233,
+                                                                                                  'line' => 246,
                                                                                                   'mod' => '',
                                                                                                   'ldelim' => '/'
                                                                                                 }, 'Parse::RecDescent::Token' ),
                                                                                          bless( {
                                                                                                   'hashname' => '__ACTION1__',
                                                                                                   'lookahead' => 0,
-                                                                                                  'line' => 234,
+                                                                                                  'line' => 247,
                                                                                                   'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7454,7 +7715,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                  ],
                                                       'name' => 'LinkLabel',
                                                       'vars' => '',
-                                                      'line' => 232
+                                                      'line' => 245
                                                     }, 'Parse::RecDescent::Rule' ),
                               'Inline' => bless( {
                                                    'impcount' => 0,
@@ -7482,12 +7743,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                'matchrule' => 0,
                                                                                                'repspec' => 's?',
                                                                                                'lookahead' => 0,
-                                                                                               'line' => 130
+                                                                                               'line' => 132
                                                                                              }, 'Parse::RecDescent::Repetition' ),
                                                                                       bless( {
                                                                                                'hashname' => '__ACTION1__',
                                                                                                'lookahead' => 0,
-                                                                                               'line' => 131,
+                                                                                               'line' => 133,
                                                                                                'code' => '{ $return = $item[1] }'
                                                                                              }, 'Parse::RecDescent::Action' )
                                                                                     ],
@@ -7496,7 +7757,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                               ],
                                                    'name' => 'Inline',
                                                    'vars' => '',
-                                                   'line' => 129
+                                                   'line' => 131
                                                  }, 'Parse::RecDescent::Rule' ),
                               'List_Continuation' => bless( {
                                                               'impcount' => 0,
@@ -7519,7 +7780,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                           'description' => '/^[^*0\\\\s]/',
                                                                                                           'lookahead' => 0,
                                                                                                           'rdelim' => '/',
-                                                                                                          'line' => 80,
+                                                                                                          'line' => 82,
                                                                                                           'mod' => '',
                                                                                                           'ldelim' => '/'
                                                                                                         }, 'Parse::RecDescent::Token' ),
@@ -7529,7 +7790,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                           'description' => '/[^\\\\n]*/',
                                                                                                           'lookahead' => 0,
                                                                                                           'rdelim' => '/',
-                                                                                                          'line' => 80,
+                                                                                                          'line' => 82,
                                                                                                           'mod' => '',
                                                                                                           'ldelim' => '/'
                                                                                                         }, 'Parse::RecDescent::Token' ),
@@ -7538,12 +7799,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                           'hashname' => '__STRING1__',
                                                                                                           'description' => '\'\\\\n\'',
                                                                                                           'lookahead' => 0,
-                                                                                                          'line' => 80
+                                                                                                          'line' => 82
                                                                                                         }, 'Parse::RecDescent::InterpLit' ),
                                                                                                  bless( {
                                                                                                           'hashname' => '__ACTION1__',
                                                                                                           'lookahead' => 0,
-                                                                                                          'line' => 81,
+                                                                                                          'line' => 83,
                                                                                                           'code' => '{ $return = $item[1] . $item[2] }'
                                                                                                         }, 'Parse::RecDescent::Action' )
                                                                                                ],
@@ -7552,7 +7813,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                          ],
                                                               'name' => 'List_Continuation',
                                                               'vars' => '',
-                                                              'line' => 79
+                                                              'line' => 81
                                                             }, 'Parse::RecDescent::Rule' ),
                               'LinkContent' => bless( {
                                                         'impcount' => 0,
@@ -7578,14 +7839,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'implicit' => undef,
                                                                                                     'argcode' => undef,
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 217
+                                                                                                    'line' => 230
                                                                                                   }, 'Parse::RecDescent::Subrule' ),
                                                                                            bless( {
                                                                                                     'pattern' => '\\|',
                                                                                                     'hashname' => '__STRING1__',
                                                                                                     'description' => '\'\\\\|\'',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 217
+                                                                                                    'line' => 230
                                                                                                   }, 'Parse::RecDescent::InterpLit' ),
                                                                                            bless( {
                                                                                                     'subrule' => 'LinkTarget',
@@ -7593,12 +7854,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'implicit' => undef,
                                                                                                     'argcode' => undef,
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 217
+                                                                                                    'line' => 230
                                                                                                   }, 'Parse::RecDescent::Subrule' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 218,
+                                                                                                    'line' => 231,
                                                                                                     'code' => '{   
                     $return = { 
                         type    => $item[0],
@@ -7624,12 +7885,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'implicit' => undef,
                                                                                                     'argcode' => undef,
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 224
+                                                                                                    'line' => 237
                                                                                                   }, 'Parse::RecDescent::Subrule' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 225,
+                                                                                                    'line' => 238,
                                                                                                     'code' => '{
                     $return = { 
                         type    => $item[0],
@@ -7638,12 +7899,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                 }'
                                                                                                   }, 'Parse::RecDescent::Action' )
                                                                                          ],
-                                                                              'line' => 224
+                                                                              'line' => 237
                                                                             }, 'Parse::RecDescent::Production' )
                                                                    ],
                                                         'name' => 'LinkContent',
                                                         'vars' => '',
-                                                        'line' => 216
+                                                        'line' => 229
                                                       }, 'Parse::RecDescent::Rule' ),
                               'EscapedChar' => bless( {
                                                         'impcount' => 0,
@@ -7665,18 +7926,18 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'hashname' => '__STRING1__',
                                                                                                     'description' => '\'E\'',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 190
+                                                                                                    'line' => 203
                                                                                                   }, 'Parse::RecDescent::InterpLit' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 190,
+                                                                                                    'line' => 203,
                                                                                                     'code' => '{ extract_bracketed( $text, \'<\' ) }'
                                                                                                   }, 'Parse::RecDescent::Action' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION2__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 191,
+                                                                                                    'line' => 204,
                                                                                                     'code' => '{
                     $return = { 
                         type    => $item[0],
@@ -7690,8 +7951,48 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                    ],
                                                         'name' => 'EscapedChar',
                                                         'vars' => '',
-                                                        'line' => 189
+                                                        'line' => 202
                                                       }, 'Parse::RecDescent::Rule' ),
+                              'KeyWord' => bless( {
+                                                    'impcount' => 0,
+                                                    'calls' => [],
+                                                    'changed' => 0,
+                                                    'opcount' => 0,
+                                                    'prods' => [
+                                                                 bless( {
+                                                                          'number' => '0',
+                                                                          'strcount' => 0,
+                                                                          'dircount' => 0,
+                                                                          'uncommit' => undef,
+                                                                          'error' => undef,
+                                                                          'patcount' => 0,
+                                                                          'actcount' => 2,
+                                                                          'items' => [
+                                                                                       bless( {
+                                                                                                'hashname' => '__ACTION1__',
+                                                                                                'lookahead' => 0,
+                                                                                                'line' => 186,
+                                                                                                'code' => '{ extract_tagged( $text, \'%%\', \'%%\' ) }'
+                                                                                              }, 'Parse::RecDescent::Action' ),
+                                                                                       bless( {
+                                                                                                'hashname' => '__ACTION2__',
+                                                                                                'lookahead' => 0,
+                                                                                                'line' => 187,
+                                                                                                'code' => '{ 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 2), 0, -2 ),
+                    }
+                }'
+                                                                                              }, 'Parse::RecDescent::Action' )
+                                                                                     ],
+                                                                          'line' => undef
+                                                                        }, 'Parse::RecDescent::Production' )
+                                                               ],
+                                                    'name' => 'KeyWord',
+                                                    'vars' => '',
+                                                    'line' => 185
+                                                  }, 'Parse::RecDescent::Rule' ),
                               'Unordered_List' => bless( {
                                                            'impcount' => 0,
                                                            'calls' => [
@@ -7719,7 +8020,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                        'matchrule' => 0,
                                                                                                        'repspec' => 's',
                                                                                                        'lookahead' => 0,
-                                                                                                       'line' => 30
+                                                                                                       'line' => 32
                                                                                                      }, 'Parse::RecDescent::Repetition' ),
                                                                                               bless( {
                                                                                                        'subrule' => 'Empty_Line',
@@ -7730,12 +8031,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                        'matchrule' => 0,
                                                                                                        'repspec' => '?',
                                                                                                        'lookahead' => 0,
-                                                                                                       'line' => 30
+                                                                                                       'line' => 32
                                                                                                      }, 'Parse::RecDescent::Repetition' ),
                                                                                               bless( {
                                                                                                        'hashname' => '__ACTION1__',
                                                                                                        'lookahead' => 0,
-                                                                                                       'line' => 31,
+                                                                                                       'line' => 33,
                                                                                                        'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7749,7 +8050,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                       ],
                                                            'name' => 'Unordered_List',
                                                            'vars' => '',
-                                                           'line' => 29
+                                                           'line' => 31
                                                          }, 'Parse::RecDescent::Rule' ),
                               'WikiDoc' => bless( {
                                                     'impcount' => 0,
@@ -7777,12 +8078,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                 'matchrule' => 0,
                                                                                                 'repspec' => 's?',
                                                                                                 'lookahead' => 0,
-                                                                                                'line' => 2
+                                                                                                'line' => 4
                                                                                               }, 'Parse::RecDescent::Repetition' ),
                                                                                        bless( {
                                                                                                 'hashname' => '__ACTION1__',
                                                                                                 'lookahead' => 0,
-                                                                                                'line' => 3,
+                                                                                                'line' => 5,
                                                                                                 'code' => '{ $return = [ grep { $_->{type} ne \'Empty_Line\' } @{ $item[1] } ] }'
                                                                                               }, 'Parse::RecDescent::Action' )
                                                                                      ],
@@ -7791,7 +8092,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                ],
                                                     'name' => 'WikiDoc',
                                                     'vars' => '',
-                                                    'line' => 1
+                                                    'line' => 3
                                                   }, 'Parse::RecDescent::Rule' ),
                               'RegularText' => bless( {
                                                         'impcount' => 0,
@@ -7814,14 +8115,14 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                     'description' => 'm\\{ ^ \\\\S+ \\}x',
                                                                                                     'lookahead' => 0,
                                                                                                     'rdelim' => '}',
-                                                                                                    'line' => 199,
+                                                                                                    'line' => 212,
                                                                                                     'mod' => 'x',
                                                                                                     'ldelim' => '{'
                                                                                                   }, 'Parse::RecDescent::Token' ),
                                                                                            bless( {
                                                                                                     'hashname' => '__ACTION1__',
                                                                                                     'lookahead' => 0,
-                                                                                                    'line' => 200,
+                                                                                                    'line' => 213,
                                                                                                     'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7835,7 +8136,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                    ],
                                                         'name' => 'RegularText',
                                                         'vars' => '',
-                                                        'line' => 198
+                                                        'line' => 211
                                                       }, 'Parse::RecDescent::Rule' ),
                               'BoldText' => bless( {
                                                      'impcount' => 0,
@@ -7855,13 +8156,13 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                         bless( {
                                                                                                  'hashname' => '__ACTION1__',
                                                                                                  'lookahead' => 0,
-                                                                                                 'line' => 160,
+                                                                                                 'line' => 164,
                                                                                                  'code' => '{ extract_delimited( $text, \'*\' ) }'
                                                                                                }, 'Parse::RecDescent::Action' ),
                                                                                         bless( {
                                                                                                  'hashname' => '__ACTION2__',
                                                                                                  'lookahead' => 0,
-                                                                                                 'line' => 161,
+                                                                                                 'line' => 165,
                                                                                                  'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7877,7 +8178,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                 ],
                                                      'name' => 'BoldText',
                                                      'vars' => '',
-                                                     'line' => 159
+                                                     'line' => 163
                                                    }, 'Parse::RecDescent::Rule' ),
                               'Header' => bless( {
                                                    'impcount' => 0,
@@ -7900,7 +8201,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                'description' => '/^=+/',
                                                                                                'lookahead' => 0,
                                                                                                'rdelim' => '/',
-                                                                                               'line' => 20,
+                                                                                               'line' => 22,
                                                                                                'mod' => '',
                                                                                                'ldelim' => '/'
                                                                                              }, 'Parse::RecDescent::Token' ),
@@ -7910,7 +8211,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                'description' => '/[\\\\t\\\\ ]+/',
                                                                                                'lookahead' => 0,
                                                                                                'rdelim' => '/',
-                                                                                               'line' => 20,
+                                                                                               'line' => 22,
                                                                                                'mod' => '',
                                                                                                'ldelim' => '/'
                                                                                              }, 'Parse::RecDescent::Token' ),
@@ -7920,7 +8221,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                'description' => '/[^\\\\n]*/',
                                                                                                'lookahead' => 0,
                                                                                                'rdelim' => '/',
-                                                                                               'line' => 20,
+                                                                                               'line' => 22,
                                                                                                'mod' => '',
                                                                                                'ldelim' => '/'
                                                                                              }, 'Parse::RecDescent::Token' ),
@@ -7929,12 +8230,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                'hashname' => '__STRING1__',
                                                                                                'description' => '\'\\\\n\'',
                                                                                                'lookahead' => 0,
-                                                                                               'line' => 20
+                                                                                               'line' => 22
                                                                                              }, 'Parse::RecDescent::InterpLit' ),
                                                                                       bless( {
                                                                                                'hashname' => '__ACTION1__',
                                                                                                'lookahead' => 0,
-                                                                                               'line' => 21,
+                                                                                               'line' => 23,
                                                                                                'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -7949,7 +8250,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                               ],
                                                    'name' => 'Header',
                                                    'vars' => '',
-                                                   'line' => 19
+                                                   'line' => 21
                                                  }, 'Parse::RecDescent::Rule' ),
                               'Indented_Line' => bless( {
                                                           'impcount' => 0,
@@ -7972,7 +8273,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/^[\\\\t\\\\ ]+/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 93,
+                                                                                                      'line' => 95,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
@@ -7982,7 +8283,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/[^\\\\t\\\\n\\\\ ]+/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 93,
+                                                                                                      'line' => 95,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
@@ -7992,7 +8293,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'description' => '/[^\\\\n]*/',
                                                                                                       'lookahead' => 0,
                                                                                                       'rdelim' => '/',
-                                                                                                      'line' => 93,
+                                                                                                      'line' => 95,
                                                                                                       'mod' => '',
                                                                                                       'ldelim' => '/'
                                                                                                     }, 'Parse::RecDescent::Token' ),
@@ -8001,12 +8302,12 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                                                       'hashname' => '__STRING1__',
                                                                                                       'description' => '\'\\\\n\'',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 93
+                                                                                                      'line' => 95
                                                                                                     }, 'Parse::RecDescent::InterpLit' ),
                                                                                              bless( {
                                                                                                       'hashname' => '__ACTION1__',
                                                                                                       'lookahead' => 0,
-                                                                                                      'line' => 94,
+                                                                                                      'line' => 96,
                                                                                                       'code' => '{ 
                     $return = { 
                         type    => $item[0],
@@ -8020,14 +8321,15 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                                                                      ],
                                                           'name' => 'Indented_Line',
                                                           'vars' => '',
-                                                          'line' => 92
+                                                          'line' => 94
                                                         }, 'Parse::RecDescent::Rule' )
                             }
                }, 'Parse::RecDescent' );
 }
 
 use vars qw( $VERSION );
-$VERSION = "0.13";
+$VERSION
+    = "0.14";
 
 
 
@@ -8040,6 +8342,10 @@ __END__
 
 Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
+= VERSION
+
+This documentation refers to version %%VERSION%%.
+
 = SYNOPSIS
 
     use Pod::WikiDoc::Parser;
@@ -8051,8 +8357,7 @@ Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 = DESCRIPTION
 
 Pod::WikiDoc::Parser is a precompiled [Parse::RecDescent] parser for use with
-[Pod::WikiDoc].  It is generated dynamically on installation of Pod::WikiDoc
-from a grammar included with the distribution.  
+[Pod::WikiDoc].  
 
 A copy of the Parse::RecDescent grammar used is appended to the
 Pod::WikiDoc::Parser source and this Pod file for reference or reuse by
@@ -8111,6 +8416,8 @@ LICENSE file included with this module.
 
 
 =begin grammar
+
+    { use Text::Balanced qw( extract_tagged ) }
 
     WikiDoc:        
             Block(s?)
@@ -8257,6 +8564,8 @@ LICENSE file included with this module.
                 { $return = $item[1] }
         |   EscapedChar
                 { $return = $item[1] }
+        |   KeyWord
+                { $return = $item[1] }
         |   RegularText
                 { $return = $item[1] }
 
@@ -8289,6 +8598,15 @@ LICENSE file included with this module.
                         content => $thisparser->Inline(
                             substr( substr( $item[1], 1), 0, -1 )
                         ),
+                    }
+                }
+
+    KeyWord:   
+            { extract_tagged( $text, '%%', '%%' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 2), 0, -2 ),
                     }
                 }
 

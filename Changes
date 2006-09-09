@@ -1,5 +1,10 @@
 Revision history for Perl module Pod::WikiDoc
 
+0.14 in progress
+    - added keyword expansion (e.g. %%VERSION%% )
+    - added no_index recipe to Cookbook for extra documentation files
+    - added pod/pod-coverage tests
+
 0.13 Mon Feb  6 22:52:16 EST 2006
     - Created custom Makefile.PL
     - Shifted parser compilation from build cycle back to distribution

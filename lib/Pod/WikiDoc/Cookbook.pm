@@ -3,7 +3,7 @@ package Pod::WikiDoc::Cookbook;
 # turned into .pod by the Build.PL
 use strict; # make CPANTS happy
 use vars '$VERSION';
-$VERSION = "0.13";
+$VERSION = "0.14";
 1;
 __END__
 
@@ -12,6 +12,10 @@ __END__
 = NAME
 
 Pod::WikiDoc::Cookbook - Examples of Pod::WikiDoc usage
+
+= VERSION
+
+This documentation refers to version %%VERSION%%.
 
 = DESCRIPTION
 
@@ -79,6 +83,7 @@ style is also problematic for some users, I recommend leaving off any
                         output  => $tgt,
                     });
                     print "Creating $tgt\n";
+                    $tgt =~ s{\\}{/}g; # for win32
                     $self->_add_to_manifest( 'MANIFEST', $tgt );
                 }
             }
@@ -104,6 +109,41 @@ style is also problematic for some users, I recommend leaving off any
     $class->new( 
         # regular Module::Build options
     )->create_build_script;
+
+== Including extra pure-wikidoc files in a distribution
+
+To add extra documentation files to a distribution, create them as .pm
+files and let Pod::WikiDoc convert them as normal.  To prevent the .pm
+files from being indexed (e.g. by search.cpan.org), list them as "no_index"
+in the META.yml file of the distribution.
+
+Example of a simple .pm documentation file:
+
+    package Some::Module::About;
+    $VERSION = "1.00";
+    use strict; # make CPANTS happy
+    1;
+    __END__
+
+    =begin wikidoc
+
+    Your wikidoc goes here.
+    
+    =end wikidoc
+
+Adding "no_index" to META.yml via Build.PL (requires Module::Build
+0.28):
+
+    my $builder = $class->new(
+        # regular Module::Build options
+        meta_add            => {
+            no_index => {
+                file => [ qw{
+                    lib/Some/Module/About.pm
+                } ]
+            }
+        },
+    );
 
 = AUTHOR
 

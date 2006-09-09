@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.13";
+$VERSION     = "0.14";
 
 use 5.006;
 use Carp;
@@ -20,6 +20,10 @@ use Pod::WikiDoc::Parser;
 
 Pod::WikiDoc - Generate Pod from inline wiki style text 
 
+= VERSION
+
+This documentation refers to version %%VERSION%%.
+
 = SYNOPSIS
 
 In a source file, Pod format-block style:
@@ -29,6 +33,7 @@ In a source file, Pod format-block style:
     
     Write documentation with *bold*, ~italic~ or {code}
     markup.  Create a link to [Pod::WikiDoc].
+    Substitute for user-defined %%KEYWORD%%.
 
         Indent for verbatim paragraphs
 
@@ -50,7 +55,10 @@ In a source file, wikidoc comment-block style:
 
 Generate Pod from wikidoc, programmatically:
     use Pod::WikiDoc;
-    my $parser = Pod::WikiDoc->new( { comment_blocks => 1 } );
+    my $parser = Pod::WikiDoc->new( { 
+        comment_blocks => 1,
+        keywords => { KEYWORD => "foo" },
+    } );
     $parser->filter( 
         { input => "my_module.pm", output => "my_module.pod" }
     );
@@ -82,6 +90,7 @@ Summary of major features of Pod::WikiDoc:
 wikidoc comment blocks
 * Extracts and preserves existing Pod
 * Provides bold, italic, code, and link markup
+* Substitutes user-defined keywords
 * Automatically converts special symbols in wikidoc to their
 Pod escape equivalents, e.g. \E\<lt\>, \E\<gt\>
 * Preserves other Pod escape sequences, e.g. \E\<euro\>
@@ -113,10 +122,13 @@ including how to automate {.pod} generation when using [Module::Build].
 ### blocks.  Default is false.
 ### * {comment_prefix_length}: the number of leading sharp (#) symbols to 
 ### denote a comment block.  Default is 3.
+### * {keywords}: a hash reference with keywords and values for keyword
+### substitution
 
 my %default_args = (
     comment_blocks         => 0,
     comment_prefix_length  => 3,
+    keywords               => {},
 );
 
 sub new {
@@ -252,7 +264,7 @@ sub format {
         undef $node if ! ref $node;
     }
 
-    return _wiki2pod( $wiki_tree );
+    return _wiki2pod( $wiki_tree, $self->{keywords} );
 }
 
 #--------------------------------------------------------------------------#
@@ -429,6 +441,7 @@ my %opening_of = (
     InlineCode          =>  "C<<< ",
     BoldText            =>  'B<',
     ItalicText          =>  'I<',
+    KeyWord             =>  q{},
     LinkContent         =>  'L<',
     LinkLabel           =>  q{},
     LinkTarget          =>  q{},
@@ -453,6 +466,7 @@ my %closing_of = (
     InlineCode          =>  " >>>",
     BoldText            =>  ">",
     ItalicText          =>  ">",
+    KeyWord             =>  q{},
     LinkContent         =>  ">",
     LinkLabel           =>  "|",
     LinkTarget          =>  q{},
@@ -463,6 +477,7 @@ my %closing_of = (
 my %content_handler_for = (
     RegularText         =>  \&_escape_pod, 
     Empty_Line          =>  sub { q{} },
+    KeyWord             =>  \&_keyword_expansion,
 );
 
 # Table of character to E<> code conversion
@@ -502,6 +517,21 @@ sub _escape_pod {
 }
 
 #--------------------------------------------------------------------------#
+# _keyword_expansion
+#
+# Given a keyword, return the corresponding value from the keywords
+# hash or the keyword itself
+#--------------------------------------------------------------------------#
+
+sub _keyword_expansion {
+    my ($node, $keywords) = @_;
+    my $key = $node->{content};
+    my $value = $keywords->{$key};
+    return defined $value ? $value : "%%" . $key . "%%" ;
+}
+
+    
+#--------------------------------------------------------------------------#
 # _translate_wikidoc()
 #
 # given an array of wikidoc lines, joins them and runs them through
@@ -521,7 +551,7 @@ sub _translate_wikidoc {
 #--------------------------------------------------------------------------#
 
 sub _wiki2pod {
-    my ($nodelist, $insert_space) = @_;
+    my ($nodelist, $keywords, $insert_space) = @_;
     my $result = q{};
     for my $node ( @$nodelist ) {
         # XXX print "$node\n" if ref $node ne 'HASH';
@@ -532,13 +562,14 @@ sub _wiki2pod {
         if ( ref $node->{content} eq 'ARRAY' ) {
             $result .= _wiki2pod( 
                 $node->{content}, 
+                $keywords,
                 $node->{type} eq 'Preformat' ? 1 : 0 
             );
         }
         else {
             my $handler = $content_handler_for{ $node->{type} };
             $result .= defined $handler 
-                     ? $handler->( $node ) : $node->{content}
+                     ? $handler->( $node, $keywords ) : $node->{content}
             ;
         }
         $result .= ref $closing eq 'CODE' ? $closing->($node) : $closing;
@@ -573,11 +604,13 @@ Inline elements include:
 * Code
 * Link
 * Escape code
+* Keywords
 
-All text except that found in verbatim text or code markup is transformed to
-convert special Pod characters to Pod escape code markup: \E\<lt\>, \E\<gt\>,
-\E\<sol\>, \E\<verbar\>.  Inline markup can be escaped with a backslash (\\).
-Including a literal backslash requires a double-backslash (\\\\).
+All text except that found in verbatim text, code markup or keywords is
+transformed to convert special Pod characters to Pod escape code markup:
+\E\<lt\>, \E\<gt\>, \E\<sol\>, \E\<verbar\>.  Inline markup can be escaped with
+a backslash (\\).  Including a literal backslash requires a double-backslash
+(\\\\).
 
 == Headers
 
@@ -670,6 +703,16 @@ or other unusual characters.
 
     This is the euro symbol: E<euro> 
 
+== Keyword markup
+
+Text surrounded by double-percent signs is treated as a keyword for expansion.
+The entire expression will be replaced with the value of the keyword from the
+hash provided when the parser is created with {new()}.  If the keyword is
+unknown or the value is undefined, the keyword will be passed through
+unchanged.
+
+    This is version %%VERSION%%
+
 = DIAGNOSTICS
 
 * {Error: Argument to convert() must be a scalar}
@@ -706,26 +749,54 @@ abstract.  Set the abstract manually in the {Build.PL} file with the
 
 = BUGS
 
-Please report bugs using the CPAN Request Tracker at 
-[http://rt.cpan.org/NoAuth/Bugs.html?Dist=Pod-WikiDoc]
+Please report bugs or feature requests using the CPAN Request Tracker.
+Bugs can be sent by email to {bug-Pod-WikiDoc@rt.cpan.org} or
+submitted using the web interface at
+[http://rt.cpan.org/Public/Dist/Display.html?Name=Pod-WikiDoc]
+
+When submitting a bug or request, please include a test-file or a patch to an
+existing test-file that illustrates the bug or desired feature.
 
 = AUTHOR
 
-David A Golden (DAGOLDEN)
+David A. Golden (DAGOLDEN)
 
 dagolden@cpan.org
 
-[http://dagolden.com/]
+http://dagolden.com/
 
-= COPYRIGHT
+= COPYRIGHT AND LICENSE
 
-Copyright (c) 2005 by David A Golden
+Copyright (c) 2005,2006 by David A. Golden
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify it under
+the same terms as Perl itself.
 
-The full text of the license can be found in the
-LICENSE file included with this module.
+The full text of the license can be found in the LICENSE file included with
+this module.
+
+= DISCLAIMER OF WARRANTY
+
+BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
+EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
+ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
+YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
+NECESSARY SERVICING, REPAIR, OR CORRECTION.
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
+REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
+LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
+OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
+THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
+RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
+FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
+SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
 =end wikidoc
 

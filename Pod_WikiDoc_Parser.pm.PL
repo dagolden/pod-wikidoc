@@ -6,11 +6,11 @@ use File::pushd;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
-$VERSION = "0.13";
+$VERSION = "0.14";
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
-use Text::Balanced qw( extract_bracketed extract_delimited );
+use Text::Balanced qw( extract_bracketed extract_delimited extract_tagged );
 package main;
 
 # Load grammar from __DATA__
@@ -38,7 +38,8 @@ my ($target_dir) = dirname($ARGV[0]);
 my $version_text = <<"END_VERSION";
 \n
 use vars qw( \$VERSION );
-\$VERSION = "0.13";
+\$VERSION
+    = "$VERSION";
 
 END_VERSION
 
@@ -52,6 +53,10 @@ my $docs_text = <<'END_DOCS';
 
 Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 
+= VERSION
+
+This documentation refers to version %%VERSION%%.
+
 = SYNOPSIS
 
     use Pod::WikiDoc::Parser;
@@ -63,8 +68,7 @@ Pod::WikiDoc::Parser -- precompiled recursive descent parser for Pod::WikiDoc
 = DESCRIPTION
 
 Pod::WikiDoc::Parser is a precompiled [Parse::RecDescent] parser for use with
-[Pod::WikiDoc].  It is generated dynamically on installation of Pod::WikiDoc
-from a grammar included with the distribution.  
+[Pod::WikiDoc].  
 
 A copy of the Parse::RecDescent grammar used is appended to the
 Pod::WikiDoc::Parser source and this Pod file for reference or reuse by
@@ -133,6 +137,8 @@ if ( $fh ) {
 }
 
 __DATA__
+    { use Text::Balanced qw( extract_tagged ) }
+
     WikiDoc:        
             Block(s?)
                 { $return = [ grep { $_->{type} ne 'Empty_Line' } @{ $item[1] } ] }
@@ -278,6 +284,8 @@ __DATA__
                 { $return = $item[1] }
         |   EscapedChar
                 { $return = $item[1] }
+        |   KeyWord
+                { $return = $item[1] }
         |   RegularText
                 { $return = $item[1] }
 
@@ -310,6 +318,15 @@ __DATA__
                         content => $thisparser->Inline(
                             substr( substr( $item[1], 1), 0, -1 )
                         ),
+                    }
+                }
+
+    KeyWord:   
+            { extract_tagged( $text, '%%', '%%' ) }
+                { 
+                    $return = { 
+                        type    => $item[0],
+                        content => substr( substr( $item[1], 2), 0, -2 ),
                     }
                 }
 
