@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use warnings;
+use File::Basename;
 use File::pushd;
 use Parse::RecDescent;
 
@@ -18,7 +19,7 @@ my $grammar = do { local $/; <DATA> };
 
 # Find target directory
 
-my ($target_dir) = $ARGV[0] =~ m{ \A ( .+ )  / .+ \z }xms;
+my ($target_dir) = dirname($ARGV[0]);
 
 {
     # Temporarily change to target directory since PRD Precompile writes to

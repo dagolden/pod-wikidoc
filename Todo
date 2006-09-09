@@ -9,6 +9,8 @@ TODO list for Perl module Pod::WikiDoc
 - Revise Parser generation approach to pre-generate before distribution 
   during the distdir action of Build.PL
 
+- Acknowledge Kwid and provide links to it
+
 #--------------------------------------------------------------------------#
 # Formatting
 #--------------------------------------------------------------------------#
