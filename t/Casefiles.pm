@@ -4,7 +4,6 @@ use warnings;
 use Carp;
 use File::Find;
 use File::Basename qw(basename);
-use Data::Dumper;
 use Test::More;
 
 # Get optional test support

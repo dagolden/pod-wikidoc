@@ -78,12 +78,14 @@ $class->new(
 #        'lib/Pod/WikiDoc/Parser.pod',
 #    ],
     requires        => {
+        perl                => 5.006,
         Getopt::Lucid       => 0.14,    
         IO::String          => 1.06,
         Parse::RecDescent   => 1.94,
         Pod::Usage          => 1,
         Scalar::Util        => 1.02,
         Text::Balanced      => 1.95,
+        Cwd                 => 0,       #build_requires
         Test::More          => 0.45,    #build_requires
         IPC::Run3           => 0.033,   #build_requires
         Probe::Perl         => 0.01,    #build_requires
@@ -101,3 +103,4 @@ $class->new(
         }
     },
 )->create_build_script;
+

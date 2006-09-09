@@ -26,6 +26,7 @@ t/09-convert_link_markup.t
 t/10-convert_inline_code.t
 t/11-escape_markup.t
 t/12-nested_formatting.t
+t/13-keyword_expansion.t
 t/20-convert_complex_wikitext.t
 t/30-format_error_handling.t
 t/50-private_filehandle_filter.t
@@ -39,7 +40,11 @@ t/57-convert_error_handling.t
 t/60-convert_wikidoc_comments.t
 t/61-convert_alt_length_comments.t
 t/70-wikidoc-script.t
+t/71-wikidoc_with_define.t
+t/98-pod.t
+t/99-pod-coverage.t
 t/Casefiles.pm
+t/CLI.pm
 t/filter_comments/001_filtering_only_doc_comments
 t/filter_comments/002_filtering_code_and_doc_comments
 t/filter_comments/003_filtering_pod_with_doc_comments
@@ -81,6 +86,7 @@ t/wiki2pod/escape_markup/004_vertbar_in_paragraph
 t/wiki2pod/escape_markup/005_escapes_in_header_and_lists
 t/wiki2pod/escape_markup/006_passthrough_E_codes
 t/wiki2pod/escape_markup/007_backslash_escaping
+t/wiki2pod/escape_markup/008_greater_than_in_link
 t/wiki2pod/headers/001_level_one_header
 t/wiki2pod/headers/002_level_two_header
 t/wiki2pod/headers/003_level_three_header
@@ -93,6 +99,12 @@ t/wiki2pod/italic_markup/003_slash_in_words
 t/wiki2pod/italic_markup/004_italic_tag_in_header
 t/wiki2pod/italic_markup/005_italic_tag_in_bullet_list
 t/wiki2pod/italic_markup/006_italic_tag_in_numbered_list
+t/wiki2pod/keyword_expansion/001_simple_keyword_in_paragraph
+t/wiki2pod/keyword_expansion/002_keyword_in_words
+t/wiki2pod/keyword_expansion/003_keyword_in_header
+t/wiki2pod/keyword_expansion/004_keyword_in_numbered_list
+t/wiki2pod/keyword_expansion/005_keyword_in_bullet_list
+t/wiki2pod/keyword_expansion/006_unmatched_keyword
 t/wiki2pod/link_markup/001_simple_link_tag
 t/wiki2pod/link_markup/002_link_tag_in_header
 t/wiki2pod/link_markup/003_link_tag_in_bullet_list
