@@ -4,4 +4,6 @@ Revision history for Perl module Pod::WikiDoc
     - basic wikidoc format section extraction
     - basic block formatting
     - basic inline formattting
+    - link formatting with or without link text
     - special symbols escaped in generated pod
+    - format nesting

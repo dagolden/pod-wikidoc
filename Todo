@@ -12,8 +12,6 @@ TODO list for Perl module Pod::WikiDoc
 
 - Add =pod and =cut around final doc output (need a new function?)
 
-- Nesting inline markup (!?)
-
 - Markup for other pod markup?  Passthrough code to allow it through 
   unescaped?  E.g. E< > or << >>
 
@@ -25,7 +23,7 @@ TODO list for Perl module Pod::WikiDoc
 # Extraction
 #--------------------------------------------------------------------------#
 
-- Extract and pass through REGUlar pod as well as wikidoc
+- Extract and pass through regular pod as well as wikidoc
 
 - Special comment mode: extract anything after "## " as wikidoc from 
   regular code lines
