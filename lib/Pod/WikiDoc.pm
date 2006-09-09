@@ -7,6 +7,7 @@ $VERSION     = "0.10";
 use 5.006;
 use Carp;
 use IO::String;
+use Scalar::Util qw( blessed );
 use Pod::WikiDoc::Parser;
 
 #--------------------------------------------------------------------------#
@@ -48,6 +49,10 @@ Usage...
 
 sub new {
     my $class = shift;
+
+    croak "Error: Class method new() can't be called on an object"
+        if ref $class;
+
     my $self = {};
 
     # load up a parser 
@@ -66,6 +71,9 @@ sub new {
 sub convert {
     my ($self, $input_string) = @_;
 
+    croak "Error: Argument to convert() must be a scalar"
+        if ( ref \$input_string ne 'SCALAR' );
+        
     my $input_fh = IO::String->new( $input_string );
     my $output_fh = IO::String->new();
     _filter_podfile( $self, $input_fh, $output_fh );
@@ -87,24 +95,25 @@ sub filter {
     my ( $self, $args_ref ) = @_;
     
     croak "Error: Argument to filter() must be a hash reference"
-        if defined $args_ref && ! ref($args_ref) eq 'HASH';
+        if defined $args_ref && ref($args_ref) ne 'HASH';
     # setup input
     my $input_fh;
     if ( ! exists $args_ref->{input} ) {
         $input_fh = \*STDIN;
     }
-    elsif ( (ref $args_ref->{input} && $args_ref->{input}->isa('GLOB') ) 
-         || ref \$args_ref->{input} eq 'GLOB' ) {
-        # filehandle
+    elsif ( ( blessed $args_ref->{input} && $args_ref->{input}->isa('GLOB') )
+         || ( ref $args_ref->{input}  eq 'GLOB' ) 
+         || ( ref \$args_ref->{input} eq 'GLOB' ) ) {
+        # filehandle or equivalent
         $input_fh = $args_ref->{input};
     } 
     elsif ( ref \$args_ref->{input} eq 'SCALAR' ) {
         # filename
         open( $input_fh, "<", $args_ref->{input} )
-            or croak "Error: Couldn't open input file '$input_fh'";
+            or croak "Error: Couldn't open input file '$args_ref->{input}'";
     }
     else {
-        croak "Error: invalid input file argument to filter()";
+        croak "Error: Invalid variable type for input file argument to filter()";
     }
     
     # setup output
@@ -112,18 +121,19 @@ sub filter {
     if ( ! exists $args_ref->{output} ) {
         $output_fh = \*STDOUT;
     }
-    elsif ( (ref $args_ref->{output} && $args_ref->{output}->isa('GLOB'))
-         || ref \$args_ref->{output} eq 'GLOB' ) {
-        # filehandle
+    elsif ( ( blessed $args_ref->{output} && $args_ref->{output}->isa('GLOB') )
+         || ( ref $args_ref->{output}  eq 'GLOB' ) 
+         || ( ref \$args_ref->{output} eq 'GLOB' ) ) {
+        # filehandle or equivalent
         $output_fh = $args_ref->{output};
     } 
     elsif ( ref \$args_ref->{output} eq 'SCALAR' ) {
         # filename
         open( $output_fh, ">", $args_ref->{output} )
-            or croak "Error: Couldn't open output file '$output_fh'";
+            or croak "Error: Couldn't open output file '$args_ref->{output}'";
     }
     else {
-        croak "Error: invalid output file argument to filter()";
+        croak "Error: Invalid variable type for output file argument to filter()";
     }
     
     _filter_podfile( $self, $input_fh, $output_fh );
@@ -133,6 +143,9 @@ sub filter {
 sub format {
     my ($self, $wikitext) = @_;
     
+    croak "Error: Argument to format() must be a scalar"
+        if ( ref \$wikitext ne 'SCALAR' );
+        
     my $wiki_tree  = $self->{parser}->WikiDoc( $wikitext ) ;
     for my $node ( @$wiki_tree ) {
         undef $node if ! ref $node;

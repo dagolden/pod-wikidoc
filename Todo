@@ -7,8 +7,6 @@ TODO list for Perl module Pod::WikiDoc
 - Eat own cooking -- write wikidoc for Pod::Wikidoc -- use magic comment
   mode in comment blocks for methods
 
-- Test error handling in all public methods
-
 #--------------------------------------------------------------------------#
 # Formatting
 #--------------------------------------------------------------------------#
