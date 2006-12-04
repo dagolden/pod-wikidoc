@@ -10,18 +10,21 @@ WriteMakefile
     },
     'EXE_FILES' => [ 'scripts/wikidoc' ],
     'PREREQ_PM' => {
-        'Scalar::Util' => '1.02',
-        'Getopt::Long' => '2.17',
-        'Pod::Usage' => 1,
-        'IO::String' => '1.06',
-        'File::pushd' => '0.30',
-        'File::Spec' => 3,
-        'Parse::RecDescent' => '1.94',
-        'Test::More' => '0.45',
-        'File::Find' => 1,
-        'Text::Balanced' => '1.95',
-        'File::Temp' => '0.14',
-        'IPC::Run3' => '0.033'
+        Getopt::Lucid       => 0.14,    
+        IO::String          => 1.06,
+        Parse::RecDescent   => 1.94,
+        Pod::Usage          => 1,
+        Scalar::Util        => 1.02,
+        Text::Balanced      => 1.95,
+        Cwd                 => 0,       #build_requires
+        Test::More          => 0.45,    #build_requires
+        IPC::Run3           => 0.033,   #build_requires
+        Probe::Perl         => 0.01,    #build_requires
+        File::Find          => 1,       #build_requires
+        File::pushd         => 0.30,    #build_requires
+        File::Spec          => 3,       #build_requires 
+        File::Temp          => 0.14,    #build_requires
+        File::Basename      => 0,       #build_requires
     }
 )
 ;

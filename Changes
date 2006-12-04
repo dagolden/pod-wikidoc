@@ -1,7 +1,7 @@
 Revision history for Perl module Pod::WikiDoc
 
 0.16 in progress
-    - fixed wrong dependency listed in Pod
+    - fixed dependencies
     
 0.15 Sun Jun 11 01:25:20 EDT 2006
     - fixed up version numbering across generated modules

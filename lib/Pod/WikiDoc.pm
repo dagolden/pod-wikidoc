@@ -724,16 +724,6 @@ unchanged.
 * {Error: Couldn't open output file 'FILENAME'}
 * {Error: 'input' parameter for filter() must be a filename or filehandle}
 * {Error: 'output' parameter for filter() must be a filename or filehandle}
-    
-= DEPENDENCIES
-
-Pod::WikiDoc and the 'wikidoc' script depend on the following modules:
-* [Getopt::Lucid]
-* [IO::String]
-* [Parse::RecDescent]
-* [Pod::Usage]
-* [Scalar::Util]
-* [Text::Balanced]
 
 = INCOMPATIBILITIES
 
@@ -742,7 +732,7 @@ Pod::WikiDoc and the 'wikidoc' script depend on the following modules:
 Pod::WikiDoc or the level of 'smartness' in [Smart::Comments] to avoid the
 conflict.
 
-* Module::Build (as of 0.27_02) does not look in external {.pod} files 
+* Module::Build before 0.28 does not look in external {.pod} files 
 to generate a {README} with the {create_readme} option or to find a module 
 abstract.  Set the abstract manually in the {Build.PL} file with the
 {dist_abstract} option.
