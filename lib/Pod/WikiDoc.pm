@@ -435,6 +435,7 @@ my %opening_of = (
     Indented_Line       =>  q{ },
     Plain_Line          =>  q{},
     Empty_Line          =>  q{ },
+    Parens              =>  "(",
     RegularText         =>  q{},
     EscapedChar         =>  q{},
     WhiteSpace          =>  q{},
@@ -460,6 +461,7 @@ my %closing_of = (
     Indented_Line       =>  "\n",
     Plain_Line          =>  "\n",
     Empty_Line          =>  "\n",
+    Parens              =>  ")",
     RegularText         =>  q{},
     EscapedChar         =>  q{},
     WhiteSpace          =>  q{},
@@ -740,8 +742,7 @@ abstract.  Set the abstract manually in the {Build.PL} file with the
 = BUGS
 
 Please report bugs or feature requests using the CPAN Request Tracker.
-Bugs can be sent by email to {bug-Pod-WikiDoc@rt.cpan.org} or
-submitted using the web interface at
+Bugs can be submitted using the web interface at
 [http://rt.cpan.org/Public/Dist/Display.html?Name=Pod-WikiDoc]
 
 When submitting a bug or request, please include a test-file or a patch to an

@@ -1,5 +1,6 @@
 Build.PL
 Changes
+INSTALL
 lib/Pod/WikiDoc.pm
 lib/Pod/WikiDoc.pod
 lib/Pod/WikiDoc/Cookbook.pm
@@ -99,18 +100,21 @@ t/wiki2pod/italic_markup/003_slash_in_words
 t/wiki2pod/italic_markup/004_italic_tag_in_header
 t/wiki2pod/italic_markup/005_italic_tag_in_bullet_list
 t/wiki2pod/italic_markup/006_italic_tag_in_numbered_list
+t/wiki2pod/italic_markup/007_italic_tag_in_parens
 t/wiki2pod/keyword_expansion/001_simple_keyword_in_paragraph
 t/wiki2pod/keyword_expansion/002_keyword_in_words
 t/wiki2pod/keyword_expansion/003_keyword_in_header
 t/wiki2pod/keyword_expansion/004_keyword_in_numbered_list
 t/wiki2pod/keyword_expansion/005_keyword_in_bullet_list
 t/wiki2pod/keyword_expansion/006_unmatched_keyword
+t/wiki2pod/keyword_expansion/007_simple_keyword_in_parens
 t/wiki2pod/link_markup/001_simple_link_tag
 t/wiki2pod/link_markup/002_link_tag_in_header
 t/wiki2pod/link_markup/003_link_tag_in_bullet_list
 t/wiki2pod/link_markup/004_link_tag_in_numbered_list
 t/wiki2pod/link_markup/005_link_tag_with_text
 t/wiki2pod/link_markup/006_link_tag_with_url
+t/wiki2pod/link_markup/007_link_url_in_parens
 t/wiki2pod/nested_formatting/001_escapes_in_bold
 t/wiki2pod/nested_formatting/002_escapes_in_italic
 t/wiki2pod/nested_formatting/003_escapes_in_link_text
@@ -121,4 +125,6 @@ t/wiki2pod/numbered_lists/001_simple_numbered_list
 t/wiki2pod/paragraphs/001_single_paragraph
 t/wiki2pod/paragraphs/002_multi_line_paragraph
 t/wiki2pod/paragraphs/003_blank_lines
+t/wiki2pod/paragraphs/004_multi_line_w_parens
+t/wiki2pod/paragraphs/005_multi_line_w_embedded_parens
 Todo

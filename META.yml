@@ -1,8 +1,8 @@
 ---
 name: Pod-WikiDoc
-version: 0.15
+version: 0.16
 author:
-  - David A Golden <dagolden@cpan.org>
+  - 'David A Golden <dagolden@cpan.org>'
 abstract: Generate Pod from inline wiki style text
 license: perl
 resources:
@@ -29,14 +29,14 @@ provides:
     file: lib/Pod/WikiDoc/Parser.pm
   Pod::WikiDoc:
     file: lib/Pod/WikiDoc.pm
-    version: 0.15
+    version: 0.16
   Pod::WikiDoc::Cookbook:
     file: lib/Pod/WikiDoc/Cookbook.pm
-    version: 0.15
+    version: 0.16
   Pod::WikiDoc::Parser:
     file: lib/Pod/WikiDoc/Parser.pm
-    version: 0.15
-generated_by: Module::Build version 0.28
+    version: 0.16
+generated_by: Module::Build version 0.2805
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.2.html
   version: 1.2

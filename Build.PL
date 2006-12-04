@@ -70,7 +70,7 @@ $class->new(
     dist_author         => 'David A Golden <dagolden@cpan.org>',
     dist_abstract       => 'Generate Pod from inline wiki style text',
     license             => 'perl',
-    create_readme       => 0,
+    create_readme       => 1,
 #    PL_files            => {
 #        'Pod_WikiDoc_Parser.pm.PL' => 'lib/Pod/WikiDoc/Parser.pm',
 #    },
