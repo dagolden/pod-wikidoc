@@ -99,7 +99,8 @@ $class->new(
         no_index => {
             file => [ qw{
                 lib/Pod/WikiDoc/Cookbook.pm
-            } ]
+            } ],
+            directory => [ 'examples' ],
         }
     },
 )->create_build_script;
