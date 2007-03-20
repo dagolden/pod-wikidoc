@@ -8632,7 +8632,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
 }
 
 use vars qw( $VERSION );
-$VERSION = 0.16
+$VERSION = 0.17
 
 
 __END__
