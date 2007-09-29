@@ -3,7 +3,7 @@ package Pod::WikiDoc::Cookbook;
 # turned into .pod by the Build.PL
 use strict; # make CPANTS happy
 use vars '$VERSION';
-$VERSION = "0.17";
+$VERSION = '0.18';
 1;
 __END__
 

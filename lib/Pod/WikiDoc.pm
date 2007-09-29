@@ -2,7 +2,7 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 use vars qw($VERSION );
-$VERSION     = "0.17";
+$VERSION     = '0.18';
 
 use 5.006;
 use Carp;
@@ -516,7 +516,8 @@ sub _filter_for {
         };
     }
     my $out_type =  $format eq 'wikidoc' ? 'wikidoc' : 'pod' ; 
-    $out_iter->( [ $out_type, @lines ] ) 
+    $out_iter->( [ $out_type, @lines ] ); 
+    $in_iter->('drop') if $format eq 'wikidoc'; # wikidoc will append \n
 }
 
 #--------------------------------------------------------------------------#
@@ -525,12 +526,12 @@ sub _filter_for {
 
 sub _filter_cblock {
     my ($self, $in_iter, $out_iter) = @_;
-    my @lines = ($1);
+    my @lines = ($1 ? $1 : "\n");
     $in_iter->('next');
     my $CBLOCK = _comment_block_regex($self);
     LINE: while ( defined( my $peek = $in_iter->('peek') ) ) {
         last LINE if $peek !~ $CBLOCK;
-        push @lines, $1;
+        push @lines, ($1 ? $1 : "\n");
         $in_iter->('next');
     }
     $out_iter->( [ 'wikidoc', @lines ] ) if $self->{comment_blocks};

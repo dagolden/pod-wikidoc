@@ -10,7 +10,8 @@ Wikidoc paragraph
 
 =begin comment
 
-The number 42 > 23 but we want x such that 12 < x < 42
+The number 42 > 23 but we
+want x such that 12 < x < 42
 
 =end comment
 
@@ -34,7 +35,8 @@ Wikidoc paragraph
 
 =begin comment
 
-The number 42 > 23 but we want x such that 12 < x < 42
+The number 42 > 23 but we
+want x such that 12 < x < 42
 
 =end comment
 
