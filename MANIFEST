@@ -63,6 +63,9 @@ t/filter_pod/005_filtering_only_for_wikidoc
 t/filter_pod/006_filtering_pod_and_code
 t/filter_pod/007_filtering_pod_with_wikidoc
 t/filter_pod/008_filtering_pod_and_wikidoc_no_sharpdoc
+t/filter_pod/009_filtering_nested_formats
+t/filter_pod/010_filtering_nested_format_w_markup
+t/filter_pod/011_filtering_multi_level_nested_format
 t/wiki2pod/bold_markup/001_simple_bold_tag_in_paragraph
 t/wiki2pod/bold_markup/002_multi_line_bold_tag_in_paragraph
 t/wiki2pod/bold_markup/003_asterisk_in_words

@@ -369,7 +369,7 @@ my $FORMAT_NAME = qr{:? [-a-zA-Z0-9_]+}xms;
 my $POD_CMD = qr{\A =[a-zA-Z]+}xms;
 my $BEGIN = qr{\A =begin \s+ ($FORMAT_NAME)  \s* \z}xms;
 my $END   = qr{\A =end   \s+ ($FORMAT_NAME)  \s* \z}xms;
-my $FOR   = qr{\A =for   \s+ ($FORMAT_NAME)  \s* (.*) \z}xms;
+my $FOR   = qr{\A =for   \s+ ($FORMAT_NAME)  [ \t]* (.*) \z}xms;
 my $POD   = qr{\A =pod                          \s* \z}xms;
 my $CUT   = qr{\A =cut                          \s* \z}xms;
 
@@ -505,7 +505,10 @@ sub _filter_pod {
 sub _filter_for {
     my ($self, $in_iter, $out_iter) = @_;
     my $for_line = $in_iter->('next');
-    my ($format, @lines) = $for_line =~ $FOR;
+    my ($format, $rest) = $for_line =~ $FOR;
+    $rest ||= "\n";
+
+    my @lines = ( $format eq 'wikidoc' ? $rest : $for_line );
 
     LINE: while ( defined( my $peek = $in_iter->('peek') ) ) {
         $peek =~ $BLANK_LINE && do {
@@ -515,9 +518,14 @@ sub _filter_for {
             push @lines, $in_iter->('next');
         };
     }
+    if ($format eq 'wikidoc' ) {
+        $in_iter->('drop'); # wikidoc will append \n
+    }
+    else {
+        push @lines, $in_iter->('next');
+    }
     my $out_type =  $format eq 'wikidoc' ? 'wikidoc' : 'pod' ; 
     $out_iter->( [ $out_type, @lines ] ); 
-    $in_iter->('drop') if $format eq 'wikidoc'; # wikidoc will append \n
 }
 
 #--------------------------------------------------------------------------#
@@ -887,42 +895,26 @@ existing test-file that illustrates the bug or desired feature.
 
 David A. Golden (DAGOLDEN)
 
-dagolden@cpan.org
-
-http://dagolden.com/
-
 = COPYRIGHT AND LICENSE
 
-Copyright (c) 2005,2006 by David A. Golden
+Copyright (c) 2005, 2006, 2007 by David A. Golden
 
-This program is free software; you can redistribute it and/or modify it under
-the same terms as Perl itself.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at 
+[http://www.apache.org/licenses/LICENSE-2.0]
 
-The full text of the license can be found in the LICENSE file included with
-this module.
+Files produced as output though the use of this software, including
+generated copies of boilerplate templates provided with this software,
+shall not be considered Derivative Works, but shall be considered the
+original work of the Licensor.
 
-= DISCLAIMER OF WARRANTY
-
-BECAUSE THIS SOFTWARE IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
-FOR THE SOFTWARE, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN
-OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
-PROVIDE THE SOFTWARE "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER
-EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
-WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE
-ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE SOFTWARE IS WITH
-YOU. SHOULD THE SOFTWARE PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL
-NECESSARY SERVICING, REPAIR, OR CORRECTION.
-
-IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MAY MODIFY AND/OR
-REDISTRIBUTE THE SOFTWARE AS PERMITTED BY THE ABOVE LICENCE, BE
-LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL,
-OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE
-THE SOFTWARE (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING
-RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A
-FAILURE OF THE SOFTWARE TO OPERATE WITH ANY OTHER SOFTWARE), EVEN IF
-SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
-SUCH DAMAGES.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 =end wikidoc
 
+=cut

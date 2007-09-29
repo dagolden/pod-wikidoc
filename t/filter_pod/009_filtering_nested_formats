@@ -8,9 +8,16 @@ This is a pod paragraph
 
 Wikidoc paragraph
 
+=for private This is a comment
+
+=for private This is a comment
+across many lines
+
 =begin comment
 
 This is text in a Pod comment format
+
+=for private This is another comment
 
 =end comment
 
@@ -32,9 +39,16 @@ This is a pod paragraph
 
 Wikidoc paragraph
 
+=for private This is a comment
+
+=for private This is a comment
+across many lines
+
 =begin comment
 
 This is text in a Pod comment format
+
+=for private This is another comment
 
 =end comment
 
