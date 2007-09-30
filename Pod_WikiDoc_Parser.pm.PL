@@ -43,7 +43,7 @@ print {$target_file} scalar <$precompile>;
 # interpolate version and add it 
 
 my $version_text = "\nuse vars qw( \$VERSION );\n\$VERSION";
-$version_text .= " = $VERSION\n\n";
+$version_text .= " = $VERSION;\n\n";
 
 print {$target_file} $version_text;
 

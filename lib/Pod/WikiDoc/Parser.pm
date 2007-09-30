@@ -1,7 +1,7 @@
 package Pod::WikiDoc::Parser;
 
 use vars qw( $VERSION );
-$VERSION = 0.18
+$VERSION = 0.18;
 
 use Parse::RecDescent;
 
