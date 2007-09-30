@@ -3,6 +3,7 @@ use strict;
 use warnings;
 use File::Basename;
 use File::pushd;
+use IO::File;
 use Parse::RecDescent;
 
 use vars qw( $VERSION );
@@ -17,32 +18,42 @@ package main;
 
 my $grammar = do { local $/; <DATA> };
 
-# Find target directory
+# Find target location
 
-my ($target_dir) = dirname($ARGV[0]);
+my ($target_name) = $ARGV[0];
 
-{
-    # Temporarily change to target directory since PRD Precompile writes to
-    # current directory only
-    my $cd = pushd( $target_dir );
+my $target_file = IO::File->new( $target_name, ">" ) or die $!;
 
-    # Generate Parser file
+# Temporarily change to temp directory since PRD Precompile writes to
+# current directory only
+my $cd = tempd();
 
-    $Parse::RecDescent::skip = q{};
-    Parse::RecDescent->Precompile( $grammar, "Pod::WikiDoc::Parser" );
-}
+# Generate Parser file
 
-# Text to append to precompiled parser
+$Parse::RecDescent::skip = q{};
+Parse::RecDescent->Precompile( $grammar, "Pod::WikiDoc::Parser" );
 
-# interpolate version 
+# open it up and open destination
+my $precompile = IO::File->new( "Parser.pm" ) or die $!;
 
-my $version_text = "\n\nuse vars qw( \$VERSION );\n\$VERSION";
-$version_text .= " = $VERSION\n";
+# copy package statement line
+
+print {$target_file} scalar <$precompile>;
+
+# interpolate version and add it 
+
+my $version_text = "\nuse vars qw( \$VERSION );\n\$VERSION";
+$version_text .= " = $VERSION\n\n";
+
+print {$target_file} $version_text;
+
+# copy precompiled parser
+
+print {$target_file} <$precompile>;
 
 # assemble intro pod
 
 my $docs_text = <<'END_DOCS';
-
 =begin wikidoc
 
 = NAME
@@ -100,21 +111,27 @@ included below for reference for those interested in the topic:
 
 = AUTHOR
 
-David A Golden (DAGOLDEN)
+David A. Golden (DAGOLDEN)
 
-dagolden@cpan.org
+= COPYRIGHT AND LICENSE
 
-[http://dagolden.com/]
+Copyright (c) 2005, 2006, 2007 by David A. Golden
 
-= COPYRIGHT
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at 
+[http://www.apache.org/licenses/LICENSE-2.0]
 
-Copyright (c) 2005 by David A Golden
+Files produced as output though the use of this software, including
+generated copies of boilerplate templates provided with this software,
+shall not be considered Derivative Works, but shall be considered the
+original work of the Licensor.
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
-
-The full text of the license can be found in the
-LICENSE file included with this module.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 =end wikidoc
 
@@ -124,13 +141,8 @@ END_DOCS
 
 # Append version and grammar for reference
 
-open my $fh, ">>", $ARGV[0] 
-    or warn "Couldn't append grammar to Pod::WikiDoc::Parser";
-if ( $fh ) {
-    print $fh $version_text, "\n\n__END__\n\n", $docs_text;
-    print $fh "\n\n=begin grammar\n\n", $grammar, "\n\n=end grammar\n\n";
-    close $fh;
-}
+print {$target_file} "\n\n__END__\n\n", $docs_text;
+print {$target_file} "\n\n=begin grammar\n\n", $grammar, "\n\n=end grammar\n\n";
 
 exit;
 

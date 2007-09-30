@@ -1,4 +1,8 @@
 package Pod::WikiDoc::Parser;
+
+use vars qw( $VERSION );
+$VERSION = 0.18
+
 use Parse::RecDescent;
 
 { my $ERRORS;
@@ -8631,12 +8635,7 @@ package Pod::WikiDoc::Parser; sub new { my $self = bless( {
                }, 'Parse::RecDescent' );
 }
 
-use vars qw( $VERSION );
-$VERSION = 0.18
-
-
 __END__
-
 
 =begin wikidoc
 
@@ -8695,21 +8694,27 @@ included below for reference for those interested in the topic:
 
 = AUTHOR
 
-David A Golden (DAGOLDEN)
+David A. Golden (DAGOLDEN)
 
-dagolden@cpan.org
+= COPYRIGHT AND LICENSE
 
-[http://dagolden.com/]
+Copyright (c) 2005, 2006, 2007 by David A. Golden
 
-= COPYRIGHT
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at 
+[http://www.apache.org/licenses/LICENSE-2.0]
 
-Copyright (c) 2005 by David A Golden
+Files produced as output though the use of this software, including
+generated copies of boilerplate templates provided with this software,
+shall not be considered Derivative Works, but shall be considered the
+original work of the Licensor.
 
-This program is free software; you can redistribute
-it and/or modify it under the same terms as Perl itself.
-
-The full text of the license can be found in the
-LICENSE file included with this module.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 =end wikidoc
 
