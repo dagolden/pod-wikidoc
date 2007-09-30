@@ -26,7 +26,7 @@ if ($@) {
         pod2usage("Syntax Error.");
     }
     else {
-        die $@;
+        die "$@\n";
     }
 }
 
@@ -41,7 +41,7 @@ if ( $opts->get_version ) {
     
 my ($input_file, $output_file) = @ARGV;
 
-if ( ! $input_file and -t *STDIN ) {
+if ( ! $input_file && -t *STDIN ) {
     pod2usage("wikidoc: Syntax error.")
 }
 
@@ -60,7 +60,7 @@ if ( $output_file ) {
     print "Extracting Pod from $input_file\n";
 }
 
-if ( defined $input_file and $input_file eq '-' ) {
+if ( defined $input_file and $input_file eq q{-} ) {
     print "wikidoc: Reading from terminal:\n";
     my $buffer;
     $buffer .= $_ while <STDIN>;

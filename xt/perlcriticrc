@@ -1,0 +1,23 @@
+severity = 2
+include = Lax::ProhibitStringyEvalExceptForRequire
+
+[TestingAndDebugging::ProhibitNoStrict]
+allow = refs
+
+;[ValuesAndExpressions::RequireNumberSeparators]
+;min_value = 100000
+
+[Variables::ProhibitPunctuationVars]
+allow = $@ $!
+
+# Turn these off
+[-BuiltinFunctions::ProhibitStringyEval]
+[-ControlStructures::ProhibitPostfixControls]
+[-ControlStructures::ProhibitUnlessBlocks]
+[-Documentation::RequirePodSections]
+[-InputOutput::ProhibitInteractiveTest]
+[-Miscellanea::RequireRcsKeywords]
+[-References::ProhibitDoubleSigils]
+[-RegularExpressions::RequireExtendedFormatting]
+
+

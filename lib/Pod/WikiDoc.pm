@@ -253,7 +253,7 @@ sub filter {
 ### translation process or who want to convert wikidoc to Pod for other
 ### creative purposes using the Pod::WikiDoc engine.
 
-sub format {
+sub format { ## no critic
     my ($self, $wikitext) = @_;
     
     croak "Error: Argument to format() must be a scalar"
@@ -365,11 +365,11 @@ sub _output_iterator {
 
 my $BLANK_LINE = qr{\A \s* \z}xms;
 my $NON_BLANK_LINE = qr{\A \s* \S }xms;
-my $FORMAT_NAME = qr{:? [-a-zA-Z0-9_]+}xms;
+my $FORMAT_LABEL = qr{:? [-a-zA-Z0-9_]+}xms;
 my $POD_CMD = qr{\A =[a-zA-Z]+}xms;
-my $BEGIN = qr{\A =begin \s+ ($FORMAT_NAME)  \s* \z}xms;
-my $END   = qr{\A =end   \s+ ($FORMAT_NAME)  \s* \z}xms;
-my $FOR   = qr{\A =for   \s+ ($FORMAT_NAME)  [ \t]* (.*) \z}xms;
+my $BEGIN = qr{\A =begin \s+ ($FORMAT_LABEL)  \s* \z}xms;
+my $END   = qr{\A =end   \s+ ($FORMAT_LABEL)  \s* \z}xms;
+my $FOR   = qr{\A =for   \s+ ($FORMAT_LABEL)  [ \t]* (.*) \z}xms;
 my $POD   = qr{\A =pod                          \s* \z}xms;
 my $CUT   = qr{\A =cut                          \s* \z}xms;
 
@@ -526,6 +526,7 @@ sub _filter_for {
     }
     my $out_type =  $format eq 'wikidoc' ? 'wikidoc' : 'pod' ; 
     $out_iter->( [ $out_type, @lines ] ); 
+    return;
 }
 
 #--------------------------------------------------------------------------#
@@ -534,7 +535,7 @@ sub _filter_for {
 
 sub _filter_cblock {
     my ($self, $in_iter, $out_iter) = @_;
-    my @lines = ($1 ? $1 : "\n");
+    my @lines = ($1 ? $1 : "\n"); ## no critic
     $in_iter->('next');
     my $CBLOCK = _comment_block_regex($self);
     LINE: while ( defined( my $peek = $in_iter->('peek') ) ) {
@@ -543,6 +544,7 @@ sub _filter_cblock {
         $in_iter->('next');
     }
     $out_iter->( [ 'wikidoc', @lines ] ) if $self->{comment_blocks};
+    return;
 }
 
 
@@ -612,8 +614,8 @@ my %closing_of = (
     BoldText            =>  ">",
     ItalicText          =>  ">",
     KeyWord             =>  q{},
-    LinkContent         =>  ">",
-    LinkLabel           =>  "|",
+    LinkContent         =>  q{>},
+    LinkLabel           =>  q{|},
     LinkTarget          =>  q{},
 );
 
@@ -627,10 +629,10 @@ my %content_handler_for = (
 
 # Table of character to E<> code conversion
 my %escape_code_for = (
-    ">" =>  "E<gt>",
-    "<" =>  "E<lt>",
-    "|" =>  "E<verbar>",
-    "/" =>  "E<sol>",
+    q{>} =>  "E<gt>",
+    q{<} =>  "E<lt>",
+    q{|} =>  "E<verbar>",
+    q{/} =>  "E<sol>",
 );
 
 # List of characters that need conversion
@@ -672,7 +674,7 @@ sub _keyword_expansion {
     my ($node, $keywords) = @_;
     my $key = $node->{content};
     my $value = $keywords->{$key};
-    return defined $value ? $value : "%%" . $key . "%%" ;
+    return defined $value ? $value : q{%%} . $key . q{%%} ;
 }
 
     
