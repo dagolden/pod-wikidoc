@@ -4,6 +4,8 @@ TODO list for Perl module Pod::WikiDoc
 # Bugs
 #--------------------------------------------------------------------------#
 
+- {@foo} doesn't work
+
 - must support nested formats
     - need to test for warning and best recovery for mismatched =end
     - test warn/halt on =cut to start Pod
