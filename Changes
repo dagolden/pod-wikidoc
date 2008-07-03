@@ -1,5 +1,10 @@
 Revision history for Perl module Pod::WikiDoc
 
+0.19
+
+    - Fixed: Build.PL wasn't specifying the script file (and doesn't have a
+      default)
+
 0.18 Sun Sep 30 13:10:12 EDT 2007
 
     - rewrote Pod/wikidoc filtering; added support for nested formats
