@@ -77,6 +77,9 @@ $class->new(
 #    add_to_cleanup      => [
 #        'lib/Pod/WikiDoc/Parser.pod',
 #    ],
+    script_files => [
+      'scripts/wikidoc',
+    ],
     requires        => {
         perl                => 5.006,
         Getopt::Lucid       => 0.14,    
