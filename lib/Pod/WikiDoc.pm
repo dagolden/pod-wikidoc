@@ -45,7 +45,7 @@ In a source file, Pod format-block style:
     0 numbered
     0 list
 
-    = end wikidoc
+    =end wikidoc
     
 In a source file, wikidoc comment-block style:
     ### = WIKIDOC COMMENT-BLOCK STYLE
