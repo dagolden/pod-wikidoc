@@ -2,6 +2,8 @@ Revision history for Perl module Pod::WikiDoc
 
 {{ $NEXT }}
 
+0.19      2012-02-23 12:19:36 EST5EDT
+
     - attempted to fix problems caused by incompatible changes
       in Parse::RecDescent breaking pre-compiled parsers
 
