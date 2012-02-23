@@ -32,6 +32,7 @@
             "Carp" : "0",
             "Getopt::Lucid" : "0.14",
             "IO::String" : "1.06",
+            "Parse::RecDescent" : "1.967006",
             "Pod::Usage" : "1",
             "Scalar::Util" : "1.02",
             "perl" : "5.006",
