@@ -1,14 +1,11 @@
-severity = 2
-include = Lax::ProhibitStringyEvalExceptForRequire
-
-[TestingAndDebugging::ProhibitNoStrict]
-allow = refs
-
-;[ValuesAndExpressions::RequireNumberSeparators]
-;min_value = 100000
+severity = 5
+verbose = 8
 
 [Variables::ProhibitPunctuationVars]
 allow = $@ $!
+
+[TestingAndDebugging::ProhibitNoStrict]
+allow = refs
 
 # Turn these off
 [-BuiltinFunctions::ProhibitStringyEval]
@@ -19,5 +16,8 @@ allow = $@ $!
 [-Miscellanea::RequireRcsKeywords]
 [-References::ProhibitDoubleSigils]
 [-RegularExpressions::RequireExtendedFormatting]
+[-InputOutput::ProhibitTwoArgOpen]
 
+# Turn this on
+[Lax::ProhibitStringyEval::ExceptForRequire]
 
