@@ -40,7 +40,7 @@ sub run {
 
     my @cmd = (
         $perl, 
-        "-Mblib=$cwd", # must hard code this in case curdir changed
+        ( -d 'blib' ? "-Mblib=$cwd" : "-Ilib=$cwd/lib" ), # must hard code this in case curdir changed
         ( $cover ? $cover : () ),
         $self->{program},
         @{ $self->default_args() },

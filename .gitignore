@@ -1,2 +1,3 @@
 /Pod-WikiDoc*
 .build
+/lib/Pod/WikiDoc/Parser.pm

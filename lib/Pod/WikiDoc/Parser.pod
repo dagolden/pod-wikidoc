@@ -1,5 +1,6 @@
 # PODNAME: Pod::WikiDoc::Parser
 # ABSTRACT: precompiled recursive descent parser for Pod::WikiDoc
+# VERSION
 
 =head1 SYNOPSIS
 

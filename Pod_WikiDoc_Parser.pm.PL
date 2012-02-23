@@ -3,12 +3,13 @@ use strict;
 use warnings;
 use File::Basename;
 use File::pushd;
+use File::Path qw/mkpath/;
 use IO::File;
 use Parse::RecDescent;
 
 use ExtUtils::MakeMaker;
 use vars qw( $VERSION );
-$VERSION = ExtUtils::MakeMaker->parse_version('lib/Pod/WikiDoc.pm');
+$VERSION = MM->parse_version('lib/Pod/WikiDoc.pm');
 
 # Load Text::Balanced into Parse::RecDescent
 package Parse::RecDescent;
@@ -19,11 +20,13 @@ package main;
 
 my $grammar = do { local $/; <DATA> };
 
-# Find target location
+# Write to blib if exists or lib if it doesn't
 
-my ($target_name) = $ARGV[0];
+my $blib_path = -d 'blib' ? 'blib/' : '';
+$blib_path .= 'lib/Pod/WikiDoc';
+mkpath $blib_path;
 
-my $target_file = IO::File->new( $target_name, ">" ) or die $!;
+my $target_file = IO::File->new( "$blib_path/Parser.pm", ">" ) or die $!;
 
 # Temporarily change to temp directory since PRD Precompile writes to
 # current directory only

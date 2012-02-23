@@ -25,7 +25,7 @@ sub diff_or_is {
 # setup program
 #--------------------------------------------------------------------------#
 
-my $script = File::Spec->catfile( "scripts", "wikidoc" );
+my $script = File::Spec->catfile( "bin", "wikidoc" );
 
 if ( ! -r $script ) {
     plan skip_all => "because I couldn't find the wikidoc script to test";

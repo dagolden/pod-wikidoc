@@ -1,5 +1,6 @@
 # PODNAME: Pod::WikiDoc::Cookbook
 # ABSTRACT: Examples of Pod::WikiDoc usage
+# VERSION
 
 =pod 
 
