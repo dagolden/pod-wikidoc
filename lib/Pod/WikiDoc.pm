@@ -8,8 +8,8 @@ $Pod::WikiDoc::VERSION ||= '999';
 
 use 5.006;
 use Carp;
-use IO::String;
-use Scalar::Util qw( blessed );
+use IO::String 1.06;
+use Scalar::Util 1.02 qw( blessed );
 use Pod::WikiDoc::Parser;
 
 #--------------------------------------------------------------------------#

@@ -7,9 +7,9 @@ use warnings;
 
 $main::VERSION ||= '999';
 
-use Getopt::Lucid ':all';
+use Getopt::Lucid 0.14 ':all';
 use Pod::WikiDoc;
-use Pod::Usage;
+use Pod::Usage 1;
 
 my @spec = (
     Switch("comment|c"),

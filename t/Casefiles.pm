@@ -2,7 +2,7 @@ package t::Casefiles;
 use strict;
 use warnings;
 use Carp;
-use File::Find;
+use File::Find 1;
 use File::Basename qw(basename);
 use Test::More;
 

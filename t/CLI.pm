@@ -3,11 +3,11 @@ use strict;
 use warnings;
 
 use Test::Builder;
-use Probe::Perl;
+use Probe::Perl 0.01;
 use Cwd qw( abs_path );
-use IPC::Run3;
+use IPC::Run3 0.033;
 use File::Basename qw( basename );
-use File::Spec;
+use File::Spec 3;
 #use POSIX qw( WEXITSTATUS );
 
 my $Test = Test::Builder->new;
