@@ -2,7 +2,10 @@ Revision history for Perl module Pod::WikiDoc
 
 {{ $NEXT }}
 
-    - converted distribution to Dist::Zilla
+    - attempted to fix problems caused by incompatible changes
+      in Parse::RecDescent breaking pre-compiled parsers
+
+    - converted distribution to Dist::Zilla management
 
 0.18 Sun Sep 30 13:10:12 EDT 2007
 
