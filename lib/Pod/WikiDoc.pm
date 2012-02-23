@@ -337,7 +337,7 @@ sub _output_iterator {
             return;
         }
         return unless ref($chunk) eq 'ARRAY';
-        my ($format, @lines) = @$chunk;
+        my ($format, @lines) = grep { defined $_ } @$chunk;
         if ( $format eq 'wikidoc' ) {
             push @wikidoc, @lines;
         }
