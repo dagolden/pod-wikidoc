@@ -5,7 +5,7 @@
 =head1 SYNOPSIS
 
     use Pod::WikiDoc::Parser;
- 
+
     my $parser = Pod::WikiDoc::Parser->new();
 
     my $tree = $parser->WikiDoc( $text );
@@ -13,7 +13,7 @@
 =head1 DESCRIPTION
 
 Pod::WikiDoc::Parser is a precompiled L<Parse::RecDescent> parser for use with
-L<Pod::WikiDoc>.  
+L<Pod::WikiDoc>.
 
 A copy of the Parse::RecDescent grammar used is appended to the
 Pod::WikiDoc::Parser source and this Pod file for reference or reuse by

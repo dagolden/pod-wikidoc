@@ -2,7 +2,7 @@
 # ABSTRACT: Examples of Pod::WikiDoc usage
 # VERSION
 
-=pod 
+=pod
 
 =begin wikidoc
 
@@ -21,9 +21,9 @@ or to integrate [Pod::WikiDoc] with other tools.
 
 In vim, use the {comments} and {formatoptions} settings in {.vimrc} to
 have vim automatically insert the wikidoc comment leader when pressing
-return from a wikidoc comment line.  For example, the following lines in a 
+return from a wikidoc comment line.  For example, the following lines in a
 {.vimrc} file will activate this option whenever a perl-ish file is loaded.
- 
+
     autocmd BufNewFile,BufRead *.p? set comments=b:###
     autocmd BufNewFile,BufRead *.p? set formatoptions+=r
 
@@ -51,7 +51,7 @@ be used to insert the current version number into the generated Pod.
 
 By making wikidoc extraction part of the {distdir} action, users installing the
 distribution will receive it with .pod files already created, and will not need
-to have [Pod::WikiDoc] installed themselves.  
+to have [Pod::WikiDoc] installed themselves.
 
     # Build.PL
     use Module::Build;
@@ -98,7 +98,7 @@ to have [Pod::WikiDoc] installed themselves.
 
     SUBCLASS
 
-    $class->new( 
+    $class->new(
         # regular Module::Build options
     )->create_build_script;
 
@@ -119,7 +119,7 @@ Example of a simple .pm documentation file:
     =begin wikidoc
 
     Your wikidoc goes here.
-    
+
     =end wikidoc
 
 Adding "no_index" to META.yml via Build.PL (requires Module::Build
