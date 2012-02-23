@@ -1,5 +1,5 @@
 {
-   "abstract" : "Generate Pod from inline wiki style text ",
+   "abstract" : "Generate Pod from inline wiki style text",
    "author" : [
       "David A Golden <dagolden@cpan.org>"
    ],
