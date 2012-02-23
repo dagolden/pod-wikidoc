@@ -1,9 +1,8 @@
 Revision history for Perl module Pod::WikiDoc
 
-0.19
+{{ $NEXT }}
 
-    - Fixed: Build.PL wasn't specifying the script file (and doesn't have a
-      default)
+    - converted distribution to Dist::Zilla
 
 0.18 Sun Sep 30 13:10:12 EDT 2007
 
