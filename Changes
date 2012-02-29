@@ -2,6 +2,8 @@ Revision history for Perl module Pod::WikiDoc
 
 {{ $NEXT }}
 
+0.20      2012-02-29 12:29:20 EST5EDT
+
     - added dependencies that were ommitted from 0.19
 
 0.19      2012-02-23 12:19:36 EST5EDT
