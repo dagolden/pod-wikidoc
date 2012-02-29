@@ -6,7 +6,7 @@ Pod::WikiDoc - Generate Pod from inline wiki style text
 
 =head1 VERSION
 
-version 0.19
+version 0.20
 
 =head1 SYNOPSIS
 

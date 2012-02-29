@@ -30,23 +30,32 @@
       "runtime" : {
          "requires" : {
             "Carp" : "0",
+            "ExtUtils::MakeMaker" : "0",
+            "File::Basename" : "0",
+            "File::Path" : "0",
+            "File::pushd" : "0",
             "Getopt::Lucid" : "0.14",
+            "IO::File" : "0",
             "IO::String" : "1.06",
             "Parse::RecDescent" : "1.967006",
             "Pod::Usage" : "1",
             "Scalar::Util" : "1.02",
+            "Text::Balanced" : "0",
             "perl" : "5.006",
             "strict" : "0",
+            "vars" : "0",
             "warnings" : "0"
          }
       },
       "test" : {
          "requires" : {
+            "Carp" : "0",
             "Cwd" : "0",
             "File::Basename" : "0",
             "File::Find" : "1",
             "File::Spec" : "3",
             "File::Temp" : "0",
+            "IO::String" : "0",
             "IPC::Run3" : "0.033",
             "Probe::Perl" : "0.01",
             "Test::Builder" : "0",
@@ -57,7 +66,7 @@
    "provides" : {
       "Pod::WikiDoc" : {
          "file" : "lib/Pod/WikiDoc.pm",
-         "version" : "0.19"
+         "version" : "0.20"
       }
    },
    "release_status" : "stable",
@@ -73,6 +82,6 @@
          "web" : "https://github.com/dagolden/pod-wikidoc"
       }
    },
-   "version" : "0.19"
+   "version" : "0.20"
 }
 
