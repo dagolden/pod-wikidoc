@@ -2,7 +2,8 @@
 
 use Test::More;
 use IO::String;
-use t::Casefiles;
+use lib "./t";
+use Casefiles;
 
 use Pod::WikiDoc;
 
@@ -16,7 +17,7 @@ my $parser = Pod::WikiDoc->new ();
 # case file runner
 #--------------------------------------------------------------------------#
 
-my $cases = t::Casefiles->new( "t/filter_pod" );
+my $cases = Casefiles->new( "t/filter_pod" );
 
 $cases->run_tests( 
     sub { 

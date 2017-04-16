@@ -2,7 +2,8 @@
 
 use Test::More;
 use IO::String;
-use t::Casefiles;
+use lib "./t";
+use Casefiles;
 
 use Pod::WikiDoc;
 
@@ -10,7 +11,7 @@ use Pod::WikiDoc;
 # case file runner
 #--------------------------------------------------------------------------#
 
-my $cases = t::Casefiles->new( "t/filter_comments_alt" );
+my $cases = Casefiles->new( "t/filter_comments_alt" );
 
 $cases->run_tests( 
     sub { 

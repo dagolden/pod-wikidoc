@@ -1,7 +1,8 @@
 use Test::More;
 use File::Spec;
 use File::Temp;
-use t::CLI;
+use lib "./t";;
+use CLI;
 
 #--------------------------------------------------------------------------#
 # Get optional test support
@@ -34,7 +35,7 @@ else {
     plan tests => 6;
 }
 
-my $wikidoc = t::CLI->new($script);
+my $wikidoc = CLI->new($script);
 
 #--------------------------------------------------------------------------#
 # setup input and expected
