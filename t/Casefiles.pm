@@ -1,4 +1,4 @@
-package t::Casefiles;
+package Casefiles;
 use strict;
 use warnings;
 use Carp;

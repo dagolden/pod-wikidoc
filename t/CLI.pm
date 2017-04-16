@@ -1,4 +1,4 @@
-package t::CLI;
+package CLI;
 use strict;
 use warnings;
 
