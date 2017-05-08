@@ -4,7 +4,7 @@ use warnings;
 # PODNAME: wikidoc
 # ABSTRACT: convert mixed Pod and wikidoc text to Pod
 
-our $VERSION = '0.21';
+our $VERSION = '0.22';
 
 use Getopt::Lucid 0.14 ':all';
 use Pod::WikiDoc;
