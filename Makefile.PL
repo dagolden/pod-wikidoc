@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use 5.010;
+use 5.006;
 
 use ExtUtils::MakeMaker 6.17;
 
@@ -16,7 +16,7 @@ my %WriteMakefileArgs = (
     "bin/wikidoc"
   ],
   "LICENSE" => "apache",
-  "MIN_PERL_VERSION" => "5.010",
+  "MIN_PERL_VERSION" => "5.006",
   "NAME" => "Pod::WikiDoc",
   "PREREQ_PM" => {
     "Carp" => 0,
@@ -47,7 +47,8 @@ my %WriteMakefileArgs = (
     "IPC::Run3" => "0.033",
     "Probe::Perl" => "0.01",
     "Test::Builder" => 0,
-    "Test::More" => 0
+    "Test::More" => 0,
+    "lib" => 0
   },
   "VERSION" => "0.21",
   "test" => {
@@ -77,6 +78,7 @@ my %FallbackPrereqs = (
   "Test::Builder" => 0,
   "Test::More" => 0,
   "Text::Balanced" => 0,
+  "lib" => 0,
   "strict" => 0,
   "vars" => 0,
   "warnings" => 0
