@@ -35,27 +35,50 @@ my $cd = tempd();
 # Generate Parser file
 
 $Parse::RecDescent::skip = q{};
+$RD_HINT = 0;
 Parse::RecDescent->Precompile( $grammar, "Pod::WikiDoc::Parser" );
 
 # open it up and open destination
 my $precompile = IO::File->new( "Parser.pm" ) or die $!;
 
-# copy package statement line
+# copy up to the package statement line
 
-print {$target_file} scalar <$precompile>;
+while ( my $line = <$precompile> ) {
+    print {$target_file} $line;
+    last if $line =~ /^package\s/;
+}
 
-# interpolate version and add it 
+# interpolate version and add it with strictures
 
-print {$target_file} "\nour \$VERSION = $VERSION;\n\n";
+print {$target_file} << "HERE";
 
-# copy precompiled parser
+use strict;
+
+our \$VERSION = '$VERSION';
+
+=for Pod::Coverage new
+
+=cut
+
+HERE
+
+# copy the rest of the precompiled parser
 
 print {$target_file} <$precompile>;
 
 # Append version and grammar for reference
 
-print {$target_file} "\n\n__END__\n\n";
-print {$target_file} "\n\n=begin grammar\n\n", $grammar, "\n\n=end grammar\n\n";
+print {$target_file} << "HERE";
+
+__END__
+
+=begin grammar
+
+$grammar
+
+=end grammar
+
+HERE
 
 exit;
 

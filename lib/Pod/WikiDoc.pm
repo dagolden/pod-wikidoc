@@ -2,9 +2,8 @@ package Pod::WikiDoc;
 use strict;
 use warnings;
 # ABSTRACT: Generate Pod from inline wiki style text
-# VERSION
 
-$Pod::WikiDoc::VERSION ||= '999';
+our $VERSION = '0.21';
 
 use 5.006;
 use Carp;

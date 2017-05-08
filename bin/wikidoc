@@ -3,9 +3,8 @@ use strict;
 use warnings;
 # PODNAME: wikidoc
 # ABSTRACT: convert mixed Pod and wikidoc text to Pod
-# VERSION
 
-$main::VERSION ||= '999';
+our $VERSION = '0.21';
 
 use Getopt::Lucid 0.14 ':all';
 use Pod::WikiDoc;

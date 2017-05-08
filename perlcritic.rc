@@ -7,17 +7,23 @@ allow = $@ $!
 [TestingAndDebugging::ProhibitNoStrict]
 allow = refs
 
+[Variables::ProhibitEvilVariables]
+variables = $DB::single
+
 # Turn these off
 [-BuiltinFunctions::ProhibitStringyEval]
 [-ControlStructures::ProhibitPostfixControls]
 [-ControlStructures::ProhibitUnlessBlocks]
 [-Documentation::RequirePodSections]
 [-InputOutput::ProhibitInteractiveTest]
-[-Miscellanea::RequireRcsKeywords]
 [-References::ProhibitDoubleSigils]
 [-RegularExpressions::RequireExtendedFormatting]
 [-InputOutput::ProhibitTwoArgOpen]
+[-Modules::ProhibitEvilModules]
 
 # Turn this on
 [Lax::ProhibitStringyEval::ExceptForRequire]
 
+# SPECIAL: the generated parser uses these
+[-ValuesAndExpressions::ProhibitLeadingZeros]
+[-Subroutines::ProhibitExplicitReturnUndef]
