@@ -2,6 +2,8 @@ Revision history for Perl module Pod::WikiDoc
 
 {{ $NEXT }}
 
+0.21      2017-05-08 15:01:24-04:00 America/New_York
+
     - fixed test for perls without '.' in @INC
 
 0.20      2012-02-29 12:29:20 EST5EDT
